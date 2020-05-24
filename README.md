@@ -3,10 +3,10 @@
 
 
 # recordset
-[recordset](./_docs/recordset.md)
+[recordset](./docs/recordset.md)
 
 # orm basic
-[orm basic](./_docs/orm_basic.md)
+[orm basic](./docs/orm_basic.md)
 
 # orm relations
-[orm relations](./_docs/orm_relations.md)
+[orm relations](./docs/orm_relations.md)
