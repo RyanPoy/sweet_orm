@@ -1,5 +1,5 @@
 
-# a simple template engine in python3.
+# a python3 ORM
 
 
 # recordset
