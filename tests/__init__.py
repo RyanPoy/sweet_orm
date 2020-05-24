@@ -3,9 +3,9 @@ import sys
 import os
 sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
 import unittest
-from sweet.db import DBManager
-from sweet.orm.model import Model
-from sweet.orm.relations import *
+from sweet_orm.db import DBManager
+from sweet_orm.orm.model import Model
+from sweet_orm.orm.relations import *
 
 
 class TestCase(unittest.TestCase):
@@ -36,8 +36,8 @@ class Foo(Model):
 
 
 class User(Model):
-    has_many('sweet._tests.Mobile', cascade=True)
-    has_one('sweet._tests.Car', cascade=True)
+    has_many('__init__.Mobile', cascade=True)
+    has_one('__init__.Car', cascade=True)
 
 
 class Mobile(Model):
@@ -49,7 +49,7 @@ class Car(Model):
 
 
 class Article(Model):
-    has_and_belongs_to_many('sweet._tests.Tag')
+    has_and_belongs_to_many('__init__.Tag')
 
 
 class Tag(Model):
@@ -57,18 +57,18 @@ class Tag(Model):
 
 
 class Category(Model):
-    has_many('sweet._tests.Category', name='children', fk='parent_id')
-    belongs_to('sweet._tests.Category', name='parent', fk='parent_id')
+    has_many('__init__.Category', name='children', fk='parent_id')
+    belongs_to('__init__.Category', name='parent', fk='parent_id')
 
 
 class Score(Model):
-    belongs_to('sweet._tests.Student')
-    belongs_to('sweet._tests.Course')
+    belongs_to('__init__.Student')
+    belongs_to('__init__.Course')
 
 
 class Student(Model):
     has_many(Score)
-    has_many('sweet._tests.Course', through=Score)
+    has_many('__init__.Course', through=Score)
 
 
 class Course(Model):
@@ -78,14 +78,14 @@ class Course(Model):
 
 class StudentForHasOneThrough(Model):
     __tablename__ = 'students'
-    has_one('sweet._tests.ScoreForHasOneThrough', name='score', fk='student_id')
-    has_one('sweet._tests.CourseForHasOneThrough', name="course", through="sweet._tests.ScoreForHasOneThrough", through_fk_on_owner='student_id', through_fk_on_target='course_id')
+    has_one('__init__.ScoreForHasOneThrough', name='score', fk='student_id')
+    has_one('__init__.CourseForHasOneThrough', name="course", through="__init__.ScoreForHasOneThrough", through_fk_on_owner='student_id', through_fk_on_target='course_id')
 
 
 class CourseForHasOneThrough(Model):
     __tablename__ = 'courses'
-    has_one('sweet._tests.ScoreForHasOneThrough', name='score', fk='course_id')
-    has_one(StudentForHasOneThrough, name="student", through="sweet._tests.ScoreForHasOneThrough", through_fk_on_owner='course_id', through_fk_on_target='student_id')
+    has_one('__init__.ScoreForHasOneThrough', name='score', fk='course_id')
+    has_one(StudentForHasOneThrough, name="student", through="__init__.ScoreForHasOneThrough", through_fk_on_owner='course_id', through_fk_on_target='student_id')
 
 
 class ScoreForHasOneThrough(Model):

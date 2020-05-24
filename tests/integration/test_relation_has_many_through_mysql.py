@@ -1,5 +1,5 @@
 #coding: utf8
-from sweet._tests import TestCase, Student, Course, Score
+from __init__ import TestCase, Student, Course, Score
 
 
 class TestRelationHasManyThroughMysql(TestCase):

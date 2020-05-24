@@ -1,7 +1,7 @@
 #coding: utf8
-from sweet._tests import TestCase
+from __init__ import TestCase
 from unittest import mock
-from sweet.db.recordset import MySQLRecordset
+from sweet_orm.db.recordset import MySQLRecordset
 
 
 class TestRecordsetDeleteForMysql(TestCase):

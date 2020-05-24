@@ -1,8 +1,8 @@
 #coding: utf8
-from sweet._tests import TestCase
-from sweet.db.recordset import MySQLRecordset
-from sweet.db.clauses import WhereClause, HavingClause
-from sweet.utils import mydict
+from __init__ import TestCase
+from sweet_orm.db.recordset import MySQLRecordset
+from sweet_orm.db.clauses import WhereClause, HavingClause
+from sweet_orm.utils import mydict
 
 
 class TestRecordsetQueryForMySQL(TestCase):

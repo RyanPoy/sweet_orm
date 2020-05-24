@@ -125,7 +125,7 @@ if you won't create `created_at` and `updated_at`, you can set `__timestamp__` i
 - atomic
 
 ```
-  from sweet.orm import atomic
+  from sweet_orm.orm import atomic
 
   @atomic
   def delete():
@@ -135,7 +135,7 @@ if you won't create `created_at` and `updated_at`, you can set `__timestamp__` i
 - manual
 
 ```
-  from sweet.orm import atomic
+  from sweet_orm.orm import atomic
 
   with User.transaction() as t:
     

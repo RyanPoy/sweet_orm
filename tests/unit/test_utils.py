@@ -1,6 +1,6 @@
 #coding: utf8
-from sweet._tests import TestCase
-from sweet.utils import *
+from __init__ import TestCase
+from sweet_orm.utils import *
 
 
 class TestUtils(TestCase):

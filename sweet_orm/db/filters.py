@@ -1,5 +1,5 @@
 #coding: utf8
-from sweet.utils import is_array, aqm
+from sweet_orm.utils import is_array, aqm
 
 
 class Filter(object):

@@ -1,7 +1,7 @@
 #coding: utf8
-from sweet._tests import TestCase, User
-from sweet.db.recordset import MySQLRecordset
-from sweet.utils import mydict
+from __init__ import TestCase, User
+from sweet_orm.db.recordset import MySQLRecordset
+from sweet_orm.utils import mydict
 
 
 class TestModelCRUDMySQL(TestCase):

@@ -1,6 +1,6 @@
 #coding: utf8
-from sweet.utils.validation import ExclusionValidator
-from sweet._tests import TestCase
+from sweet_orm.utils.validation import ExclusionValidator
+from __init__ import TestCase
 
 
 class TestValidatorExclusion(TestCase):

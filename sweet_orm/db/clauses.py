@@ -1,6 +1,6 @@
 #coding: utf8
-from sweet.utils import is_array, is_str, is_hash, aqm
-from sweet.db.filters import Filter
+from sweet_orm.utils import is_array, is_str, is_hash, aqm
+from sweet_orm.db.filters import Filter
 
 
 class WhereClause(object):

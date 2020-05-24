@@ -1,5 +1,5 @@
 #coding: utf8
-from sweet.utils.inflection import *
+from sweet_orm.utils.inflection import *
 from datetime import datetime, date
 from decimal import Decimal
 import functools

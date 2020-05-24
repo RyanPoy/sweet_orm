@@ -1,7 +1,7 @@
 #coding: utf8
 from collections import namedtuple
-from sweet.db.clauses import *
-from sweet.utils import *
+from sweet_orm.db.clauses import *
+from sweet_orm.utils import *
 import functools
 import copy
 

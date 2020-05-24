@@ -1,8 +1,8 @@
 #coding: utf8
-from sweet.db.recordset import MySQLRecordset
+from sweet_orm.db.recordset import MySQLRecordset
 from contextlib import contextmanager
-from sweet.orm.fields import *
-from sweet.utils import *
+from sweet_orm.orm.fields import *
+from sweet_orm.utils import *
 import MySQLdb
 import time
 import logging

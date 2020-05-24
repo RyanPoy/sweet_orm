@@ -53,8 +53,8 @@
 --------------------------------------------------------
 # model define
   
-  from sweet.orm import Model
-  from sweet.relations import *
+  from sweet_orm.orm import Model
+  from sweet_orm.orm.relations import *
 
   class User(Model):
     pass
@@ -135,8 +135,8 @@
 --------------------------------------------------------
 # model define: demo.py
   
-  from sweet.orm import Model
-  from sweet.relations import *
+  from sweet_orm.orm import Model
+  from sweet_orm.orm.relations import *
 
   class User(Model):
     has_many(Mobile)   #  if Mobile and User in same python file. 
@@ -191,8 +191,8 @@
 --------------------------------------------------------
 # model define: demo.py
   
-  from sweet.orm import Model
-  from sweet.relations import *
+  from sweet_orm.orm import Model
+  from sweet_orm.orm.relations import *
 
   class Score(Model):
     belongs_to('demo.Student')
@@ -272,8 +272,8 @@
 --------------------------------------------------------
 # model define: demo.py
   
-  from sweet.orm import Model
-  from sweet.relations import *
+  from sweet_orm.orm import Model
+  from sweet_orm.orm.relations import *
 
   class User(Model):
     has_one(Mobile)
@@ -320,8 +320,8 @@
 --------------------------------------------------------
 # model define: demo.py
   
-  from sweet.orm import Model
-  from sweet.relations import *
+  from sweet_orm.orm import Model
+  from sweet_orm.orm.relations import *
 
   class Score(Model):
     belongs_to('demo.Student')
@@ -400,8 +400,8 @@
 --------------------------------------------------------
 # model define: demo.py
   
-  from sweet.orm import Model
-  from sweet.relations import *
+  from sweet_orm.orm import Model
+  from sweet_orm.orm.relations import *
 
   class Article(Model):
     has_and_belongs_to_many('demo.Tag')
@@ -472,8 +472,8 @@
 --------------------------------------------------------
 # model define: demo.py
   
-  from sweet.orm import Model
-  from sweet.relations import *
+  from sweet_orm.orm import Model
+  from sweet_orm.orm.relations import *
 
   class Category(Model):
     has_many('demo.Category', name='children', fk='parent_id')
@@ -539,8 +539,8 @@ You can use `include` method to optimizate the N + 1 problem
 ```
 # model define
   
-  from sweet.orm import Model
-  from sweet.relations import *
+  from sweet_orm.orm import Model
+  from sweet_orm.orm.relations import *
 
   class User(Model):
     has_many('demo.Mobile')
@@ -583,8 +583,8 @@ u.mobiles # return a Collection
 ### `has_one` with through、`has_many` with through
 
 ```
-  from sweet.orm import Model
-  from sweet.relations import *
+  from sweet_orm.orm import Model
+  from sweet_orm.orm.relations import *
 
   class Score(Model):
     belongs_to('demo.Student')
@@ -613,8 +613,8 @@ u.mobiles # return a Collection
 ### `has_and_belongs_to_many`
 
 ```
-  from sweet.orm import Model
-  from sweet.relations import *
+  from sweet_orm.orm import Model
+  from sweet_orm.orm.relations import *
 
   class Article(Model):
     has_and_belongs_to_many('demo.Tag')

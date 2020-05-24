@@ -1,5 +1,5 @@
 #coding: utf8
-from sweet.utils import is_str, is_num, is_blank_str
+from sweet_orm.utils import is_str, is_num, is_blank_str
 from functools import partial
 import re
 

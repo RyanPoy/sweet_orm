@@ -1,5 +1,5 @@
 #coding: utf8
-from sweet._tests import TestCase, User, Mobile
+from __init__ import TestCase, User, Mobile
 
 
 class TestRelationBelongsToMysql(TestCase):

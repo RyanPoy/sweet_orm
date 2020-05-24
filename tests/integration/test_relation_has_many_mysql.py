@@ -1,7 +1,7 @@
 #coding: utf8
-from sweet._tests import TestCase, User, Mobile
-from sweet.orm import Model
-from sweet.orm.relations import *
+from __init__ import TestCase, User, Mobile
+from sweet_orm.orm import Model
+from sweet_orm.orm.relations import *
 from MySQLdb import IntegrityError
 
 
@@ -85,8 +85,8 @@ class TestRelationHasManyToMysql(TestCase):
         class Member(Model):
             __tablename__ = 'users'
 
-            has_many('mobiles', 'sweet._tests.Mobile', cascade=False)
-            has_one('car', 'sweet._tests.Car', cascade=False)
+            has_many('mobiles', '__init__.Mobile', cascade=False)
+            has_one('car', '__init__.Car', cascade=False)
 
         member1 = Member.create(name="Jon", age=31)
         Mobile.create(name="Nokia", user_id=member1.id)

@@ -1,8 +1,8 @@
 #coding: utf8
-from sweet.utils import *
-from sweet.utils.inflection import *
-from sweet.orm.relations import *
-from sweet.orm.method_missing import *
+from sweet_orm.utils import *
+from sweet_orm.utils.inflection import *
+from sweet_orm.orm.relations import *
+from sweet_orm.orm.method_missing import *
 
 
 class ModelMetaClass(type):

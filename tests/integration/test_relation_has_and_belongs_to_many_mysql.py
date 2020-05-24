@@ -1,5 +1,5 @@
 #coding: utf8
-from sweet._tests import TestCase, Article, Tag
+from __init__ import TestCase, Article, Tag
 
 
 class TestRelationHasAndBelongsToManyMysql(TestCase):

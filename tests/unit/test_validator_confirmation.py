@@ -1,6 +1,6 @@
 #coding: utf8
-from sweet.utils.validation import ConfirmationValidator
-from sweet._tests import TestCase
+from sweet_orm.utils.validation import ConfirmationValidator
+from __init__ import TestCase
 
 
 class TestValidatorConfirmation(TestCase):

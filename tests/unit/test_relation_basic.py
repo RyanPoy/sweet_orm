@@ -1,7 +1,7 @@
 #coding: utf8
-from sweet._tests import TestCase
-from sweet.orm.model import Model
-from sweet.orm.relations import *
+from __init__ import TestCase
+from sweet_orm.orm.model import Model
+from sweet_orm.orm.relations import *
 import inspect
 
 

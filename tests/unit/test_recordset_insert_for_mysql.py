@@ -1,7 +1,7 @@
 #coding: utf8
 from unittest import mock
-from sweet._tests import TestCase
-from sweet.db.recordset import MySQLRecordset
+from __init__ import TestCase
+from sweet_orm.db.recordset import MySQLRecordset
 
 
 class TestRecordsetInsertForMySQL(TestCase):

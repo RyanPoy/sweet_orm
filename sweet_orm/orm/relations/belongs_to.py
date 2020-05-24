@@ -1,6 +1,6 @@
 #coding: utf8
-from sweet.orm.relations.relation import Relation, relation_q
-from sweet.utils.inflection import *
+from sweet_orm.orm.relations.relation import Relation, relation_q
+from sweet_orm.utils.inflection import *
 
 
 class BelongsTo(Relation):

@@ -1,8 +1,8 @@
 #coding: utf8
 from collections import OrderedDict as oDict
 from queue import Queue as Q
-from sweet.utils.inflection import *
-from sweet.utils import import_object
+from sweet_orm.utils.inflection import *
+from sweet_orm.utils import import_object
 
 
 class RelationQ(Q):

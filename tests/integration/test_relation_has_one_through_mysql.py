@@ -1,8 +1,8 @@
 #coding: utf8
-from sweet._tests import TestCase
-from sweet._tests import StudentForHasOneThrough as Student
-from sweet._tests import CourseForHasOneThrough as Course
-from sweet._tests import ScoreForHasOneThrough as Score
+from __init__ import TestCase
+from __init__ import StudentForHasOneThrough as Student
+from __init__ import CourseForHasOneThrough as Course
+from __init__ import ScoreForHasOneThrough as Score
 
 
 class TestRelationHasOneThroughMysql(TestCase):

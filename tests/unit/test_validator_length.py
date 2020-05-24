@@ -1,6 +1,6 @@
 #coding: utf8
-from sweet.utils.validation import LengthValidator
-from sweet._tests import TestCase
+from sweet_orm.utils.validation import LengthValidator
+from __init__ import TestCase
 
 
 class TestValidatorLength(TestCase):

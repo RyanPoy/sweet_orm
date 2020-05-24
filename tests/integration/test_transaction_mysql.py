@@ -1,6 +1,6 @@
 #coding: utf8
-from sweet._tests import TestCase, Student, Course, Score
-from sweet.orm import atomic
+from __init__ import TestCase, Student, Course, Score
+from sweet_orm.orm import atomic
 
 
 class TestTransactionMysql(TestCase):

@@ -1,8 +1,8 @@
 #coding: utf8
-from sweet.orm.relations.relation import relation_q
-from sweet.orm.relations.has_many import HasMany
-from sweet.orm.relations.has_many_through import HasManyThrough
-from sweet.utils.inflection import *
+from sweet_orm.orm.relations.relation import relation_q
+from sweet_orm.orm.relations.has_many import HasMany
+from sweet_orm.orm.relations.has_many_through import HasManyThrough
+from sweet_orm.utils.inflection import *
 
 
 class HasOne(HasMany):

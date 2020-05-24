@@ -1,6 +1,6 @@
 #coding: utf8
 from collections import namedtuple
-from sweet.utils import *
+from sweet_orm.utils import *
 
 # _field_types = [
 #     'string', 'text', 'blob',

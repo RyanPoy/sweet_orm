@@ -1,6 +1,6 @@
 #coding: utf8
-from sweet.utils.validation import FormatValidator
-from sweet._tests import TestCase
+from sweet_orm.utils.validation import FormatValidator
+from __init__ import TestCase
 
 
 class TestValidatorFormat(TestCase):

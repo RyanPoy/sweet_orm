@@ -1,11 +1,11 @@
 #coding: utf8
-from sweet._tests import TestCase, User, Mobile, Car, Tag, Article, Course, Student, Score , \
+from __init__ import TestCase, User, Mobile, Car, Tag, Article, Course, Student, Score , \
                         StudentForHasOneThrough as Student2, CourseForHasOneThrough as Course2, ScoreForHasOneThrough as Score2, \
                         db_mgr
-from sweet.orm import Model
-from sweet.db import MySQL
-from sweet.db.recordset import MySQLRecordset
-from sweet.utils.collection import Collection
+from sweet_orm.orm import Model
+from sweet_orm.db import MySQL
+from sweet_orm.db.recordset import MySQLRecordset
+from sweet_orm.utils.collection import Collection
 from contextlib import contextmanager
 
 

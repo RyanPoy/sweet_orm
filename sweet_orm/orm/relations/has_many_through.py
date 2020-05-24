@@ -1,8 +1,8 @@
 #coding: utf8
-from sweet.orm.relations.relation import Relation, relation_q
-from sweet.utils.collection import Collection
-from sweet.utils.inflection import *
-from sweet.utils import *
+from sweet_orm.orm.relations.relation import Relation, relation_q
+from sweet_orm.utils.collection import Collection
+from sweet_orm.utils.inflection import *
+from sweet_orm.utils import *
 
 
 class HasManyThrough(Relation):

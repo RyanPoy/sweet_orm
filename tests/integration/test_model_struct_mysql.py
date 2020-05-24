@@ -1,9 +1,9 @@
 #coding: utf8
-from sweet._tests import TestCase, Foo
-from sweet.db.recordset import MySQLRecordset
-from sweet.db import MySQL
-from sweet.utils import mydict
-from sweet.orm.fields import *
+from __init__ import TestCase, Foo
+from sweet_orm.db.recordset import MySQLRecordset
+from sweet_orm.db import MySQL
+from sweet_orm.utils import mydict
+from sweet_orm.orm.fields import *
 
 
 class TestModelStructMySQL(TestCase):
