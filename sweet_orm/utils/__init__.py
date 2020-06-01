@@ -2,6 +2,7 @@
 from sweet_orm.utils.inflection import *
 from datetime import datetime, date
 from decimal import Decimal
+from queue import Queue
 import functools
 import time
 import re
@@ -221,3 +222,9 @@ class mydict(dict):
             return self[k]
         return super().__getattribute__(k)
 
+
+class Q(Queue):
+    def get(self, block=True, timeout=None):
+        if self.qsize() <= 0:
+            return None
+        return super().get(block=block, timeout=timeout)

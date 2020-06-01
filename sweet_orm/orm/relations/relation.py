@@ -1,17 +1,10 @@
 #coding: utf8
 from collections import OrderedDict as oDict
-from queue import Queue as Q
 from sweet_orm.utils.inflection import *
-from sweet_orm.utils import import_object
+from sweet_orm.utils import import_object, Q
 
 
-class RelationQ(Q):
-    def get(self, block=True, timeout=None):
-        if self.qsize() <= 0:
-            return None
-        return super().get(block=block, timeout=timeout)
-relation_q = RelationQ()
-
+relation_q = Q()
 
 class Relation(object):
 
