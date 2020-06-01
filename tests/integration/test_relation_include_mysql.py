@@ -4,12 +4,14 @@ from __init__ import TestCase, User, Mobile, Car, Tag, Article, Course, Student,
                         db_mgr
 from sweet_orm.orm import Model
 from sweet_orm.db import MySQL
-from sweet_orm.db.recordset import MySQLRecordset
+from sweet_orm.db.recordset import Recordset
 from sweet_orm.utils.collection import Collection
 from contextlib import contextmanager
 
 
 class FakeDB(MySQL):
+    qutotation_marks = '`'
+    paramstyle_marks = '%s'
 
     SQLS = []
 
@@ -100,7 +102,7 @@ class TestRelationIncludeMysql(TestCase):
             us = User.all()
             for u in us:
                 ms = u.mobiles
-                self.assertEqual(MySQLRecordset, type(ms))
+                self.assertEqual(Recordset, type(ms))
                 for m in ms.all():
                     m.name
             self.assertEqual(3, len(FakeDB.SQLS))
@@ -171,7 +173,7 @@ class TestRelationIncludeMysql(TestCase):
             # not use include
             for s in Student.all():
                 cs = s.courses
-                self.assertEqual(type(cs), MySQLRecordset)
+                self.assertEqual(type(cs), Recordset)
                 for c in cs.all():
                     c.name
             self.assertEqual(4, len(FakeDB.SQLS))
@@ -277,7 +279,7 @@ class TestRelationIncludeMysql(TestCase):
             # not use include
             for t in Tag.all():
                 articles = t.articles
-                self.assertEqual(type(articles), MySQLRecordset)
+                self.assertEqual(type(articles), Recordset)
                 for a in articles.all():
                     a.title
             self.assertEqual(4, len(FakeDB.SQLS))

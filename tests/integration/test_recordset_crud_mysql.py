@@ -1,6 +1,6 @@
 #coding: utf8
 from __init__ import TestCase, User
-from sweet_orm.db.recordset import MySQLRecordset
+from sweet_orm.db.recordset import Recordset
 from sweet_orm.utils import mydict
 
 
@@ -30,7 +30,7 @@ class TestRecordsetCRUDMySQL(TestCase):
 
     def test_table(self):
         table = self.db.records('users')
-        self.assertTrue(isinstance(table, MySQLRecordset))
+        self.assertTrue(isinstance(table, Recordset))
 
     def test_first(self):
         r = self.db.records('users').first()

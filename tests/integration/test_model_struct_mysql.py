@@ -1,6 +1,5 @@
 #coding: utf8
 from __init__ import TestCase, Foo
-from sweet_orm.db.recordset import MySQLRecordset
 from sweet_orm.db import MySQL
 from sweet_orm.utils import mydict
 from sweet_orm.orm.fields import *

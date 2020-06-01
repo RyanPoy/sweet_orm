@@ -1,5 +1,5 @@
 #coding: utf8
-from sweet_orm.db.recordset import MySQLRecordset
+from sweet_orm.db.recordset import Recordset
 from contextlib import contextmanager
 from sweet_orm.orm.fields import *
 from sweet_orm.utils import *
@@ -12,8 +12,9 @@ logger = logging.getLogger('MySQL')
 
 
 class MySQL(object):
-    
-    RECORDSET_CLASS = MySQLRecordset
+        
+    qutotation_marks = '`'
+    paramstyle_marks = '%s'
 
     COLUMN_FIELD_MAPPING = {
         'integer': IntField, 
@@ -256,4 +257,4 @@ AND
         return self
 
     def records(self, tbname):
-        return self.RECORDSET_CLASS(self, tbname)
+        return Recordset(self, tbname)

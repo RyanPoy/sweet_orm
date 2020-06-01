@@ -1,6 +1,6 @@
 #coding: utf8
 from __init__ import TestCase
-from sweet_orm.db.recordset import MySQLRecordset
+from sweet_orm.db.recordset import Recordset
 from sweet_orm.db.clauses import WhereClause, HavingClause
 from sweet_orm.utils import mydict
 
@@ -8,8 +8,10 @@ from sweet_orm.utils import mydict
 class TestRecordsetQueryForMySQL(TestCase):
 
     def get_recordset(self, name="users"):
-        class FakeDB(object): pass
-        return MySQLRecordset(db=FakeDB(), tbname=name)
+        class FakeDB(object):
+            qutotation_marks = '`'
+            paramstyle_marks = '%s'
+        return Recordset(db=FakeDB(), tbname=name)
 
     def test_copy_deep(self):
         tb = self.get_recordset()
