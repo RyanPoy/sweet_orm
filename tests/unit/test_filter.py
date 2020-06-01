@@ -1,9 +1,9 @@
 #coding: utf8
-from __init__ import TestCase
+import unittest
 from sweet_orm.db.filters import Filter
 
 
-class TestFilter(TestCase):
+class TestFilter(unittest.TestCase):
     
     def get_filter(self, name, value):
         return Filter.new(name, value, '`', '%s')
@@ -149,5 +149,4 @@ class TestFilter(TestCase):
 
 
 if __name__ == '__main__':
-    import unittest
     unittest.main()

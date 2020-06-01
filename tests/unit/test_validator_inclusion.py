@@ -1,9 +1,9 @@
 #coding: utf8
+import unittest
 from sweet_orm.utils.validation import InclusionValidator
-from __init__ import TestCase
 
 
-class TestValidatorInclusion(TestCase):
+class TestValidatorInclusion(unittest.TestCase):
 
     def test_inclusion_if_value_is_null_and_allow_null(self):
         self.assertTrue(InclusionValidator().validate(None, allow_null=True))
@@ -25,5 +25,4 @@ class TestValidatorInclusion(TestCase):
 
 
 if __name__ == '__main__':
-    import unittest
     unittest.main()

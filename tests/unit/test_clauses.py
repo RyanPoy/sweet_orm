@@ -1,5 +1,5 @@
 #coding: utf8
-from __init__ import TestCase
+import unittest
 from sweet_orm.db.clauses import WhereClause, HavingClause, \
                                     JoinClause, LeftJoinClause, \
                                     RightJoinClause, OrderClause, \
@@ -7,7 +7,7 @@ from sweet_orm.db.clauses import WhereClause, HavingClause, \
                                     SelectClause
 
 
-class TestClauses(TestCase):
+class TestClauses(unittest.TestCase):
 
     def setUp(self):
         self.where_clause = WhereClause('`', '%s')
@@ -295,7 +295,6 @@ class TestClauses(TestCase):
 
 
 if __name__ == '__main__':
-    import unittest
     unittest.main()
 
     

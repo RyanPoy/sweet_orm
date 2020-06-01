@@ -1,8 +1,9 @@
 #coding: utf8
-from __init__ import TestCase, User, Mobile
+import unittest
+from .helper import User, Mobile
 
 
-class TestRelationBelongsToMysql(TestCase):
+class TestRelationBelongsToMysql(unittest.TestCase):
     
     def setUp(self):
         self.remove_record()
@@ -99,5 +100,4 @@ class TestRelationBelongsToMysql(TestCase):
 
 
 if __name__ == '__main__':
-    import unittest
     unittest.main()

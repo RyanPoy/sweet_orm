@@ -1,9 +1,9 @@
 #coding: utf8
+import unittest
 from sweet_orm.utils.validation import AcceptanceValidator
-from __init__ import TestCase
 
 
-class TestValidatorAcceptance(TestCase):
+class TestValidatorAcceptance(unittest.TestCase):
     
     def test_acceptance(self):
         self.assertTrue(AcceptanceValidator().validate(10))  
@@ -16,5 +16,4 @@ class TestValidatorAcceptance(TestCase):
 
 
 if __name__ == '__main__':
-    import unittest
     unittest.main()

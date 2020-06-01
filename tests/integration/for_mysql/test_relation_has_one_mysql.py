@@ -1,8 +1,9 @@
 #coding: utf8
-from __init__ import TestCase, User, Mobile, Car
+import unittest
+from .helper import User, Mobile, Car
 
 
-class TestHasOneToMysql(TestCase):
+class TestHasOneToMysql(unittest.TestCase):
     
     def setUp(self):
         self.remove_record()
@@ -91,5 +92,4 @@ class TestHasOneToMysql(TestCase):
 
 
 if __name__ == '__main__':
-    import unittest
     unittest.main()

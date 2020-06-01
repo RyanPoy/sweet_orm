@@ -1,5 +1,5 @@
 #coding: utf8
-from __init__ import TestCase
+import unittest
 from sweet_orm.orm.model import Model
 
 
@@ -17,7 +17,7 @@ class ModelCustomerStub(Model):
 #     __pk__ = 'id'
 
 
-class TestModelDefine(TestCase):
+class TestModelDefine(unittest.TestCase):
 
     def test_auto_tablename(self):
         self.assertEqual('model_auto_stubs', ModelAutoStub.__tablename__)
@@ -45,5 +45,4 @@ class TestModelDefine(TestCase):
 
 
 if __name__ == '__main__':
-    import unittest
     unittest.main()

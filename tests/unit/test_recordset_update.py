@@ -1,10 +1,10 @@
 #coding: utf8
-from __init__ import TestCase
+import unittest
 from sweet_orm.db.recordset import Recordset
 from unittest import mock
 
 
-class TestRecordsetUpdateMySQL(TestCase):
+class TestRecordsetUpdate(unittest.TestCase):
 
     def get_db(self):
         db = mock.MagicMock('db')
@@ -42,6 +42,5 @@ class TestRecordsetUpdateMySQL(TestCase):
 
 
 if __name__ == '__main__':
-    import unittest
     unittest.main()
 

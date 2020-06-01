@@ -1,9 +1,9 @@
 #coding: utf8
+import unittest
 from sweet_orm.utils.validation import ConfirmationValidator
-from __init__ import TestCase
 
 
-class TestValidatorConfirmation(TestCase):
+class TestValidatorConfirmation(unittest.TestCase):
 
     def test_confirmation(self):
         self.assertTrue(ConfirmationValidator().validate(10, 10))  
@@ -13,5 +13,4 @@ class TestValidatorConfirmation(TestCase):
 
 
 if __name__ == '__main__':
-    import unittest
     unittest.main()

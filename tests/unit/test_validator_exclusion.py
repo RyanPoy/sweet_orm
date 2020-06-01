@@ -1,9 +1,9 @@
 #coding: utf8
+import unittest
 from sweet_orm.utils.validation import ExclusionValidator
-from __init__ import TestCase
 
 
-class TestValidatorExclusion(TestCase):
+class TestValidatorExclusion(unittest.TestCase):
 
     def test_exclusion_if_value_is_null_and_allow_null(self):
         self.assertTrue(ExclusionValidator().validate(None, allow_null=True))
@@ -25,5 +25,4 @@ class TestValidatorExclusion(TestCase):
         
 
 if __name__ == '__main__':
-    import unittest
     unittest.main()

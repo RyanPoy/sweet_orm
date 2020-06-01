@@ -10,18 +10,18 @@ logging.basicConfig(
 )
 
 import unittest
-from integration.test_recordset_crud_mysql import TestRecordsetCRUDMySQL
-from integration.test_model_struct_mysql import TestModelStructMySQL
-from integration.test_model_crud_mysql import TestModelCRUDMySQL
-from integration.test_relation_belongs_to_mysql import TestRelationBelongsToMysql
-from integration.test_relation_reference_myself_mysql import TestRelationReferenceMysqlMysql
-from integration.test_relation_has_many_mysql import TestRelationHasManyToMysql
-from integration.test_relation_has_many_through_mysql import TestRelationHasManyThroughMysql
-from integration.test_relation_has_one_mysql import TestHasOneToMysql
-from integration.test_relation_has_one_through_mysql import TestRelationHasOneThroughMysql
-from integration.test_relation_has_and_belongs_to_many_mysql import TestRelationHasAndBelongsToManyMysql
-from integration.test_relation_include_mysql import TestRelationIncludeMysql
-from integration.test_transaction_mysql import TestTransactionMysql
+from integration.for_mysql.test_recordset_crud_mysql import TestRecordsetCRUDMySQL
+from integration.for_mysql.test_model_struct_mysql import TestModelStructMySQL
+from integration.for_mysql.test_model_crud_mysql import TestModelCRUDMySQL
+from integration.for_mysql.test_relation_belongs_to_mysql import TestRelationBelongsToMysql
+from integration.for_mysql.test_relation_reference_myself_mysql import TestRelationReferenceMysqlMysql
+from integration.for_mysql.test_relation_has_many_mysql import TestRelationHasManyToMysql
+from integration.for_mysql.test_relation_has_many_through_mysql import TestRelationHasManyThroughMysql
+from integration.for_mysql.test_relation_has_one_mysql import TestHasOneToMysql
+from integration.for_mysql.test_relation_has_one_through_mysql import TestRelationHasOneThroughMysql
+from integration.for_mysql.test_relation_has_and_belongs_to_many_mysql import TestRelationHasAndBelongsToManyMysql
+from integration.for_mysql.test_relation_include_mysql import TestRelationIncludeMysql
+from integration.for_mysql.test_transaction_mysql import TestTransactionMysql
 
 from unit.test_utils import TestUtils
 from unit.test_inflection import TestInflection
@@ -30,10 +30,10 @@ from unit.test_filter import TestFilter
 from unit.test_clauses import TestClauses
 
 from unit.test_relation_basic import TestRelationBasic
-from unit.test_recordset_query_for_mysql import TestRecordsetQueryForMySQL
-from unit.test_recordset_insert_for_mysql import TestRecordsetInsertForMySQL
-from unit.test_recordset_delete_for_mysql import TestRecordsetDeleteForMysql
-from unit.test_recordset_update_for_mysql import TestRecordsetUpdateMySQL
+from unit.test_recordset_query import TestRecordsetQuery
+from unit.test_recordset_insert import TestRecordsetInsert
+from unit.test_recordset_delete import TestRecordsetDelete
+from unit.test_recordset_update import TestRecordsetUpdate
 
 from unit.test_model_define import TestModelDefine
 
@@ -54,10 +54,10 @@ unit_tests = [
     TestFilter,
     TestClauses,
 
-    TestRecordsetQueryForMySQL,
-    TestRecordsetInsertForMySQL,
-    TestRecordsetDeleteForMysql,
-    TestRecordsetUpdateMySQL,
+    TestRecordsetQuery,
+    TestRecordsetInsert,
+    TestRecordsetDelete,
+    TestRecordsetUpdate,
 
     TestModelDefine,
     TestRelationBasic,

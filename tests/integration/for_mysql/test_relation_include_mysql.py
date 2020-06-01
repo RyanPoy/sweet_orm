@@ -1,7 +1,7 @@
 #coding: utf8
-from __init__ import TestCase, User, Mobile, Car, Tag, Article, Course, Student, Score , \
-                        StudentForHasOneThrough as Student2, CourseForHasOneThrough as Course2, ScoreForHasOneThrough as Score2, \
-                        db_mgr
+import unittest
+from .helper import User, Mobile, Car, Tag, Article, Course, Student, Score, db_mgr
+from .helper import StudentForHasOneThrough as Student2, CourseForHasOneThrough as Course2, ScoreForHasOneThrough as Score2
 from sweet_orm.orm import Model
 from sweet_orm.db import MySQL
 from sweet_orm.db.recordset import Recordset
@@ -30,7 +30,7 @@ class FakeDB(MySQL):
         return relt
 
 
-class TestRelationIncludeMysql(TestCase):
+class TestRelationIncludeMysql(unittest.TestCase):
     
     def setUp(self):
         self.remove_record()
@@ -331,5 +331,4 @@ class TestRelationIncludeMysql(TestCase):
             self.assertEqual('SELECT * FROM `cars` WHERE `user_id` IN (%s, %s)', FakeDB.SQLS[2])
 
 if __name__ == '__main__':
-    import unittest
     unittest.main()

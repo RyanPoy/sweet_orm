@@ -1,9 +1,9 @@
 #coding: utf8
+import unittest
 from sweet_orm.utils.validation import NumericalityValidator
-from __init__ import TestCase
 
 
-class TestValidatorNumericality(TestCase):
+class TestValidatorNumericality(unittest.TestCase):
         
     def test_numericality_should_return_false_if_value_is_null(self):
         self.assertFalse(NumericalityValidator().validate(None, greater_than = 10))
@@ -66,5 +66,4 @@ class TestValidatorNumericality(TestCase):
         
 
 if __name__ == '__main__':
-    import unittest
     unittest.main()

@@ -1,11 +1,12 @@
 #coding: utf8
-from __init__ import TestCase, Foo
+import unittest
+from .helper import Foo
 from sweet_orm.db import MySQL
 from sweet_orm.utils import mydict
 from sweet_orm.orm.fields import *
 
 
-class TestModelStructMySQL(TestCase):
+class TestModelStructMySQL(unittest.TestCase):
     
     def test_table_columns(self):
         field_dict = Foo.__field_define_dict__
@@ -113,5 +114,4 @@ class TestModelStructMySQL(TestCase):
 
 
 if __name__ == '__main__':
-    import unittest
     unittest.main()

@@ -1,9 +1,9 @@
 #coding: utf8
+import unittest
 from sweet_orm.utils.validation import LengthValidator
-from __init__ import TestCase
 
 
-class TestValidatorLength(TestCase):
+class TestValidatorLength(unittest.TestCase):
 
     def test_length_is_5(self):
         self.assertTrue(LengthValidator().validate('hello', _is = 5))  
@@ -39,5 +39,4 @@ class TestValidatorLength(TestCase):
         
 
 if __name__ == '__main__':
-    import unittest
     unittest.main()

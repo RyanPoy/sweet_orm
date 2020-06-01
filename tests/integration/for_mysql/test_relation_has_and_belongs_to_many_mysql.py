@@ -1,8 +1,9 @@
 #coding: utf8
-from __init__ import TestCase, Article, Tag
+import unittest
+from .helper import Article, Tag
 
 
-class TestRelationHasAndBelongsToManyMysql(TestCase):
+class TestRelationHasAndBelongsToManyMysql(unittest.TestCase):
     
     def setUp(self):
         self.remove_record()
@@ -118,5 +119,4 @@ class TestRelationHasAndBelongsToManyMysql(TestCase):
 
 
 if __name__ == '__main__':
-    import unittest
     unittest.main()

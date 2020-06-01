@@ -1,9 +1,9 @@
 #coding: utf8
+import unittest
 from sweet_orm.utils.validation import FormatValidator
-from __init__ import TestCase
 
 
-class TestValidatorFormat(TestCase):
+class TestValidatorFormat(unittest.TestCase):
 
     def test_foramt_with(self):
         self.assertTrue(FormatValidator().validate('abc.abc.abc.', '[(\w+)/.]{3}'))  
@@ -23,5 +23,4 @@ class TestValidatorFormat(TestCase):
 
 
 if __name__ == '__main__':
-    import unittest
     unittest.main()

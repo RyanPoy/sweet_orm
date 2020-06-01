@@ -1,8 +1,9 @@
 #coding: utf8
-from __init__ import TestCase, Student, Course, Score
+import unittest
+from .helper import Student, Course, Score
 
 
-class TestRelationHasManyThroughMysql(TestCase):
+class TestRelationHasManyThroughMysql(unittest.TestCase):
 
     def setUp(self):
         self.remove_record()
@@ -98,5 +99,4 @@ class TestRelationHasManyThroughMysql(TestCase):
 
 
 if __name__ == '__main__':
-    import unittest
     unittest.main()

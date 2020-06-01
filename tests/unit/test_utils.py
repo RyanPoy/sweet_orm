@@ -1,9 +1,9 @@
 #coding: utf8
-from __init__ import TestCase
+import unittest
 from sweet_orm.utils import *
 
 
-class TestUtils(TestCase):
+class TestUtils(unittest.TestCase):
 
     def test_to_i(self):
         self.assertEqual(9, to_i(9))
@@ -69,5 +69,4 @@ class TestUtils(TestCase):
 
 
 if __name__ == '__main__':
-    import unittest
     unittest.main()

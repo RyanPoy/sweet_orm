@@ -1,9 +1,9 @@
 #coding: utf8
-from __init__ import TestCase
+import unittest
 from sweet_orm.utils import *
 
 
-class TestInflection(TestCase):
+class TestInflection(unittest.TestCase):
 
     def setUp(self):
         self.singular_and_plural = [
@@ -131,5 +131,4 @@ class TestInflection(TestCase):
 
 
 if __name__ == '__main__':
-    import unittest
     unittest.main()

@@ -1,11 +1,11 @@
 #coding: utf8
-from __init__ import TestCase
+import unittest
 from sweet_orm.db.recordset import Recordset
 from sweet_orm.db.clauses import WhereClause, HavingClause
 from sweet_orm.utils import mydict
 
 
-class TestRecordsetQueryForMySQL(TestCase):
+class TestRecordsetQuery(unittest.TestCase):
 
     def get_recordset(self, name="users"):
         class FakeDB(object):
@@ -628,7 +628,6 @@ class TestRecordsetQueryForMySQL(TestCase):
 
 
 if __name__ == '__main__':
-    import unittest
     unittest.main()
 
     

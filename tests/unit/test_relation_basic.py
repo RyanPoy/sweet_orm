@@ -1,11 +1,11 @@
 #coding: utf8
-from __init__ import TestCase
+import unittest
 from sweet_orm.orm.model import Model
 from sweet_orm.orm.relations import *
 import inspect
 
 
-class TestRelationBasic(TestCase):
+class TestRelationBasic(unittest.TestCase):
 
     def test_belongs_to_without_argument(self):
 
@@ -166,6 +166,5 @@ class TestRelationBasic(TestCase):
 
 
 if __name__ == '__main__':
-    import unittest
     unittest.main()
 

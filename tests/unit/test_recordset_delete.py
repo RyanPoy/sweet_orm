@@ -1,10 +1,10 @@
 #coding: utf8
-from __init__ import TestCase
+import unittest
 from unittest import mock
 from sweet_orm.db.recordset import Recordset
 
 
-class TestRecordsetDeleteForMysql(TestCase):
+class TestRecordsetDelete(unittest.TestCase):
 
     def get_db(self):
         db = mock.MagicMock('db')
@@ -47,6 +47,5 @@ class TestRecordsetDeleteForMysql(TestCase):
         db.execute_rowcount.assert_called_once_with('DELETE FROM `users` WHERE `id` = %s AND `name` = %s', *[1, 'Ryan'])
 
 if __name__ == '__main__':
-    import unittest
     unittest.main()
 

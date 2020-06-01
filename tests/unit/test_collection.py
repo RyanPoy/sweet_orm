@@ -1,12 +1,12 @@
 # coding: utf8
-from __init__ import TestCase
+import unittest
 from sweet_orm.utils.collection import *
 
 class Foobar(object):
     pass
 
 
-class TestCollection(TestCase):
+class TestCollection(unittest.TestCase):
 
     def test_get_value(self):
         obj = Foobar()
@@ -27,5 +27,4 @@ class TestCollection(TestCase):
 
 
 if __name__ == '__main__':
-    import unittest
     unittest.main()

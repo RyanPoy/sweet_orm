@@ -1,11 +1,11 @@
 #coding: utf8
-from __init__ import TestCase
-from __init__ import StudentForHasOneThrough as Student
-from __init__ import CourseForHasOneThrough as Course
-from __init__ import ScoreForHasOneThrough as Score
+import unittest
+from .helper import StudentForHasOneThrough as Student
+from .helper import CourseForHasOneThrough as Course
+from .helper import ScoreForHasOneThrough as Score
 
 
-class TestRelationHasOneThroughMysql(TestCase):
+class TestRelationHasOneThroughMysql(unittest.TestCase):
 
     def setUp(self):
         self.remove_record()
@@ -72,5 +72,4 @@ class TestRelationHasOneThroughMysql(TestCase):
 
 
 if __name__ == '__main__':
-    import unittest
     unittest.main()

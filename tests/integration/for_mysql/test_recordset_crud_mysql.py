@@ -1,10 +1,11 @@
 #coding: utf8
-from __init__ import TestCase, User
+import unittest
+from .helper import User
 from sweet_orm.db.recordset import Recordset
 from sweet_orm.utils import mydict
 
 
-class TestRecordsetCRUDMySQL(TestCase):
+class TestRecordsetCRUDMySQL(unittest.TestCase):
     
     def setUp(self):
         self.db = User.db
@@ -255,5 +256,4 @@ class TestRecordsetCRUDMySQL(TestCase):
 
 
 if __name__ == '__main__':
-    import unittest
     unittest.main()

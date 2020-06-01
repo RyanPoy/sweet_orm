@@ -1,9 +1,9 @@
 #coding: utf8
+import unittest
 from sweet_orm.utils.validation import PresenceValidator
-from __init__ import TestCase
 
 
-class TestValidatorPresence(TestCase):
+class TestValidatorPresence(unittest.TestCase):
 
     def test_presence_validate_if_value_is_none(self):
         self.assertFalse(PresenceValidator().validate(None))
@@ -43,5 +43,4 @@ class TestValidatorPresence(TestCase):
         
 
 if __name__ == '__main__':
-    import unittest
     unittest.main()

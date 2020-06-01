@@ -1,9 +1,10 @@
 #coding: utf8
-from __init__ import TestCase, Student, Course, Score
+import unittest
+from .helper import Student, Course, Score
 from sweet_orm.orm import atomic
 
 
-class TestTransactionMysql(TestCase):
+class TestTransactionMysql(unittest.TestCase):
 
     def setUp(self):
         self.remove_record()
@@ -123,5 +124,4 @@ class TestTransactionMysql(TestCase):
         
 
 if __name__ == '__main__':
-    import unittest
     unittest.main()

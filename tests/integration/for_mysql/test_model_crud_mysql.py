@@ -1,9 +1,10 @@
 #coding: utf8
-from __init__ import TestCase, User
+import unittest
+from .helper import User
 from sweet_orm.utils import mydict
 
 
-class TestModelCRUDMySQL(TestCase):
+class TestModelCRUDMySQL(unittest.TestCase):
     
     def setUp(self):
         self.remove_record()
@@ -196,5 +197,4 @@ class TestModelCRUDMySQL(TestCase):
 
 
 if __name__ == '__main__':
-    import unittest
     unittest.main()

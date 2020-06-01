@@ -1,11 +1,12 @@
 #coding: utf8
-from __init__ import TestCase, User, Mobile
+import unittest
+from .helper import User, Mobile
 from sweet_orm.orm import Model
 from sweet_orm.orm.relations import *
 from MySQLdb import IntegrityError
 
 
-class TestRelationHasManyToMysql(TestCase):
+class TestRelationHasManyToMysql(unittest.TestCase):
     
     def setUp(self):
         self.remove_record()
@@ -102,5 +103,4 @@ class TestRelationHasManyToMysql(TestCase):
 
 
 if __name__ == '__main__':
-    import unittest
     unittest.main()
