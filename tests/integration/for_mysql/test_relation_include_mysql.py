@@ -1,7 +1,11 @@
 #coding: utf8
+import sys
+import os
+sys.path.append(os.path.join(os.path.dirname(__file__), '..', '..'))
+
 import unittest
-from .helper import User, Mobile, Car, Tag, Article, Course, Student, Score, db_mgr
-from .helper import StudentForHasOneThrough as Student2, CourseForHasOneThrough as Course2, ScoreForHasOneThrough as Score2
+from tests.integration.for_mysql.helper import User, Mobile, Car, Tag, Article, Course, Student, Score, db_mgr
+from tests.integration.for_mysql.helper import StudentForHasOneThrough as Student2, CourseForHasOneThrough as Course2, ScoreForHasOneThrough as Score2
 from sweet_orm.orm import Model
 from sweet_orm.db import MySQL
 from sweet_orm.db.recordset import Recordset

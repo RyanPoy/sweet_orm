@@ -1,3 +1,8 @@
+#coding: utf8
+import sys
+import os
+sys.path.append(os.path.join(os.path.dirname(__file__), '..', '..'))
+
 import unittest
 from sweet_orm.db import DBManager
 from sweet_orm.orm.model import Model
@@ -22,8 +27,8 @@ class Foo(Model):
 
 
 class User(Model):
-    has_many('integration.for_mysql.helper.Mobile', cascade=True)
-    has_one('integration.for_mysql.helper.Car', cascade=True)
+    has_many('tests.integration.for_mysql.helper.Mobile', cascade=True)
+    has_one('tests.integration.for_mysql.helper.Car', cascade=True)
 
 
 class Mobile(Model):
@@ -35,7 +40,7 @@ class Car(Model):
 
 
 class Article(Model):
-    has_and_belongs_to_many('integration.for_mysql.helper.Tag')
+    has_and_belongs_to_many('tests.integration.for_mysql.helper.Tag')
 
 
 class Tag(Model):
@@ -43,18 +48,18 @@ class Tag(Model):
 
 
 class Category(Model):
-    has_many('integration.for_mysql.helper.Category', name='children', fk='parent_id')
-    belongs_to('integration.for_mysql.helper.Category', name='parent', fk='parent_id')
+    has_many('tests.integration.for_mysql.helper.Category', name='children', fk='parent_id')
+    belongs_to('tests.integration.for_mysql.helper.Category', name='parent', fk='parent_id')
 
 
 class Score(Model):
-    belongs_to('integration.for_mysql.helper.Student')
-    belongs_to('integration.for_mysql.helper.Course')
+    belongs_to('tests.integration.for_mysql.helper.Student')
+    belongs_to('tests.integration.for_mysql.helper.Course')
 
 
 class Student(Model):
     has_many(Score)
-    has_many('integration.for_mysql.helper.Course', through=Score)
+    has_many('tests.integration.for_mysql.helper.Course', through=Score)
 
 
 class Course(Model):
@@ -64,14 +69,14 @@ class Course(Model):
 
 class StudentForHasOneThrough(Model):
     __tablename__ = 'students'
-    has_one('integration.for_mysql.helper.ScoreForHasOneThrough', name='score', fk='student_id')
-    has_one('integration.for_mysql.helper.CourseForHasOneThrough', name="course", through="integration.for_mysql.helper.ScoreForHasOneThrough", through_fk_on_owner='student_id', through_fk_on_target='course_id')
+    has_one('tests.integration.for_mysql.helper.ScoreForHasOneThrough', name='score', fk='student_id')
+    has_one('tests.integration.for_mysql.helper.CourseForHasOneThrough', name="course", through="tests.integration.for_mysql.helper.ScoreForHasOneThrough", through_fk_on_owner='student_id', through_fk_on_target='course_id')
 
 
 class CourseForHasOneThrough(Model):
     __tablename__ = 'courses'
-    has_one('integration.for_mysql.helper.ScoreForHasOneThrough', name='score', fk='course_id')
-    has_one(StudentForHasOneThrough, name="student", through="integration.for_mysql.helper.ScoreForHasOneThrough", through_fk_on_owner='course_id', through_fk_on_target='student_id')
+    has_one('tests.integration.for_mysql.helper.ScoreForHasOneThrough', name='score', fk='course_id')
+    has_one(StudentForHasOneThrough, name="student", through="tests.integration.for_mysql.helper.ScoreForHasOneThrough", through_fk_on_owner='course_id', through_fk_on_target='student_id')
 
 
 class ScoreForHasOneThrough(Model):

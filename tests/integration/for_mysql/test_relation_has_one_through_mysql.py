@@ -1,8 +1,12 @@
 #coding: utf8
+import sys
+import os
+sys.path.append(os.path.join(os.path.dirname(__file__), '..', '..'))
+
 import unittest
-from .helper import StudentForHasOneThrough as Student
-from .helper import CourseForHasOneThrough as Course
-from .helper import ScoreForHasOneThrough as Score
+from tests.integration.for_mysql.helper import StudentForHasOneThrough as Student
+from tests.integration.for_mysql.helper import CourseForHasOneThrough as Course
+from tests.integration.for_mysql.helper import ScoreForHasOneThrough as Score
 
 
 class TestRelationHasOneThroughMysql(unittest.TestCase):

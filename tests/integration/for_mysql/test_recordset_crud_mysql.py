@@ -1,6 +1,10 @@
 #coding: utf8
+import sys
+import os
+sys.path.append(os.path.join(os.path.dirname(__file__), '..', '..'))
+
 import unittest
-from .helper import User
+from tests.integration.for_mysql.helper import User
 from sweet_orm.db.recordset import Recordset
 from sweet_orm.utils import mydict
 

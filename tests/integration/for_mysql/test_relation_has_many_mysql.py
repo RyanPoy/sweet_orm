@@ -1,6 +1,10 @@
 #coding: utf8
+import sys
+import os
+sys.path.append(os.path.join(os.path.dirname(__file__), '..', '..'))
+
 import unittest
-from .helper import User, Mobile
+from tests.integration.for_mysql.helper import User, Mobile
 from sweet_orm.orm import Model
 from sweet_orm.orm.relations import *
 from MySQLdb import IntegrityError
