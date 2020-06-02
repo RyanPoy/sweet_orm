@@ -1,8 +1,6 @@
 #coding: utf8
 import unittest
 from .helper import Foo
-from sweet_orm.db import MySQL
-from sweet_orm.utils import mydict
 from sweet_orm.orm.fields import *
 
 
