@@ -274,7 +274,7 @@ class Recordset(object):
     def update(self, **kwargs):
         update_columns, update_params = [], []
         for k, v in kwargs.items():
-            update_columns.append('%s = %%s' % self.__aqm(k))
+            update_columns.append('%s = %s' % (self.__aqm(k), self.paramstyle_marks))
             update_params.append(v)
 
         sql = 'UPDATE %s' % self.tablename
