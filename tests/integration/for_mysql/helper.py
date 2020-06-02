@@ -19,67 +19,75 @@ db_mgr = DBManager({
         'show_sql': True,
     }
 })
-Model.db = db_mgr.new_db('default')
 
 
-class Foo(Model):
+class AbsModel(Model):
+
+    __abs = True
+    db = db_mgr.new_db('default')
+
+    # class Meta:
+    #     abs = True
+
+
+class Foo(AbsModel):
     pass
 
 
-class User(Model):
+class User(AbsModel):
     has_many('tests.integration.for_mysql.helper.Mobile', cascade=True)
     has_one('tests.integration.for_mysql.helper.Car', cascade=True)
 
 
-class Mobile(Model):
+class Mobile(AbsModel):
     belongs_to(User)
 
 
-class Car(Model):
+class Car(AbsModel):
     belongs_to(User, name='user')
 
 
-class Article(Model):
+class Article(AbsModel):
     has_and_belongs_to_many('tests.integration.for_mysql.helper.Tag')
 
 
-class Tag(Model):
+class Tag(AbsModel):
     has_and_belongs_to_many(Article)
 
 
-class Category(Model):
+class Category(AbsModel):
     has_many('tests.integration.for_mysql.helper.Category', name='children', fk='parent_id')
     belongs_to('tests.integration.for_mysql.helper.Category', name='parent', fk='parent_id')
 
 
-class Score(Model):
+class Score(AbsModel):
     belongs_to('tests.integration.for_mysql.helper.Student')
     belongs_to('tests.integration.for_mysql.helper.Course')
 
 
-class Student(Model):
+class Student(AbsModel):
     has_many(Score)
     has_many('tests.integration.for_mysql.helper.Course', through=Score)
 
 
-class Course(Model):
+class Course(AbsModel):
     has_many(Score)
     has_many(Student, through=Score)
 
 
-class StudentForHasOneThrough(Model):
+class StudentForHasOneThrough(AbsModel):
     __tablename__ = 'students'
     has_one('tests.integration.for_mysql.helper.ScoreForHasOneThrough', name='score', fk='student_id')
     has_one('tests.integration.for_mysql.helper.CourseForHasOneThrough', name="course", through="tests.integration.for_mysql.helper.ScoreForHasOneThrough", through_fk_on_owner='student_id', through_fk_on_target='course_id')
 
 
-class CourseForHasOneThrough(Model):
+class CourseForHasOneThrough(AbsModel):
     __tablename__ = 'courses'
     has_one('tests.integration.for_mysql.helper.ScoreForHasOneThrough', name='score', fk='course_id')
     has_one(StudentForHasOneThrough, name="student", through="tests.integration.for_mysql.helper.ScoreForHasOneThrough", through_fk_on_owner='course_id', through_fk_on_target='student_id')
 
 
-class ScoreForHasOneThrough(Model):
+class ScoreForHasOneThrough(AbsModel):
     __tablename__ = 'scores'
     belongs_to(StudentForHasOneThrough, name='student', fk='student_id')
     belongs_to(CourseForHasOneThrough, name='course', fk='course_id')

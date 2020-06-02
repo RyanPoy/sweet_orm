@@ -9,7 +9,7 @@ class ModelMetaClass(type):
 
     def __init__(cls, name, bases, attr):
 
-        if name != 'Model':
+        if name != 'Model' and getattr(cls, '_%s__abs' % name, False) is False:
             # set __tablename__ to model Class
             if not hasattr(cls, '__tablename__'):
                 setattr(cls, '__tablename__', tableize(cls.__name__))

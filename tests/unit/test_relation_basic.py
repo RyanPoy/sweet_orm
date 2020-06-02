@@ -1,8 +1,18 @@
 #coding: utf8
 import unittest
+from unittest import mock
 from sweet_orm.orm.model import Model
 from sweet_orm.orm.relations import *
 import inspect
+
+def get_db():
+    db = mock.MagicMock('db')
+    db.qutotation_marks = '`'
+    db.paramstyle_marks = '%s'
+    db.get_columns = mock.MagicMock(return_value={})
+    return db
+
+db = get_db()
 
 
 class TestRelationBasic(unittest.TestCase):
@@ -10,9 +20,11 @@ class TestRelationBasic(unittest.TestCase):
     def test_belongs_to_without_argument(self):
 
         class Member(Model):
+            db = db
             __tablename__ = 'users'
 
         class Phone(Model):
+            db = db
             __tablename__ = 'mobiles'
             belongs_to(Member)
 
@@ -26,10 +38,12 @@ class TestRelationBasic(unittest.TestCase):
     def test_belongs_to_with_argument(self):
 
         class Member(Model):
+            db = db
             __pk__ = 'member_id'
             __tablename__ = 'users'
 
         class Phone(Model):
+            db = db
             __tablename__ = 'mobiles'
             belongs_to(Member, name='user', fk='owner_id')
 
@@ -43,9 +57,11 @@ class TestRelationBasic(unittest.TestCase):
     def test_has_many_without_argument(self):
 
         class Phone(Model):
+            db = db
             __tablename__ = 'mobiles'
         
         class Member(Model):
+            db = db
             __tablename__ = 'users'
             has_many(Phone)
 
@@ -60,9 +76,11 @@ class TestRelationBasic(unittest.TestCase):
     def test_has_many_with_argument(self):
 
         class Phone(Model):
+            db = db
             __tablename__ = 'mobiles'
         
         class Member(Model):
+            db = db
             __tablename__ = 'users'
             has_many(Phone, name='mobiles', fk='user_id')
 
@@ -77,9 +95,11 @@ class TestRelationBasic(unittest.TestCase):
     def test_has_one_without_argument(self):
 
         class Phone(Model):
+            db = db
             __tablename__ = 'mobiles'
         
         class Member(Model):
+            db = db
             __tablename__ = 'users'
             has_one(Phone)
 
@@ -94,9 +114,11 @@ class TestRelationBasic(unittest.TestCase):
     def test_has_one_with_argument(self):
 
         class Phone(Model):
+            db = db
             __tablename__ = 'mobiles'
         
         class Member(Model):
+            db = db 
             __tablename__ = 'users'
             has_one(Phone, name='mobile', fk='user_id')
 
@@ -111,9 +133,10 @@ class TestRelationBasic(unittest.TestCase):
     def test_has_and_belongs_to_many_without_argument(self):
 
         class Role(Model):
-            pass
+            db = db
 
         class Group(Model):
+            db = db
             has_and_belongs_to_many(Role)
 
         HasAndBelongsToMany(target=Group).set_owner(Role)
@@ -139,9 +162,10 @@ class TestRelationBasic(unittest.TestCase):
     def test_has_and_belongs_to_many_with_argument(self):
 
         class Role(Model):
-            pass
+            db = db
 
         class Group(Model):
+            db = db
             has_and_belongs_to_many(Role, name='roles', through_fk_on_owner="gid", through_fk_on_target="rid")
 
         HasAndBelongsToMany(target=Group, name='groups', through_fk_on_owner="rid", through_fk_on_target="gid").set_owner(Role)

@@ -86,8 +86,8 @@ class DecimalField(Field):
         self.name = self._init_name(name)
         self.null = self._init_null(null)
         self.default = None if default is None else to_decimal(default)
-        self.precision = precision
-        self.scale = scale
+        self.precision = precision if precision else 10
+        self.scale = scale if precision else 0
 
 
 class TextField(Field):

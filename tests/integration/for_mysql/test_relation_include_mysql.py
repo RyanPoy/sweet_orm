@@ -4,7 +4,7 @@ import os
 sys.path.append(os.path.join(os.path.dirname(__file__), '..', '..', '..'))
 
 import unittest
-from tests.integration.for_mysql.helper import User, Mobile, Car, Tag, Article, Course, Student, Score, db_mgr
+from tests.integration.for_mysql.helper import AbsModel, User, Mobile, Car, Tag, Article, Course, Student, Score, db_mgr
 from tests.integration.for_mysql.helper import StudentForHasOneThrough as Student2, CourseForHasOneThrough as Course2, ScoreForHasOneThrough as Score2
 from sweet_orm.orm import Model
 from sweet_orm.db import MySQL
@@ -54,14 +54,14 @@ class TestRelationIncludeMysql(unittest.TestCase):
 
     @contextmanager
     def mock_db(self):
-        src_db = Model.db
-        Model.db = FakeDB.instance()
+        src_db = AbsModel.db
+        AbsModel.db = FakeDB.instance()
         try:
             yield self
         except Exception:
             raise
         finally:
-            Model.db = src_db
+            AbsModel.db = src_db
             FakeDB.clear_sqls()
 
     def test_include_belongs_to(self):

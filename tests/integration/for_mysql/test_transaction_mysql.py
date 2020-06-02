@@ -5,15 +5,17 @@ sys.path.append(os.path.join(os.path.dirname(__file__), '..', '..', '..'))
 
 import unittest
 from tests.integration.for_mysql.helper import Student, Course, Score
-from sweet_orm.orm import atomic
+from sweet_orm.orm import atomic, Model
 
 
 class TestTransactionMysql(unittest.TestCase):
 
     def setUp(self):
+        Model.db = Student.db
         self.remove_record()
 
     def tearDown(self):
+        Model.db = None
         self.remove_record()
 
     def remove_record(self):

@@ -4,8 +4,7 @@ import os
 sys.path.append(os.path.join(os.path.dirname(__file__), '..', '..', '..'))
 
 import unittest
-from tests.integration.for_mysql.helper import User, Mobile
-from sweet_orm.orm import Model
+from tests.integration.for_mysql.helper import AbsModel, User, Mobile
 from sweet_orm.orm.relations import *
 from MySQLdb import IntegrityError
 
@@ -87,7 +86,7 @@ class TestRelationHasManyToMysql(unittest.TestCase):
 
     def test_delete_if_set_not_cascade(self):
 
-        class Member(Model):
+        class Member(AbsModel):
             __tablename__ = 'users'
 
             has_many('mobiles', '__init__.Mobile', cascade=False)
