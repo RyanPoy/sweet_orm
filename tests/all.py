@@ -10,9 +10,9 @@ logging.basicConfig(
 )
 
 import unittest
-from integration.for_mysql.test_recordset_crud_mysql import TestRecordsetCRUDMySQL
 from integration.for_mysql.test_model_struct_mysql import TestModelStructMySQL
 from integration.for_mysql.test_model_crud_mysql import TestModelCRUDMySQL
+from integration.for_mysql.test_recordset_crud_mysql import TestRecordsetCRUDMySQL
 from integration.for_mysql.test_relation_belongs_to_mysql import TestRelationBelongsToMysql
 from integration.for_mysql.test_relation_reference_myself_mysql import TestRelationReferenceMysqlMysql
 from integration.for_mysql.test_relation_has_many_mysql import TestRelationHasManyToMysql
@@ -23,19 +23,19 @@ from integration.for_mysql.test_relation_has_and_belongs_to_many_mysql import Te
 from integration.for_mysql.test_relation_include_mysql import TestRelationIncludeMysql
 from integration.for_mysql.test_transaction_mysql import TestTransactionMysql
 
-from unit.test_utils import TestUtils
-from unit.test_inflection import TestInflection
+from unit.test_clauses import TestClauses
 from unit.test_collection import TestCollection
 from unit.test_filter import TestFilter
-from unit.test_clauses import TestClauses
-
-from unit.test_relation_basic import TestRelationBasic
-from unit.test_recordset_query import TestRecordsetQuery
-from unit.test_recordset_insert import TestRecordsetInsert
-from unit.test_recordset_delete import TestRecordsetDelete
-from unit.test_recordset_update import TestRecordsetUpdate
-
+from unit.test_inflection import TestInflection
 from unit.test_model_define import TestModelDefine
+
+from unit.test_recordset_delete import TestRecordsetDelete
+from unit.test_recordset_insert import TestRecordsetInsert
+from unit.test_recordset_query import TestRecordsetQuery
+from unit.test_recordset_update import TestRecordsetUpdate
+from unit.test_relation_basic import TestRelationBasic
+
+from unit.test_utils import TestUtils
 
 from unit.test_validator_acceptance import TestValidatorAcceptance
 from unit.test_validator_confirmation import TestValidatorConfirmation
@@ -48,19 +48,18 @@ from unit.test_validator_presence import TestValidatorPresence
 
 
 unit_tests = [
-    TestUtils,
-    TestInflection,
+    TestClauses,
     TestCollection,
     TestFilter,
-    TestClauses,
-
-    TestRecordsetQuery,
-    TestRecordsetInsert,
-    TestRecordsetDelete,
-    TestRecordsetUpdate,
-
+    TestInflection,
     TestModelDefine,
+
+    TestRecordsetDelete,
+    TestRecordsetInsert,
+    TestRecordsetQuery,
+    TestRecordsetUpdate,
     TestRelationBasic,
+    TestUtils,
 
     TestValidatorAcceptance,
     TestValidatorConfirmation,
