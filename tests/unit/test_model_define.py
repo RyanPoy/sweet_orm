@@ -1,12 +1,23 @@
 #coding: utf8
+from unittest import mock
 import unittest
 from sweet_orm.orm.model import Model
 
 
+def get_db():
+    db = mock.MagicMock('db')
+    db.qutotation_marks = '`'
+    db.paramstyle_marks = '%s'
+    db.get_columns = mock.MagicMock(return_value={})
+    return db
+
+db = get_db()
+
 class ModelAutoStub(Model):
-    pass
+    db = db
 
 class ModelCustomerStub(Model):
+    db = db
     __tablename__ = 'customer_models'
     __pk__ = 'customer_pk'
     __timestamp__ = False
