@@ -16,6 +16,7 @@ db_mgr = DBManager({
 })
 Model.db = db_mgr.new_db('default')
 
+
 class Foo(Model):
     pass
 

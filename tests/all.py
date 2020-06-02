@@ -14,7 +14,7 @@ from integration.for_mysql.test_model_struct_mysql import TestModelStructMySQL
 from integration.for_mysql.test_model_crud_mysql import TestModelCRUDMySQL
 from integration.for_mysql.test_recordset_crud_mysql import TestRecordsetCRUDMySQL
 from integration.for_mysql.test_relation_belongs_to_mysql import TestRelationBelongsToMysql
-from integration.for_mysql.test_relation_reference_myself_mysql import TestRelationReferenceMysqlMysql
+from integration.for_mysql.test_relation_reference_myself_mysql import TestRelationReferenceMyselfMysql
 from integration.for_mysql.test_relation_has_many_mysql import TestRelationHasManyToMysql
 from integration.for_mysql.test_relation_has_many_through_mysql import TestRelationHasManyThroughMysql
 from integration.for_mysql.test_relation_has_one_mysql import TestHasOneToMysql
@@ -80,7 +80,7 @@ integration_tests = [
     TestModelCRUDMySQL,
 
     TestRelationBelongsToMysql,
-    TestRelationReferenceMysqlMysql,
+    TestRelationReferenceMyselfMysql,
 
     TestRelationHasManyToMysql,
     TestRelationHasManyThroughMysql,

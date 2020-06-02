@@ -3,7 +3,7 @@ import unittest
 from .helper import Category
 
 
-class TestRelationReferenceMysqlMysql(unittest.TestCase):
+class TestRelationReferenceMyselfMysql(unittest.TestCase):
     
     def setUp(self):
         self.remove_record()
