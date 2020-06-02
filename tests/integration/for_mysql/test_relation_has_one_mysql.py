@@ -1,7 +1,7 @@
 #coding: utf8
 import sys
 import os
-sys.path.append(os.path.join(os.path.dirname(__file__), '..', '..'))
+sys.path.append(os.path.join(os.path.dirname(__file__), '..', '..', '..'))
 
 import unittest
 from tests.integration.for_mysql.helper import User, Mobile, Car
