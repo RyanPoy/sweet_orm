@@ -26,9 +26,6 @@ class AbsModel(Model):
     __abs = True
     db = db_mgr.new_db('default')
 
-    # class Meta:
-    #     abs = True
-
 
 class Foo(AbsModel):
     pass
