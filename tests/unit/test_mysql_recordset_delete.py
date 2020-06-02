@@ -1,35 +1,32 @@
 #coding: utf8
 import unittest
 from unittest import mock
-from sweet_orm.db.recordset import Recordset
+from sweet_orm.db.recordset import MySQLRecordset
 
 
-class TestRecordsetDelete(unittest.TestCase):
+class TestMySQLRecordsetDelete(unittest.TestCase):
 
     def get_db(self):
-        db = mock.MagicMock('db')
-        db.qutotation_marks = '`'
-        db.paramstyle_marks = '%s'
-        return db
+        return mock.MagicMock('db')
 
     def test_delete(self):
         db = self.get_db()
         db.execute_rowcount = mock.MagicMock(return_value=3)
-        tb = Recordset(db=db, tbname='users')
+        tb = MySQLRecordset(db=db, tbname='users')
         tb.where(id=[1, 2, 3], name='Ryan', age__gte=30).delete()
         db.execute_rowcount.assert_called_once_with('DELETE FROM `users` WHERE `id` IN (%s, %s, %s) AND `name` = %s AND `age` >= %s', *[1, 2, 3, "Ryan", 30])
 
     def test_delete_with_join(self):
         db = self.get_db()
         db.execute_rowcount = mock.MagicMock(return_value=3)
-        tb = Recordset(db=db, tbname='users')
+        tb = MySQLRecordset(db=db, tbname='users')
         tb.where(id=[1,2,3]).or_where(name="Ryan").join('cars', on='users.id=cars.user_id').delete()
         db.execute_rowcount.assert_called_once_with('DELETE `users` FROM `users` INNER JOIN `cars` ON `users`.`id` = `cars`.`user_id` WHERE `id` IN (%s, %s, %s) OR `name` = %s', *[1, 2, 3, 'Ryan'])
 
     def test_truncate(self):
         db = self.get_db()
         db.execute_rowcount = mock.MagicMock(return_value=10)
-        tb = Recordset(db=db, tbname='users')
+        tb = MySQLRecordset(db=db, tbname='users')
         tb.where(id=[1, 2, 3]).truncate()
         db.execute_rowcount.assert_called_once_with('TRUNCATE `users`')
 
@@ -38,7 +35,7 @@ class TestRecordsetDelete(unittest.TestCase):
         db.fetchall = mock.MagicMock()
         db.execute_rowcount = mock.MagicMock()
 
-        tb = Recordset(db=db, tbname='users')
+        tb = MySQLRecordset(db=db, tbname='users')
         tb = tb.where(id=1, name='Ryan')
         tb.all()
         tb.delete()

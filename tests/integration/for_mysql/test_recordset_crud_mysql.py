@@ -5,7 +5,7 @@ sys.path.append(os.path.join(os.path.dirname(__file__), '..', '..', '..'))
 
 import unittest
 from tests.integration.for_mysql.helper import User
-from sweet_orm.db.recordset import Recordset
+from sweet_orm.db.recordset import MySQLRecordset
 from sweet_orm.utils import mydict
 
 
@@ -35,7 +35,7 @@ class TestRecordsetCRUDMySQL(unittest.TestCase):
 
     def test_table(self):
         table = self.db.records('users')
-        self.assertTrue(isinstance(table, Recordset))
+        self.assertTrue(isinstance(table, MySQLRecordset))
 
     def test_first(self):
         r = self.db.records('users').first()

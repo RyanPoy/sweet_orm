@@ -8,14 +8,12 @@ from tests.integration.for_mysql.helper import AbsModel, User, Mobile, Car, Tag,
 from tests.integration.for_mysql.helper import StudentForHasOneThrough as Student2, CourseForHasOneThrough as Course2, ScoreForHasOneThrough as Score2
 from sweet_orm.orm import Model
 from sweet_orm.db import MySQL
-from sweet_orm.db.recordset import Recordset
+from sweet_orm.db.recordset import MySQLRecordset
 from sweet_orm.utils.collection import Collection
 from contextlib import contextmanager
 
 
 class FakeDB(MySQL):
-    qutotation_marks = '`'
-    paramstyle_marks = '%s'
 
     SQLS = []
 
@@ -29,7 +27,6 @@ class FakeDB(MySQL):
 
     def fetchall(self, sql, *params):
         relt = super().fetchall(sql, *params)
-        # self.__class__.SQLS.append('%s | %s' % (sql, ','.join(map(str, params))))
         self.__class__.SQLS.append(sql)
         return relt
 
@@ -106,7 +103,7 @@ class TestRelationIncludeMysql(unittest.TestCase):
             us = User.all()
             for u in us:
                 ms = u.mobiles
-                self.assertEqual(Recordset, type(ms))
+                self.assertEqual(MySQLRecordset, type(ms))
                 for m in ms.all():
                     m.name
             self.assertEqual(3, len(FakeDB.SQLS))
@@ -177,7 +174,7 @@ class TestRelationIncludeMysql(unittest.TestCase):
             # not use include
             for s in Student.all():
                 cs = s.courses
-                self.assertEqual(type(cs), Recordset)
+                self.assertEqual(type(cs), MySQLRecordset)
                 for c in cs.all():
                     c.name
             self.assertEqual(4, len(FakeDB.SQLS))
@@ -283,7 +280,7 @@ class TestRelationIncludeMysql(unittest.TestCase):
             # not use include
             for t in Tag.all():
                 articles = t.articles
-                self.assertEqual(type(articles), Recordset)
+                self.assertEqual(type(articles), MySQLRecordset)
                 for a in articles.all():
                     a.title
             self.assertEqual(4, len(FakeDB.SQLS))

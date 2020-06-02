@@ -20,8 +20,6 @@ class Recordset(object):
 
     def __init__(self, db, tbname, model_class=None):
         self.db = db
-        self.qutotation_marks = db.qutotation_marks
-        self.paramstyle_marks = db.paramstyle_marks
         self.tbname = tbname
         self.select_clause = SelectClause(self.qutotation_marks)
         self.where_clause = WhereClause(self.qutotation_marks, self.paramstyle_marks)
@@ -400,3 +398,18 @@ class Recordset(object):
         )
         vs = self.db.fetchone(sql, *params)
         return vs.aggregate
+
+
+
+class MySQLRecordset(Recordset):
+
+    qutotation_marks = '`'
+    paramstyle_marks = '%s'
+
+
+
+class SQLiteRecordset(Recordset):
+
+    qutotation_marks = '`'
+    paramstyle_marks = '?'
+

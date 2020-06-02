@@ -1,22 +1,19 @@
 #coding: utf8
 import unittest
 from unittest import mock
-from sweet_orm.db.recordset import Recordset
+from sweet_orm.db.recordset import MySQLRecordset
 
 
-class TestRecordsetInsert(unittest.TestCase):
+class TestMySQLRecordsetInsert(unittest.TestCase):
 
     def get_db(self):
-        db = mock.MagicMock('db')
-        db.qutotation_marks = '`'
-        db.paramstyle_marks = '%s'
-        return db
+        return mock.MagicMock('db')
 
     def test_insert_an_record(self):
         db = self.get_db()
         db.execute_rowcount = mock.MagicMock(return_value=1)
 
-        tb = Recordset(db=db, tbname="users")
+        tb = MySQLRecordset(db=db, tbname="users")
         tb.insert(id=3, name="Poy", age=33)
         db.execute_rowcount.assert_called_once_with('INSERT INTO `users` (`id`, `name`, `age`) VALUES (%s, %s, %s)', *[3, "Poy", 33])
 
@@ -24,7 +21,7 @@ class TestRecordsetInsert(unittest.TestCase):
         db = self.get_db()
         db.execute_lastrowid = mock.MagicMock(return_value=1)
         
-        tb = Recordset(db=db, tbname="users")
+        tb = MySQLRecordset(db=db, tbname="users")
         tb.insert_getid(id=3, name="Poy", age=33)
         db.execute_lastrowid.assert_called_once_with('INSERT INTO `users` (`id`, `name`, `age`) VALUES (%s, %s, %s)', *[3, "Poy", 33])
 
@@ -32,7 +29,7 @@ class TestRecordsetInsert(unittest.TestCase):
         db = self.get_db()
         db.execute_rowcount = mock.MagicMock(return_value=1)
         
-        tb = Recordset(db=db, tbname="users")
+        tb = MySQLRecordset(db=db, tbname="users")
         tb.insert(dict(id=3, name="Poy", age=33))
         db.execute_rowcount.assert_called_once_with('INSERT INTO `users` (`id`, `name`, `age`) VALUES (%s, %s, %s)', *[3, "Poy", 33])
 
@@ -40,7 +37,7 @@ class TestRecordsetInsert(unittest.TestCase):
         db = self.get_db()
         db.execute_rowcount = mock.MagicMock(return_value=2)
         
-        tb = Recordset(db=db, tbname="users")
+        tb = MySQLRecordset(db=db, tbname="users")
         tb.insert([
             dict(id=3, name="Poy", age=33),
             dict(id=4, name="Ryan", age=44),

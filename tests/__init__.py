@@ -2,10 +2,13 @@
 import sys
 import os
 sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
+import unittest
 
+import logging
+logging.basicConfig(
+    level=logging.DEBUG, 
+    format="%(asctime)s - %(name)s [%(levelname)s]: %(message)s",
+)
 
-class UserForTemplateTest(object):
-    def __init__(self, name, age):
-        self.name = name
-        self.age = age
-
+class TestCase(unittest.TestCase):
+    pass

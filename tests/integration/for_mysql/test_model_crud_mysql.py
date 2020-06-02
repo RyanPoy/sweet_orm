@@ -3,12 +3,12 @@ import sys
 import os
 sys.path.append(os.path.join(os.path.dirname(__file__), '..', '..', '..'))
 
-import unittest
 from tests.integration.for_mysql.helper import User
+from tests import TestCase
 from sweet_orm.utils import mydict
 
 
-class TestModelCRUDMySQL(unittest.TestCase):
+class TestModelCRUDMySQL(TestCase):
     
     def setUp(self):
         self.remove_record()
