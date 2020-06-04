@@ -2,9 +2,12 @@
 from collections import namedtuple
 from sweet_orm.db.clauses import *
 from sweet_orm.utils import *
+from abc import *
 import functools
 import copy
 
+
+class SQLError(Exception): pass
 
 def dcp(method):
     @functools.wraps(method)
@@ -108,19 +111,19 @@ class Recordset(object):
         return self.limit((page_num-1) * page_size).offset(page_size)
 
     def join(self, tbname, on=None, func=None):
-        return self.__join(JoinClause, tbname, on, func)
+        return self._join(JoinClause, tbname, on, func)
 
     def left_join(self, tbname, on=None, func=None):
-        return self.__join(LeftJoinClause, tbname, on, func)
+        return self._join(LeftJoinClause, tbname, on, func)
 
     def cross_join(self, tbname, on=None, func=None):
-        return self.__join(CrossJoinClause, tbname, on, func)
+        return self._join(CrossJoinClause, tbname, on, func)
 
     def right_join(self, tbname, on=None, func=None):
-        return self.__join(RightJoinClause, tbname, on, func)
+        return self._join(RightJoinClause, tbname, on, func)
 
     @dcp
-    def __join(self, join_clause_class, tbname, on, func=None):
+    def _join(self, join_clause_class, tbname, on, func=None):
         jc = join_clause_class(self.qutotation_marks, self.paramstyle_marks, tbname)
         if on:
             jc.on(on)
@@ -152,26 +155,26 @@ class Recordset(object):
             self._exists_tables.append( (WhereClause.OR, t) )
         return self
 
-    def __aqm(self, s):
+    def _aqm(self, s):
         return aqm(s, self.qutotation_marks)
 
     def _query_sql(self):
         params = []
-        from_sql = self.__from_sql(params)
+        from_sql = self._from_sql(params)
         select_sql, select_params = self.select_clause.compile()
         sql = '{select_sql} {from_sql}{lock_sql}'.format(
             select_sql= select_sql,
             from_sql=from_sql,
-            lock_sql=self.__lock_sql()
+            lock_sql=self._lock_sql()
         )
         params.extend(select_params)
         return sql, params
 
     @property
     def tablename(self):
-        return self.__aqm(self.tbname)
+        return self._aqm(self.tbname)
 
-    def __lock_sql(self):
+    def _lock_sql(self):
         lock = ''
         if self._lock == self.LOCK.READ:
             lock = ' LOCK IN SHARE MODE'
@@ -179,7 +182,7 @@ class Recordset(object):
             lock = ' FOR UPDATE'
         return lock
 
-    def __push_exist_sql(self, where_sql, sql, params):
+    def _push_exist_sql(self, where_sql, sql, params):
         sqls = []
         for or_and, t in self._exists_tables:
             tmp_sql, tmp_params = t._query_sql()
@@ -198,20 +201,20 @@ class Recordset(object):
                 sql = '%s %s' % (sql, exists_tables_sql)
         return sql
 
-    def __from_sql(self, params):
+    def _from_sql(self, params):
         sql = 'FROM {tablename}'.format(tablename=self.tablename)
-        join_sql = self.__join_sql(params)
+        join_sql = self._join_sql(params)
         if join_sql:
             sql = '%s %s' % (sql, join_sql)
-        return self.__core_sql(sql, params)
+        return self._core_sql(sql, params)
 
-    def __core_sql(self, sql, params):
+    def _core_sql(self, sql, params):
         where_sql, where_params = self.where_clause.compile()
         if where_sql:
             sql = '%s %s' % (sql, where_sql)
             params.extend(where_params)
 
-        sql = self.__push_exist_sql(where_sql, sql, params)
+        sql = self._push_exist_sql(where_sql, sql, params)
         group_sql, group_params = self.group_clause.compile()
         if group_sql:
             sql = '%s %s' % (sql, group_sql)
@@ -222,7 +225,7 @@ class Recordset(object):
             sql = '%s %s' % (sql, having_sql)
             params.extend(having_params)
 
-        union_sql = self.__union_sql(params)
+        union_sql = self._union_sql(params)
         if union_sql:
             sql = '%s %s' % (sql, union_sql)
 
@@ -238,7 +241,7 @@ class Recordset(object):
 
         return sql
 
-    def __union_sql(self, params):
+    def _union_sql(self, params):
         sqls = []
         for u, _all in self.unions:
             sqls.append( 'UNION ALL' if _all else 'UNION' )
@@ -247,7 +250,7 @@ class Recordset(object):
             params.extend(tmp_params)
         return ' '.join(sqls)
 
-    def __join_sql(self, params):
+    def _join_sql(self, params):
         sqls = []
         for j in self._joins_clauses:
             tmp_sql, tmp_params = j.compile()
@@ -272,66 +275,55 @@ class Recordset(object):
     def update(self, **kwargs):
         update_columns, update_params = [], []
         for k, v in kwargs.items():
-            update_columns.append('%s = %s' % (self.__aqm(k), self.paramstyle_marks))
+            update_columns.append('%s = %s' % (self._aqm(k), self.paramstyle_marks))
             update_params.append(v)
 
         sql = 'UPDATE %s' % self.tablename
         params = [] 
-        join_sql = self.__join_sql(params)
+        join_sql = self._join_sql(params)
         if join_sql:
             sql = '%s %s' % (sql, join_sql)
 
         sql = '%s SET %s' % (sql, ', '.join(update_columns))
         params.extend(update_params)
 
-        sql = self.__core_sql(sql, params)
+        sql = self._core_sql(sql, params)
 
         return self.db.execute_rowcount(sql, *params)
 
     def increase(self, **kwargs):
-        return self.__in_or_decrease('+', **kwargs)
+        return self._in_or_decrease('+', **kwargs)
 
     def decrease(self, **kwargs):
-        return self.__in_or_decrease('-', **kwargs)
+        return self._in_or_decrease('-', **kwargs)
 
     @dcp
-    def __in_or_decrease(self, flag='+', **kwargs):
+    def _in_or_decrease(self, flag='+', **kwargs):
         update_columns, update_params = [], []
         for k, v in kwargs.items():
-            update_columns.append('{name} = {name} {flag} %s'.format(name=self.__aqm(k), flag=flag))
+            update_columns.append('{name} = {name} {flag} %s'.format(name=self._aqm(k), flag=flag))
             update_params.append(v)
 
         params = []
         sql = 'UPDATE %s' % self.tablename 
-        join_sql = self.__join_sql(params)
+        join_sql = self._join_sql(params)
         if join_sql:
             sql = '%s %s' % (sql, join_sql)
 
         sql = '%s SET %s' % (sql, ', '.join(update_columns))
         params.extend(update_params)
 
-        sql = self.__core_sql(sql, params)
+        sql = self._core_sql(sql, params)
 
         return self.db.execute_rowcount(sql, *params)
 
+    @abstractmethod
     def delete(self):
-        if self.model_class:
-            # mean that: User.where(age__gt=30).delete()
-            self.model_class._delete_relations(self.all())
+        pass
 
-        params = []
-        from_sql = self.__from_sql(params)
-        if not self._joins_clauses: # needn't join
-            sql = "DELETE {from_sql}".format(from_sql=from_sql)
-        else:
-            sql = "DELETE {tablename} {from_sql}".format(
-                tablename=self.tablename,
-                from_sql=from_sql
-            )
-        return self.db.execute_rowcount(sql, *params)
-
+    @abstractmethod
     def truncate(self):
-        return self.db.execute_rowcount('TRUNCATE {}'.format(self.tablename))
+        pass
 
     def first(self):
         sql, params = self._query_sql()
@@ -364,21 +356,21 @@ class Recordset(object):
         return True if self.first() else False
 
     def count(self, column=None, distinct=False):
-        return self.__func('count', column, distinct)
+        return self._func('count', column, distinct)
 
     def max(self, column, distinct=False):
-        return self.__func('max', column, distinct)
+        return self._func('max', column, distinct)
 
     def min(self, column, distinct=False):
-        return self.__func('min', column, distinct)
+        return self._func('min', column, distinct)
 
     def avg(self, column, distinct=False):
-        return self.__func('avg', column, distinct)
+        return self._func('avg', column, distinct)
 
     def sum(self, column, distinct=False):
-        return self.__func('sum', column, distinct)
+        return self._func('sum', column, distinct)
 
-    def __func(self, func_name, column, distinct=False):
+    def _func(self, func_name, column, distinct=False):
         func_name = func_name.upper()
 
         if not column:
@@ -387,10 +379,10 @@ class Recordset(object):
         if column == '*':
             distinct = False
 
-        column_name = self.__aqm(column)
+        column_name = self._aqm(column)
 
         params = []
-        from_sql = self.__from_sql(params)
+        from_sql = self._from_sql(params)
         sql = 'SELECT {func_name}({column_name}) AS aggregate {from_sql}'.format(
             func_name=func_name,
             column_name=column_name if not distinct else 'DISTINCT %s' % column_name,
@@ -406,6 +398,24 @@ class MySQLRecordset(Recordset):
     qutotation_marks = '`'
     paramstyle_marks = '%s'
 
+    def truncate(self):
+        return self.db.execute_rowcount('TRUNCATE {}'.format(self.tablename))
+
+    def delete(self):
+        if self.model_class:
+            # mean that: User.where(age__gt=30).delete()
+            self.model_class._delete_relations(self.all())
+
+        params = []
+        from_sql = self._from_sql(params)
+        if not self._joins_clauses: # needn't join
+            sql = "DELETE {from_sql}".format(from_sql=from_sql)
+        else:
+            sql = "DELETE {tablename} {from_sql}".format(
+                tablename=self.tablename,
+                from_sql=from_sql
+            )
+        return self.db.execute_rowcount(sql, *params)
 
 
 class SQLiteRecordset(Recordset):
@@ -413,3 +423,27 @@ class SQLiteRecordset(Recordset):
     qutotation_marks = '`'
     paramstyle_marks = '?'
 
+    def truncate(self):
+        r = self.db.execute_rowcount('DELETE FROM {}'.format(self.tablename))
+        # self.db.execute('UPDATE sqlite_sequence SET seq = 0 where name = {}'.format(self.tablename))
+        return r
+
+    def delete(self):
+        if self.model_class:
+            # mean that: User.where(age__gt=30).delete()
+            self.model_class._delete_relations(self.all())
+
+        params = []
+        from_sql = self._from_sql(params)
+        if not self._joins_clauses: # needn't join
+            sql = "DELETE {from_sql}".format(from_sql=from_sql)
+        elif self.model_class:
+            pk = model_class.__pk__
+            sql = "DELETE FROM {tablename} WHERE {tablename}.{pk} IN (SELECT {tablename}.{pk} {from_sql})".format(
+                tablename=self.tablename,
+                from_sql=from_sql,
+                pk=pk
+            )
+        else:
+            raise SQLError("SQLite can't support delete with join")
+        return self.db.execute_rowcount(sql, *params)

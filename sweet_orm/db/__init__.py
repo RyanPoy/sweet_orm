@@ -1,5 +1,7 @@
 #coding: utf8
 from .mysql import MySQL
+from .sqlite import SQLite
+from .recordset import SQLError
 
 
 class DBManager(object):
@@ -25,6 +27,7 @@ class DBManager(object):
     DEFAULT_NAME = 'default'
     DRIVER_MAPPING = {
         'mysql': MySQL,
+        'sqlite': SQLite
     }
 
     def __init__(self, config):
@@ -59,4 +62,4 @@ class DBManager(object):
         return driver_class(**db_config)
 
 
-__all__ = [DBManager, MySQL]
+__all__ = [DBManager, MySQL, SQLite, SQLError]
