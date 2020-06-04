@@ -425,7 +425,7 @@ class SQLiteRecordset(Recordset):
 
     def truncate(self):
         r = self.db.execute_rowcount('DELETE FROM {}'.format(self.tablename))
-        # self.db.execute('UPDATE sqlite_sequence SET seq = 0 where name = {}'.format(self.tablename))
+        self.db.execute('UPDATE sqlite_sequence SET seq = 0 where name = {}'.format(self.tablename))
         return r
 
     def delete(self):

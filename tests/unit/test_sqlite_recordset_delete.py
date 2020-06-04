@@ -27,9 +27,11 @@ class TestSQLiteRecordsetDelete(unittest.TestCase):
     def test_truncate(self):
         db = self.get_db()
         db.execute_rowcount = mock.MagicMock(return_value=10)
+        db.execute = mock.MagicMock()
         tb = SQLiteRecordset(db=db, tbname='users')
         tb.where(id=[1, 2, 3]).truncate()
         db.execute_rowcount.assert_called_once_with('DELETE FROM `users`')
+        db.execute.assert_called_once_with('UPDATE sqlite_sequence SET seq = 0 where name = `users`')
 
     def test_delete_after_find_all(self):
         db = self.get_db()
