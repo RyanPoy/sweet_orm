@@ -75,50 +75,38 @@ class Driver(object):
     
     def fetchall(self, sql, *params):
         """Returns a row list for the given query and parameters."""
-        cursor = self._cursor()
-        try:
-            self._execute(cursor, sql, *params)
+        with self._execute(sql, *params) as cursor:
             return [ mydict(row) for row in cursor ]
-        finally:
-            cursor.close()
-
+    
     def execute_lastrowid(self, sql, *params):
         """Executes the given query, returning the lastrowid from the query."""
-        cursor = self._cursor()
-        try:
-            self._execute(cursor, sql, *params)
+        with self._execute(sql, *params) as cursor:
             return cursor.lastrowid
-        finally:
-            cursor.close()
     
     def execute_rowcount(self, sql, *params):
         """Executes the given query, returning the rowcount from the query."""
-        cursor = self._cursor()
-        try:
-            self._execute(cursor, sql, *params)
+        with self._execute(sql, *params) as cursor:
             return cursor.rowcount
-        finally:
-            cursor.close()
             
     def execute(self, sql, *params):
-        cursor = self._cursor()
-        try:
-            self._execute(cursor, sql, *params)
+        with self._execute(sql, *params) as cursor:
             return self
-        finally:
-            cursor.close()
     raw = execute
 
-    def _execute(self, cursor, sql, *params):
+    @contextmanager
+    def _execute(self, sql, *params):
+        cursor = self._cursor()
         try:
             btime = time.time()
             cursor.execute(sql, params)
             if self.show_sql:
                 self._log_msg(self.__class__.logger.debug, btime, sql, *params)
+            yield cursor
         except:
             self._log_msg(self.__class__.logger.error, btime, sql, *params)
             raise
-        return self
+        finally:
+            cursor.close()
 
     def _log_msg(self, log_func, btime, sql, *params):
         param_buff = []
