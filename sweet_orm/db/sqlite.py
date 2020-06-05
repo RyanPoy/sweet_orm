@@ -11,7 +11,15 @@ import logging
 logger = logging.getLogger('SQLite')
 
 
-sqlite_row_factory = lambda cursor, row: dict((col[0], row[idx]) for idx, col in enumerate(cursor.description))
+# sqlite_row_factory = lambda cursor, row: dict((col[0], row[idx]) for idx, col in enumerate(cursor.description))
+# sqlite_row_factory = lambda cursor, row: dict(zip([col[0] for col in cursor.description], row))
+def sqlite_row_factory(cursor, row):
+    r = {}
+    for idx, col in enumerate(cursor.description):
+        colname = col[0]
+        if colname not in r:
+            r[colname] = row[idx]
+    return r
 
 class SQLite(object):
 
@@ -82,6 +90,8 @@ class SQLite(object):
         cursor = self._cursor()
         try:
             self._execute(cursor, sql, *params)
+            # print ('*'*20, cursor.description)
+            # return [ dict(row) for row in cursor ]
             return [ mydict(row) for row in cursor ]
         finally:
             cursor.close()

@@ -271,7 +271,11 @@ class Recordset(object):
         sql, params = insert_clause.insert(records, **kwargs).compile()
         return self.db.execute_rowcount(sql, *params)
 
-    @dcp
+    @abstractmethod
+    def update(self, **kwargs):
+        pass
+
+    # @dcp
     def update(self, **kwargs):
         update_columns, update_params = [], []
         for k, v in kwargs.items():
@@ -301,7 +305,13 @@ class Recordset(object):
     def _in_or_decrease(self, flag='+', **kwargs):
         update_columns, update_params = [], []
         for k, v in kwargs.items():
-            update_columns.append('{name} = {name} {flag} %s'.format(name=self._aqm(k), flag=flag))
+            update_columns.append(
+                '{name} = {name} {flag} {paramstyle_marks}'.format(
+                    name=self._aqm(k), 
+                    flag=flag,
+                    paramstyle_marks=self.paramstyle_marks
+                )
+            )
             update_params.append(v)
 
         params = []
@@ -417,11 +427,41 @@ class MySQLRecordset(Recordset):
             )
         return self.db.execute_rowcount(sql, *params)
 
+    # @dcp
+    def update(self, **kwargs):
+        update_columns, update_params = [], []
+        for k, v in kwargs.items():
+            update_columns.append('%s = %s' % (self._aqm(k), self.paramstyle_marks))
+            update_params.append(v)
+
+        sql = 'UPDATE %s' % self.tablename
+        params = [] 
+        join_sql = self._join_sql(params)
+        if join_sql:
+            sql = '%s %s' % (sql, join_sql)
+
+        sql = '%s SET %s' % (sql, ', '.join(update_columns))
+        params.extend(update_params)
+
+        sql = self._core_sql(sql, params)
+
+        return self.db.execute_rowcount(sql, *params)
+
 
 class SQLiteRecordset(Recordset):
 
     qutotation_marks = '`'
     paramstyle_marks = '?'
+
+    def __init__(self, db, tbname, model_class=None, pk='id'):
+        """ 
+        :param pk: primary key of the table. it will be used on delete with join、update with join
+        pk = model_class.__pk__ if model_class is not None
+        """
+        super().__init__(db, tbname, model_class=None)
+        self.table_pk = pk
+        if model_class:
+            self.table_pk = model_class.__pk__
 
     def truncate(self):
         r = self.db.execute_rowcount('DELETE FROM {}'.format(self.tablename))
@@ -440,13 +480,34 @@ class SQLiteRecordset(Recordset):
         from_sql = self._from_sql(params)
         if not self._joins_clauses: # needn't join
             sql = "DELETE {from_sql}".format(from_sql=from_sql)
-        elif self.model_class:
-            pk = model_class.__pk__
+        elif self.table_pk:
             sql = "DELETE FROM {tablename} WHERE {tablename}.{pk} IN (SELECT {tablename}.{pk} {from_sql})".format(
                 tablename=self.tablename,
                 from_sql=from_sql,
-                pk=pk
+                pk=self._aqm(self.table_pk)
             )
         else:
             raise SQLError("SQLite can't support delete with join")
+        return self.db.execute_rowcount(sql, *params)
+
+    # @dcp
+    def update(self, **kwargs):
+        update_columns, params = [], []
+        for k, v in kwargs.items():
+            update_columns.append('%s = %s' % (self._aqm(k), self.paramstyle_marks))
+            params.append(v)
+
+        sql = 'UPDATE %s SET %s' % (self.tablename, ', '.join(update_columns))
+        join_sql = self._join_sql(params)
+        if join_sql:
+            join_sql = self._core_sql(join_sql, params)
+            sub_select_sql = 'WHERE {tablename}.{pk} IN (SELECT {tablename}.{pk} FROM {tablename} {join_sql})'.format(
+                tablename=self.tablename,
+                join_sql=join_sql,
+                pk=self._aqm(self.table_pk)
+            )
+            sql = '%s %s' % (sql, sub_select_sql)
+        else:
+            sql = self._core_sql(sql, params)
+
         return self.db.execute_rowcount(sql, *params)

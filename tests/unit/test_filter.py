@@ -17,6 +17,15 @@ class TestFilter(unittest.TestCase):
         self.assertEqual('=', f.operator)
         self.assertEqual('`name` = %s', sql)
 
+    def test_filter2(self):
+        f = self.get_filter('user__name', 'Ryan')
+        sql, params = f.compile()
+        self.assertEqual('user.name', f.name)
+        self.assertEqual('Ryan', f.value)
+        self.assertEqual(['Ryan'], params)
+        self.assertEqual('=', f.operator)
+        self.assertEqual('`user`.`name` = %s', sql)
+
     def test_filter_not(self):
         f = self.get_filter('age__not', 10)
         sql, params = f.compile()
