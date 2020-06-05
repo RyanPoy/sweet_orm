@@ -90,8 +90,6 @@ class SQLite(object):
         cursor = self._cursor()
         try:
             self._execute(cursor, sql, *params)
-            # print ('*'*20, cursor.description)
-            # return [ dict(row) for row in cursor ]
             return [ mydict(row) for row in cursor ]
         finally:
             cursor.close()
@@ -198,6 +196,7 @@ class SQLite(object):
         self._conn = sqlite3.connect(**self._db_args)
         self._conn.row_factory = sqlite_row_factory
         self.set_autocommit(True)
+        self.execute('PRAGMA foreign_keys = ON;')
     
     def _cursor(self):
         return self._conn.cursor()

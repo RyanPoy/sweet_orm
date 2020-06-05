@@ -3,12 +3,6 @@ import sys
 import os
 sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
 
-import logging
-logging.basicConfig(
-    level=logging.DEBUG, 
-    format="%(asctime)s - %(name)s [%(levelname)s]: %(message)s",
-)
-
 import unittest
 from integration.for_mysql.test_model_struct_mysql import TestModelStructMySQL
 from integration.for_mysql.test_model_crud_mysql import TestModelCRUDMySQL
@@ -23,16 +17,33 @@ from integration.for_mysql.test_relation_has_and_belongs_to_many_mysql import Te
 from integration.for_mysql.test_relation_include_mysql import TestRelationIncludeMysql
 from integration.for_mysql.test_transaction_mysql import TestTransactionMysql
 
+from integration.for_sqlite.test_model_struct_sqlite import TestModelStructSQLite
+from integration.for_sqlite.test_model_crud_sqlite import TestModelCRUDSQLite
+from integration.for_sqlite.test_recordset_crud_sqlite import TestRecordsetCRUDSQLite
+from integration.for_sqlite.test_relation_belongs_to_sqlite import TestRelationBelongsToSQLite
+from integration.for_sqlite.test_relation_reference_myself_sqlite import TestRelationReferenceMyselfSQLite
+from integration.for_sqlite.test_relation_has_many_sqlite import TestRelationHasManyToSQLite
+from integration.for_sqlite.test_relation_has_many_through_sqlite import TestRelationHasManyThroughSQLite
+from integration.for_sqlite.test_relation_has_one_sqlite import TestHasOneToSQLite
+from integration.for_sqlite.test_relation_has_one_through_sqlite import TestRelationHasOneThroughSQLite
+from integration.for_sqlite.test_relation_has_and_belongs_to_many_sqlite import TestRelationHasAndBelongsToManySQLite
+from integration.for_sqlite.test_relation_include_sqlite import TestRelationIncludeSQLite
+from integration.for_sqlite.test_transaction_sqlite import TestTransactionSQLite
+
 from unit.test_clauses import TestClauses
 from unit.test_collection import TestCollection
 from unit.test_filter import TestFilter
 from unit.test_inflection import TestInflection
 from unit.test_model_define import TestModelDefine
 
-from unit.test_recordset_delete import TestRecordsetDelete
-from unit.test_recordset_insert import TestRecordsetInsert
-from unit.test_recordset_query import TestRecordsetQuery
-from unit.test_recordset_update import TestRecordsetUpdate
+from unit.test_mysql_recordset_delete import TestMySQLRecordsetDelete
+from unit.test_mysql_recordset_insert import TestMySQLRecordsetInsert
+from unit.test_mysql_recordset_query import TestMySQLRecordsetQuery
+from unit.test_mysql_recordset_update import TestMySQLRecordsetUpdate
+
+from unit.test_sqlite_recordset_delete import TestSQLiteRecordsetDelete
+from unit.test_sqlite_recordset_update import TestSQLiteRecordsetUpdate
+
 from unit.test_relation_basic import TestRelationBasic
 
 from unit.test_utils import TestUtils
@@ -54,11 +65,13 @@ unit_tests = [
     TestInflection,
     TestModelDefine,
 
-    TestRecordsetDelete,
-    TestRecordsetInsert,
-    TestRecordsetQuery,
-    TestRecordsetUpdate,
+    TestMySQLRecordsetDelete,
+    TestMySQLRecordsetInsert,
+    TestMySQLRecordsetQuery,
+    TestMySQLRecordsetUpdate,
     TestRelationBasic,
+    TestSQLiteRecordsetDelete,
+    TestSQLiteRecordsetUpdate,
     TestUtils,
 
     TestValidatorAcceptance,
@@ -74,23 +87,30 @@ unit_tests = [
 
 integration_tests = [
     TestTransactionMysql,
-
     TestRecordsetCRUDMySQL,
     TestModelStructMySQL,
     TestModelCRUDMySQL,
-
     TestRelationBelongsToMysql,
     TestRelationReferenceMyselfMysql,
-
     TestRelationHasManyToMysql,
     TestRelationHasManyThroughMysql,
-
     TestHasOneToMysql,
     TestRelationHasOneThroughMysql,
-
     TestRelationHasAndBelongsToManyMysql,
+    TestRelationIncludeMysql,
 
-    TestRelationIncludeMysql
+    TestModelStructSQLite,
+    TestModelCRUDSQLite,
+    TestRecordsetCRUDSQLite,
+    TestRelationBelongsToSQLite,
+    TestRelationReferenceMyselfSQLite,
+    TestRelationHasManyToSQLite,
+    TestRelationHasManyThroughSQLite,
+    TestHasOneToSQLite,
+    TestRelationHasOneThroughSQLite,
+    TestRelationHasAndBelongsToManySQLite,
+    TestRelationIncludeSQLite,
+    TestTransactionSQLite,
 ]
 
 

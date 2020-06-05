@@ -177,10 +177,7 @@ class Model(metaclass=ModelMetaClass):
             objs = cls.objects.where(**attrs)
         else:
             objs = cls.objects
-
-        rs = objs.all() if cls.__relations__ else []
-        cls._delete_relations(rs)
-
+        
         objs.delete()
         return cls
 
