@@ -4,7 +4,7 @@ import os
 sys.path.append(os.path.join(os.path.dirname(__file__), '..', '..', '..'))
 
 import unittest
-from tests.integration.for_mysql.helper import AbsModel, User, Mobile
+from tests.integration.for_mysql.helper import AbsModel, User, Mobile, Car
 from sweet_orm.orm.relations import *
 from MySQLdb import IntegrityError
 
@@ -89,8 +89,8 @@ class TestRelationHasManyToMysql(unittest.TestCase):
         class Member(AbsModel):
             __tablename__ = 'users'
 
-            has_many('mobiles', '__init__.Mobile', cascade=False)
-            has_one('car', '__init__.Car', cascade=False)
+            has_many(Mobile, cascade=False, fk='user_id')
+            has_one(Car, cascade=False, fk='user_id')
 
         member1 = Member.create(name="Jon", age=31)
         Mobile.create(name="Nokia", user_id=member1.id)
