@@ -1,6 +1,5 @@
 #coding: utf8
-from .mysql import MySQL
-from .sqlite import SQLite
+from .driver import MySQL, SQLite
 from .recordset import SQLError
 
 

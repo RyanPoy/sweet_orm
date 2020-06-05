@@ -2,7 +2,7 @@
 from collections import namedtuple
 from sweet_orm.db.clauses import *
 from sweet_orm.utils import *
-from abc import *
+from abc import abstractmethod
 import functools
 import copy
 

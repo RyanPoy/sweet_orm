@@ -5,7 +5,6 @@ sys.path.append(os.path.join(os.path.dirname(__file__), '..', '..', '..'))
 
 import unittest
 from tests.integration.for_sqlite.helper import Foo
-from sweet_orm.utils import mydict
 from sweet_orm.orm.fields import *
 
 
