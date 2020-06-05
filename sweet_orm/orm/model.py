@@ -96,8 +96,7 @@ class Model(metaclass=ModelMetaClass):
     def _init_field_default_value(self):
         """ set default value of field which does not init 
         """
-        cls = self.__class__
-        for name, field in cls.__field_define_dict__.items():
+        for name, field in self.__class__.__field_define_dict__.items():
             if not hasattr(self, name):
                 setattr(self, name, field.default)
         return self
@@ -273,7 +272,7 @@ class Model(metaclass=ModelMetaClass):
     @classproperty
     def objects(cls):
         rs = cls.db.records(cls.__tablename__)
-        rs.model_class = cls
+        rs.set_model_class(cls)
         return rs
 
     @classmethod

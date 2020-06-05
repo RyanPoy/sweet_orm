@@ -21,7 +21,11 @@ class Recordset(object):
 
     LOCK = namedtuple("Lock", ['NILL', 'READ', 'WRITE'])._make([0, 1, 2])
 
-    def __init__(self, db, tbname, model_class=None):
+    def __init__(self, db, tbname, model_class=None, pk='id'):
+        """
+        :param pk: primary key of the table. it will be used on delete with join、update with join
+        pk = model_class.__pk__ if model_class is not None
+        """
         self.db = db
         self.tbname = tbname
         self.select_clause = SelectClause(self.qutotation_marks)
@@ -34,8 +38,11 @@ class Recordset(object):
         self._lock = self.LOCK.NILL
         self._exists_tables = []
         self.unions = []
-        self.model_class = model_class
+        self._model_class = model_class
         self._includes = []
+        self.table_pk = pk
+        self._prepare_pk()
+        
 
     def __deepcopy__(self, memo):
         """ Deep copy """
@@ -46,6 +53,20 @@ class Recordset(object):
             else:
                 obj.__dict__[k] = copy.deepcopy(v, memo)
         return obj
+
+    @property
+    def model_class(self):
+        return self._model_class
+
+    def set_model_class(self, model_class):
+        self._model_class = model_class
+        self._prepare_pk()
+        return self
+
+    def _prepare_pk(self):
+        if self.model_class:
+            self.table_pk = self.model_class.__pk__
+        return self
 
     def union(self, rs):
         self.unions.append( (rs, False) )
@@ -451,17 +472,7 @@ class MySQLRecordset(Recordset):
 class SQLiteRecordset(Recordset):
 
     qutotation_marks = '`'
-    paramstyle_marks = '?'
-
-    def __init__(self, db, tbname, model_class=None, pk='id'):
-        """ 
-        :param pk: primary key of the table. it will be used on delete with join、update with join
-        pk = model_class.__pk__ if model_class is not None
-        """
-        super().__init__(db, tbname, model_class=None)
-        self.table_pk = pk
-        if model_class:
-            self.table_pk = model_class.__pk__
+    paramstyle_marks = '?'        
 
     def truncate(self):
         r = self.db.execute_rowcount('DELETE FROM {}'.format(self.tablename))
