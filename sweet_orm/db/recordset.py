@@ -155,14 +155,14 @@ class Recordset(object):
         return self
 
     @dcp
+    @abstractmethod
     def read_lock(self):
-        self._lock = self.LOCK.READ
-        return self
+        pass
 
     @dcp
+    @abstractmethod
     def write_lock(self):
-        self._lock = self.LOCK.WRITE
-        return self
+        pass
 
     @dcp
     def where_exists(self, *rset):
@@ -195,13 +195,9 @@ class Recordset(object):
     def tablename(self):
         return self._aqm(self.tbname)
 
+    @abstractmethod
     def _lock_sql(self):
-        lock = ''
-        if self._lock == self.LOCK.READ:
-            lock = ' LOCK IN SHARE MODE'
-        elif self._lock == self.LOCK.WRITE:
-            lock = ' FOR UPDATE'
-        return lock
+        return ''
 
     def _push_exist_sql(self, where_sql, sql, params):
         sqls = []
@@ -429,6 +425,16 @@ class MySQLRecordset(Recordset):
     qutotation_marks = '`'
     paramstyle_marks = '%s'
 
+    @dcp
+    def read_lock(self):
+        self._lock = self.LOCK.READ
+        return self
+
+    @dcp
+    def write_lock(self):
+        self._lock = self.LOCK.WRITE
+        return self
+
     def truncate(self):
         return self.db.execute_rowcount('TRUNCATE {}'.format(self.tablename))
 
@@ -468,6 +474,13 @@ class MySQLRecordset(Recordset):
 
         return self.db.execute_rowcount(sql, *params)
 
+    def _lock_sql(self):
+        lock = ''
+        if self._lock == self.LOCK.READ:
+            lock = ' LOCK IN SHARE MODE'
+        elif self._lock == self.LOCK.WRITE:
+            lock = ' FOR UPDATE'
+        return lock
 
 class SQLiteRecordset(Recordset):
 
