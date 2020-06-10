@@ -20,14 +20,11 @@ class BelongsTo(Relation):
         """
         self.owner = owner
         self._target_cls_or_target_name = target
-        self._name = name
+        self.name = self.init_name(name)
         self._owner_fk = fk
 
-    @property
-    def name(self):
-        if not self._name:
-            self._name = pythonize(singularize(self.target_name))
-        return self._name
+    def init_name(self, name):
+        return name if name else pythonize(singularize(self.target_name))
 
     @property
     def owner_fk(self):

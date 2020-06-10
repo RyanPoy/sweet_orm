@@ -22,16 +22,13 @@ class HasAndBelongsToMany(HasManyThrough):
     def __init__(self, owner=None, target=None, name=None, through_table=None, through_fk_on_owner=None, through_fk_on_target=None):
         self.owner = owner
         self._target_cls_or_target_name = target
-        self._name = name
+        self.name = self.init_name(name)
         self._through_fk_one_owner = through_fk_on_owner
         self._through_table = through_table
         self._through_fk_on_target = through_fk_on_target
 
-    @property
-    def name(self):
-        if not self._name:
-            self._name = pythonize(pluralize(self.target_name))
-        return self._name
+    def init_name(self, name):
+        return name if name else pythonize(pluralize(self.target_name))
 
     @property
     def through_fk_on_owner(self):

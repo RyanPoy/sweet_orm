@@ -33,8 +33,3 @@ class Relation(object):
             else:
                 self._target_name = self._target_cls_or_target_name.__name__
         return self._target_name
-
-    # def _singularize_or_pluralize_name(self, singularize_or_pluralize, name):
-    #     if not self._name:
-    #         self._name = pythonize(singularize_or_pluralize(self.target_name))
-    #     return self._name

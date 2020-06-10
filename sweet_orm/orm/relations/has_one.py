@@ -7,11 +7,8 @@ from sweet_orm.utils.inflection import *
 
 class HasOne(HasMany):
 
-    @property
-    def name(self):
-        if not self._name:
-            self._name = pythonize(singularize(self.target_name))
-        return self._name
+    def init_name(self, name):
+        return name if name else pythonize(singularize(self.target_name))
 
     def get_real_value(self, owner_obj):
         """ eg. user has one car
@@ -36,11 +33,8 @@ class HasOne(HasMany):
 
 class HasOneThrough(HasManyThrough):
 
-    @property
-    def name(self):
-        if not self._name:
-            self._name = pythonize(singularize(self.target_name))
-        return self._name
+    def init_name(self, name):
+        return name if name else pythonize(singularize(self.target_name))
 
     def get_real_value(self, owner_obj):
         """ eg. user has one car
