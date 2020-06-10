@@ -6,6 +6,7 @@ from sweet_orm.utils import import_object, Q
 
 relation_q = Q()
 
+
 class Relation(object):
 
     def delete_all_real_value(self, owner_objs):
@@ -26,6 +27,14 @@ class Relation(object):
 
     @property
     def target_name(self):
-        if isinstance(self._target_cls_or_target_name, str):
-            return self._target_cls_or_target_name.split('.')[-1]
-        return self._target_cls_or_target_name.__name__
+        if not hasattr(self, '_target_name'):
+            if isinstance(self._target_cls_or_target_name, str):
+                self._target_name = self._target_cls_or_target_name.split('.')[-1]
+            else:
+                self._target_name = self._target_cls_or_target_name.__name__
+        return self._target_name
+
+    # def _singularize_or_pluralize_name(self, singularize_or_pluralize, name):
+    #     if not self._name:
+    #         self._name = pythonize(singularize_or_pluralize(self.target_name))
+    #     return self._name
