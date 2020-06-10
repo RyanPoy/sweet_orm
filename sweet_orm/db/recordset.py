@@ -38,10 +38,10 @@ class Recordset(object):
         self._lock = self.LOCK.NILL
         self._exists_tables = []
         self.unions = []
-        self._model_class = model_class
         self._includes = []
         self.table_pk = pk
-        self._prepare_pk()
+        self.model_class = None
+        self.set_model_class(model_class)
 
     def __deepcopy__(self, memo):
         """ Deep copy """
@@ -53,18 +53,10 @@ class Recordset(object):
                 obj.__dict__[k] = copy.deepcopy(v, memo)
         return obj
 
-    @property
-    def model_class(self):
-        return self._model_class
-
     def set_model_class(self, model_class):
-        self._model_class = model_class
-        self._prepare_pk()
-        return self
-
-    def _prepare_pk(self):
-        if self._model_class:
-            self.table_pk = self._model_class.__pk__
+        self.model_class = model_class
+        if self.model_class:
+            self.table_pk = self.model_class.__pk__
         return self
 
     def union(self, rs):
@@ -168,6 +160,10 @@ class Recordset(object):
         for t in rset:
             self._exists_tables.append( (WhereClause.AND, t) )
         return self
+
+    @abstractmethod
+    def update(self, **kwargs):
+        pass
 
     @dcp
     def or_exists(self, *rset):
@@ -283,10 +279,6 @@ class Recordset(object):
         sql, params = insert_clause.insert(records, **kwargs).compile()
         return self.db.execute_rowcount(sql, *params)
 
-    @abstractmethod
-    def update(self, **kwargs):
-        pass
-
     # @dcp
     def update(self, **kwargs):
         update_columns, update_params = [], []
@@ -350,28 +342,28 @@ class Recordset(object):
     def first(self):
         sql, params = self._query_sql()
         r = self.db.fetchone(sql, *params)
-        if not r or not self._model_class:
+        if not r or not self.model_class:
             return r
-        m = self._model_class(**r)
-        self._model_class._get_include([m], self._includes)
+        m = self.model_class(**r)
+        self.model_class._get_include([m], self._includes)
         return m
 
     def last(self):
         sql, params = self._query_sql()
         r = self.db.fetchlastone(sql, *params)
-        if not r or not self._model_class:
+        if not r or not self.model_class:
             return r
-        m = self._model_class(**r)
-        self._model_class._get_include([m], self._includes)
+        m = self.model_class(**r)
+        self.model_class._get_include([m], self._includes)
         return m
 
     def all(self):
         sql, params = self._query_sql()
         rs = self.db.fetchall(sql, *params)
-        if not rs or not self._model_class:
+        if not rs or not self.model_class:
             return rs
-        ms = [ self._model_class(**r) for r in rs ]
-        self._model_class._get_include(ms, self._includes)
+        ms = [ self.model_class(**r) for r in rs ]
+        self.model_class._get_include(ms, self._includes)
         return ms
 
     def exists(self):
@@ -434,9 +426,9 @@ class MySQLRecordset(Recordset):
         return self.db.execute_rowcount('TRUNCATE {}'.format(self.tablename))
 
     def delete(self):
-        if self._model_class:
+        if self.model_class:
             # mean that: User.where(age__gt=30).delete()
-            self._model_class._delete_relations(self.all())
+            self.model_class._delete_relations(self.all())
 
         params = []
         from_sql = self._from_sql(params)
@@ -491,9 +483,9 @@ class SQLiteRecordset(Recordset):
         return r
 
     def delete(self):
-        if self._model_class:
+        if self.model_class:
             # mean that: User.where(age__gt=30).delete()
-            self._model_class._delete_relations(self.all())
+            self.model_class._delete_relations(self.all())
 
         params = []
         from_sql = self._from_sql(params)
