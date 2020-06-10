@@ -9,7 +9,7 @@ class TestMySQLRecordsetQuery(unittest.TestCase):
 
     def get_recordset(self, name="users"):
         class FakeDB(object): pass
-        return MySQLRecordset(db=FakeDB(), tbname=name)
+        return MySQLRecordset(db=FakeDB(), tablename=name)
 
     def test_copy_deep(self):
         tb = self.get_recordset()

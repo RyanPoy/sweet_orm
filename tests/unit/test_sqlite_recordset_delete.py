@@ -12,7 +12,7 @@ class TestSQLiteRecordsetDelete(unittest.TestCase):
     def test_delete(self):
         db = self.get_db()
         db.execute_rowcount = mock.MagicMock(return_value=3)
-        tb = SQLiteRecordset(db=db, tbname='users')
+        tb = SQLiteRecordset(db=db, tablename='users')
         tb.where(id=[1, 2, 3], name='Ryan', age__gte=30).delete()
         db.execute_rowcount.assert_called_once_with('DELETE FROM `users` WHERE `id` IN (?, ?, ?) AND `name` = ? AND `age` >= ?', *[1, 2, 3, "Ryan", 30])
 
@@ -20,22 +20,14 @@ class TestSQLiteRecordsetDelete(unittest.TestCase):
         db = self.get_db()
         db.execute_rowcount = mock.MagicMock(return_value=3)
 
-        tb = SQLiteRecordset(db=db, tbname='users')
+        tb = SQLiteRecordset(db=db, tablename='users')
         tb = tb.where(id=[1,2,3]).or_where(name="Ryan").join('cars', on='users.id=cars.user_id').delete()
         db.execute_rowcount.assert_called_once_with('DELETE FROM `users` WHERE `users`.`id` IN (SELECT `users`.`id` FROM `users` INNER JOIN `cars` ON `users`.`id` = `cars`.`user_id` WHERE `id` IN (?, ?, ?) OR `name` = ?)', *[1, 2, 3, "Ryan"])
-
-    # def test_delete_with_join(self):
-    #     db = self.get_db()
-    #     tb = SQLiteRecordset(db=db, tbname='users')
-    #     tb = tb.where(id=[1,2,3]).or_where(name="Ryan").join('cars', on='users.id=cars.user_id')
-    #     with self.assertRaises(SQLError) as err:
-    #         tb.delete()
-    #         self.assertEqual("SQLite can't support delete with join", str(err.exception))
 
     def test_truncate_and_not_update_sqlite_sequence(self):
         db = self.get_db()
         db.execute_rowcount = mock.MagicMock(side_effect=[10, -1])
-        tb = SQLiteRecordset(db=db, tbname='users')
+        tb = SQLiteRecordset(db=db, tablename='users')
         tb.truncate()
 
         calls = [
@@ -48,7 +40,7 @@ class TestSQLiteRecordsetDelete(unittest.TestCase):
         db = self.get_db()
         db.execute_rowcount = mock.MagicMock(side_effect=[10, 1])
         db.execute = mock.MagicMock()
-        tb = SQLiteRecordset(db=db, tbname='users')
+        tb = SQLiteRecordset(db=db, tablename='users')
         tb.truncate()
 
         calls = [
@@ -70,7 +62,7 @@ class TestSQLiteRecordsetDelete(unittest.TestCase):
         db.fetchall = mock.MagicMock()
         db.execute_rowcount = mock.MagicMock()
 
-        tb = SQLiteRecordset(db=db, tbname='users')
+        tb = SQLiteRecordset(db=db, tablename='users')
         tb = tb.where(id=1, name='Ryan')
         tb.all()
         tb.delete()

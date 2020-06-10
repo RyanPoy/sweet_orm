@@ -21,13 +21,13 @@ class Recordset(object):
 
     LOCK = namedtuple("Lock", ['NILL', 'READ', 'WRITE'])._make([0, 1, 2])
 
-    def __init__(self, db, tbname, model_class=None, pk='id'):
+    def __init__(self, db, tablename, model_class=None, pk='id'):
         """
         :param pk: primary key of the table. it will be used on delete with join、update with join
         pk = model_class.__pk__ if model_class is not None
         """
         self.db = db
-        self.tbname = tbname
+        self.tablename = self._aqm(tablename)
         self.select_clause = SelectClause(self.qutotation_marks)
         self.where_clause = WhereClause(self.qutotation_marks, self.paramstyle_marks)
         self.having_clause = HavingClause(self.qutotation_marks, self.paramstyle_marks)
@@ -46,9 +46,9 @@ class Recordset(object):
 
     def __deepcopy__(self, memo):
         """ Deep copy """
-        obj = self.__class__(self.db, self.tbname)
+        obj = self.__class__(self.db, self.tablename)
         for k, v in self.__dict__.items():
-            if k == 'db' or k == 'tbname': # conn can not deep copy
+            if k == 'db' or k == 'tablename': # conn can not deep copy
                 obj.__dict__[k] = v
             else:
                 obj.__dict__[k] = copy.deepcopy(v, memo)
@@ -191,10 +191,6 @@ class Recordset(object):
         params.extend(select_params)
         return sql, params
 
-    @property
-    def tablename(self):
-        return self._aqm(self.tbname)
-
     @abstractmethod
     def _lock_sql(self):
         return ''
@@ -279,12 +275,12 @@ class Recordset(object):
     def insert_getid(self, record=None, **kwargs):
         record = record or {}
         if kwargs: record.update(kwargs)
-        insert_clause = InsertClause(self.qutotation_marks, self.paramstyle_marks, self.tbname)
+        insert_clause = InsertClause(self.qutotation_marks, self.paramstyle_marks, self.tablename)
         sql, params = insert_clause.insert(record).compile()
         return self.db.execute_lastrowid(sql, *params)
 
     def insert(self, records=None, **kwargs):
-        insert_clause = InsertClause(self.qutotation_marks, self.paramstyle_marks, self.tbname)
+        insert_clause = InsertClause(self.qutotation_marks, self.paramstyle_marks, self.tablename)
         sql, params = insert_clause.insert(records, **kwargs).compile()
         return self.db.execute_rowcount(sql, *params)
 
