@@ -42,6 +42,8 @@ from unit.test_mysql_recordset_query import TestMySQLRecordsetQuery
 from unit.test_mysql_recordset_update import TestMySQLRecordsetUpdate
 
 from unit.test_sqlite_recordset_delete import TestSQLiteRecordsetDelete
+from unit.test_sqlite_recordset_insert import TestSQLiteRecordsetInsert
+from unit.test_sqlite_recordset_query import TestSQLiteRecordsetQuery
 from unit.test_sqlite_recordset_update import TestSQLiteRecordsetUpdate
 
 from unit.test_relation_basic import TestRelationBasic
@@ -71,6 +73,8 @@ unit_tests = [
     TestMySQLRecordsetUpdate,
     TestRelationBasic,
     TestSQLiteRecordsetDelete,
+    TestSQLiteRecordsetInsert,
+    TestSQLiteRecordsetQuery,
     TestSQLiteRecordsetUpdate,
     TestUtils,
 

@@ -148,12 +148,12 @@ class Recordset(object):
     @dcp
     @abstractmethod
     def read_lock(self):
-        pass
+        return self
 
     @dcp
     @abstractmethod
     def write_lock(self):
-        pass
+        return self
 
     @dcp
     def where_exists(self, *rset):
