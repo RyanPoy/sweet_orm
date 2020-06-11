@@ -8,10 +8,59 @@ class Filter(object):
         self.name = name
         self.operator = operator
         self.value = value
-        self.qutotation = '`'
-        self.paramstyle = '?'
-
         self.valid()
+
+    def valid(self):
+        return True
+
+
+class JoinOnFilter(Filter):
+
+    def compile(self, qutotation, paramstyle):
+        pass
+
+
+class SimpleFilter(Filter):
+    
+    def compile(self, qutotation, paramstyle):
+        params = []
+        sql = '%s %s %s' % (aqm(self.name, qutotation), self.operator, paramstyle)
+        params.append(self.value)
+        return sql, params
+
+
+class InFilter(Filter):
+
+    def compile(self, qutotation, paramstyle):
+        params = []
+        ps = ', '.join([paramstyle]*len(self.value))
+        sql = '%s %s (%s)' % (aqm(self.name, qutotation), self.operator, ps)
+        params.extend(self.value)
+        return sql, params
+
+
+class NullFilter(Filter):
+
+    def compile(self, qutotation, paramstyle):
+        return '%s %s NULL' % (aqm(self.name, qutotation), self.operator), []
+
+
+class BetweenFilter(Filter):
+    
+    def compile(self, qutotation, paramstyle):
+        params = []
+        sql = '%s %s %s AND %s' % (aqm(self.name, qutotation), self.operator, paramstyle, paramstyle)
+        params.append(self.value[0])
+        params.append(self.value[1])
+        return sql, params
+
+    def valid(self):
+        if not is_array(self.value) or len(self.value) != 2:
+            raise TypeError("%s just support a array which has 2 elements" % self.value) 
+        return True
+
+
+class FilterBuilder:
 
     @classmethod
     def mapping(cls):
@@ -30,7 +79,7 @@ class Filter(object):
         return cls.MAPPING
 
     @classmethod
-    def new(cls, name, value, qutotation, paramstyle):
+    def build(cls, name, value):
         flag = '__'
         vs = name.split(flag)
         suffix = vs[-1]
@@ -61,63 +110,5 @@ class Filter(object):
                 operator = '='
                 expression_class = SimpleFilter
 
-        expression = expression_class(name, operator, value)
-        expression.qutotation = qutotation
-        expression.paramstyle = paramstyle
-        expression.name = name.replace(flag, '.')
-        return expression
-
-    @property
-    def aqm_name(self):
-        if not hasattr(self, '_aqm_name'):
-            setattr(self, '_aqm_name', aqm(self.name, self.qutotation))
-        return getattr(self, '_aqm_name')
-
-    def valid(self):
-        return True
-
-
-class JoinOnFilter(Filter):
-
-    def compile(self):
-        pass
-
-
-class SimpleFilter(Filter):
-    
-    def compile(self):
-        params = []
-        sql = '%s %s %s' % (self.aqm_name, self.operator, self.paramstyle)
-        params.append(self.value)
-        return sql, params
-
-
-class InFilter(Filter):
-
-    def compile(self):
-        params = []
-        ps = ', '.join([self.paramstyle]*len(self.value))
-        sql = '%s %s (%s)' % (self.aqm_name, self.operator, ps)
-        params.extend(self.value)
-        return sql, params
-
-
-class NullFilter(Filter):
-
-    def compile(self):
-        return '%s %s NULL' % (self.aqm_name, self.operator), []
-
-
-class BetweenFilter(Filter):
-    
-    def compile(self):
-        params = []
-        sql = '%s %s %s AND %s' % (self.aqm_name, self.operator, self.paramstyle, self.paramstyle)
-        params.append(self.value[0])
-        params.append(self.value[1])
-        return sql, params
-
-    def valid(self):
-        if not is_array(self.value) or len(self.value) != 2:
-            raise TypeError("%s just support a array which has 2 elements" % self.value) 
-        return True
+        name = name.replace(flag, '.')
+        return expression_class(name, operator, value)

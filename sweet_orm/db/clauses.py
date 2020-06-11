@@ -1,6 +1,6 @@
 #coding: utf8
 from sweet_orm.utils import is_array, is_str, is_hash, aqm
-from sweet_orm.db.filters import Filter
+from sweet_orm.db.filters import FilterBuilder
 
 
 class WhereClause(object):
@@ -27,7 +27,7 @@ class WhereClause(object):
             self.filters.append( (and_or, c) )
 
         for k, v in kwargs.items():
-            self.filters.append( (and_or, Filter.new(k, v, self.qutotation, self.paramstyle)) )
+            self.filters.append( (and_or, FilterBuilder.build(k, v)) )
         return self
 
     def compile(self, with_prefix=True):
@@ -55,7 +55,7 @@ class WhereClause(object):
                 sqls.append(")")
                 params.extend(tmp_params)
             else:
-                tmp_sql, tmp_params = f.compile()
+                tmp_sql, tmp_params = f.compile(self.qutotation, self.paramstyle)
                 sqls.append(and_or)
                 sqls.append(tmp_sql)
                 params.extend(tmp_params)
