@@ -5,3 +5,7 @@ __pycache__
 .pydevproject
 .settings/
 sweet_test.db
+.vscode/
+docs/Makefile
+docs/_build/
+docs/make.bat
