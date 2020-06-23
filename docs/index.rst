@@ -12,7 +12,7 @@ Welcome to SweetOrm's documentation!
 
    recordset
    orm
-   relation
+   associations
 
 
 Indices and tables

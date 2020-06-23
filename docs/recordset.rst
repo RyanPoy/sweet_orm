@@ -57,8 +57,8 @@ Also, you can customize the query field.
 
   db.records('users').select('age').all()
   # SELECT `age` FROM `users`
-
-  db.records('users').select('age', 'name).all()
+  
+  db.records('users').select('age', 'name').all()
   # SELECT `age`, `name` FROM `users`
 
   db.records('users').select('age').select('name').all()
@@ -79,7 +79,6 @@ Sometimes you may need to use a raw expression in a query. You can call raw() me
   
   Raw statements will be injected into the query as strings, 
   so you should be extremely careful to not create SQL injection vulnerabilities.
-
 
 Joins
 ------
@@ -147,7 +146,7 @@ Unions
 Where Clauses
 -------------
 
-IS NULL
+Is null
 ^^^^^^^
 
 .. code-block:: python
@@ -155,7 +154,7 @@ IS NULL
   db.records('users').where(name=None).all()
   # SELECT * FROM `users` WHERE `id` IS NULL 
 
-IS NOT NULL
+Is not null
 ^^^^^^^^^^^
 
 .. code-block:: python
@@ -163,14 +162,14 @@ IS NOT NULL
   db.records('users').where(name__not=None).all()
   # SELECT * FROM `users` WHERE `id` IS NOT NULL 
 
-LIKE
+Like
 ^^^^
 .. code-block:: python
 
   db.records('users').where(name__like='%Jim%').all()
   # SELECT * FROM `users` WHERE `id` LIKE '%Jim%'
 
-NOT LIKE
+Not like
 ^^^^^^^^
 
 .. code-block:: python
@@ -186,7 +185,7 @@ Equal
   db.records('users').where(age=10).all()
   # SELECT * FROM `users` WHERE `age` = 10
 
-NOT Equal
+Not equal
 ^^^^^^^^^
 
 .. code-block:: python
@@ -225,16 +224,16 @@ Great than or equal
   db.records('users').where(id__gte=10).all()
   # SELECT * FROM `users` WHERE `id` >= 10
 
-BETWEEN ... AND ...
-^^^^^^^^^^^^^^^^^^^
+Between and
+^^^^^^^^^^^^^^^
 
 .. code-block:: python
 
   db.records('users').where(id__bt=[1, 5]).all()
   # SELECT * FROM `users` WHERE `id` BETWEEN 1 AND 5
 
-NOT BETWEEN ... AND ...
-^^^^^^^^^^^^^^^^^^^^^^^
+Not between and
+^^^^^^^^^^^^^^^^^^^
 
 .. code-block:: python
 
@@ -250,7 +249,7 @@ IN
   # SELECT * FROM `users` WHERE `id` IN (1, 5)
 
 
-NOT INNER
+Not in
 ^^^^^^^^^
 
 .. code-block:: python
