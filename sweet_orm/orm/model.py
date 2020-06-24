@@ -46,7 +46,7 @@ class Model(metaclass=ModelMetaClass):
     class HasNotBeenPersisted(Exception): 
         pass
 
-    class RelationNotFound(Exception):
+    class AssociationNotFound(Exception):
         pass
 
     def __init__(self, **attrs):
@@ -257,7 +257,7 @@ class Model(metaclass=ModelMetaClass):
         objs = cls.objects
         for rn in relation_names:
             if rn not in cls.__relations__:
-                raise cls.RelationNotFound("Can not include '%s', because relation named '%s' not found" % (rn, rn))
+                raise cls.AssociationNotFound("Can not include '%s', because relation named '%s' not found" % (rn, rn))
             objs._includes.append(rn)
         return objs
 
