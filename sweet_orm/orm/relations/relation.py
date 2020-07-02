@@ -7,7 +7,7 @@ from sweet_orm.utils import import_object, Q
 relation_q = Q()
 
 
-class Relation(object):
+class Relation:
 
     def delete_all_real_value(self, owner_objs):
         pass

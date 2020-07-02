@@ -3,7 +3,7 @@ from sweet_orm.utils import is_array, is_str, is_hash, aqm
 from sweet_orm.db.filters import FilterBuilder
 
 
-class WhereClause(object):
+class WhereClause:
     
     AND, OR = 'AND', 'OR'
 
@@ -123,7 +123,7 @@ class CrossJoinClause(JoinClause):
 
 ######################################
 ###
-class ByClause(object):
+class ByClause:
 
     def __init__(self, qutotation):
         self.qutotation = qutotation
@@ -158,7 +158,7 @@ class GroupClause(ByClause):
         return self
 
 
-class PageClause(object):
+class PageClause:
 
     def __init__(self):
         self._limit = None
@@ -188,7 +188,7 @@ class PageClause(object):
 
 ##################################
 ###
-class SelectClause(object):
+class SelectClause:
 
     def __init__(self, qutotation):
         self.qutotation = qutotation
@@ -219,7 +219,7 @@ class SelectClause(object):
 
 #################################
 ###
-class InsertClause(object):
+class InsertClause:
     
     def __init__(self, qutotation, paramstyle, tbname):
         self.qutotation = qutotation

@@ -17,7 +17,7 @@ def dcp(method):
     return _
 
 
-class Recordset(object):
+class Recordset:
 
     LOCK = namedtuple("Lock", ['NILL', 'READ', 'WRITE'])._make([0, 1, 2])
 

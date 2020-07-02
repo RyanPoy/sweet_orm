@@ -3,7 +3,7 @@ from .driver import MySQL, SQLite
 from .recordset import SQLError
 
 
-class DBManager(object):
+class DBManager:
     """
     config: {
         'default': {

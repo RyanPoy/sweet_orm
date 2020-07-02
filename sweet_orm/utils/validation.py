@@ -5,7 +5,7 @@ import re
 
 
 ############### validators ###############
-class PresenceValidator(object):
+class PresenceValidator:
     
     def validate(self, value, allow_blank=True):
         if value is None:
@@ -19,7 +19,7 @@ class PresenceValidator(object):
         return True
     
     
-class InclusionValidator(object):
+class InclusionValidator:
     
     def validate(self, value, in_values=[], allow_null=False, allow_blank=False):
         if value is None:
@@ -31,7 +31,7 @@ class InclusionValidator(object):
         return value in in_values
 
 
-class NumericalityValidator(object):
+class NumericalityValidator:
     
     def validate(self, value, allow_null=False, greater_than=None, greater_than_or_equal_to=None, 
                     equal_to=None, less_than=None, less_than_or_equal_to=None, odd=None, even=None):
@@ -62,7 +62,7 @@ class NumericalityValidator(object):
         return True
         
 
-class AcceptanceValidator(object):
+class AcceptanceValidator:
     
     def validate(self, value, allow_null=True):
         if allow_null:
@@ -70,7 +70,7 @@ class AcceptanceValidator(object):
         return value is not None
     
     
-class LengthValidator(object):
+class LengthValidator:
     
     def validate(self, value, allow_null=True, allow_blank=True, _is=None, minimum=None, maximum=None):
         if value is None:
@@ -86,13 +86,13 @@ class LengthValidator(object):
         return True
 
 
-class ConfirmationValidator(object):
+class ConfirmationValidator:
     
     def validate(self, value, confirmation_value):
         return confirmation_value == value
 
 
-class FormatValidator(object):
+class FormatValidator:
     
     def validate(self, value, _with, allow_null=True, allow_blank=True):
         if value is None:
@@ -104,7 +104,7 @@ class FormatValidator(object):
         return True if re.match(_with, value) else False
 
     
-class ExclusionValidator(object):
+class ExclusionValidator:
     
     def validate(self, value, exclusion_values=[], allow_null=False, allow_blank=False):
         if value is None:
@@ -120,7 +120,7 @@ class ExclusionValidator(object):
 #########################################
 ############# validations ###############
 #########################################
-class Validates(object):
+class Validates:
 
     # store the validate partial function
     # the format is :

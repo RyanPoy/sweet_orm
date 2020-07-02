@@ -10,7 +10,7 @@ from sweet_orm.utils import *
 # FieldType = namedtuple('FieldType', field_types)._make(field_types)
 
 
-class Field(object):
+class Field:
 
     # @classmethod
     # def mapping(cls):

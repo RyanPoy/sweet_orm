@@ -2,7 +2,7 @@
 import unittest
 from sweet_orm.utils.collection import *
 
-class Foobar(object):
+class Foobar:
     pass
 
 

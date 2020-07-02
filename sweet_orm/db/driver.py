@@ -10,7 +10,7 @@ import time
 import logging
 
 
-class Driver(object):
+class Driver:
     
     RECORDSET_CLASS = MySQLRecordset
 

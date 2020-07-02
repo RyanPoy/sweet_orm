@@ -183,11 +183,11 @@ def import_object(name):
 
 
 
-class classproperty(object):
+class classproperty:
     """
     A decorate for class method. Use it like this:
     
-    class Foo(object):
+    class Foo:
     
         __value = 10
 

@@ -8,7 +8,7 @@ from sweet_orm.utils import mydict
 class TestSQLiteRecordsetQuery(unittest.TestCase):
 
     def get_recordset(self, name="users"):
-        class FakeDB(object): pass
+        class FakeDB: pass
         return SQLiteRecordset(db=FakeDB(), tablename=name)
 
     def test_copy_deep(self):

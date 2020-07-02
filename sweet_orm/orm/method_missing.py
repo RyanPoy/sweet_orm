@@ -2,7 +2,7 @@
 import re
 
 
-class AssociateMethod(object):
+class AssociateMethod:
     """ for a relation.
     if the relation has a binding method, it can support associate_with_xxxx
     if the relation has a unbinding method, it can support dissociate_with_xxxx
@@ -50,7 +50,7 @@ class AssociateMethod(object):
         return self.relation.binding(self.model, *args)
 
 
-class ReloadCacheMethod(object):
+class ReloadCacheMethod:
     """ for Model
     """
     pattern = re.compile(r'^reload_([_a-zA-Z]\w*)$')
@@ -68,7 +68,7 @@ class ReloadCacheMethod(object):
         return self.model._delete_relation_cache(name)
 
 
-class MethodMissing(object):
+class MethodMissing:
 
     methods = [
         AssociateMethod, ReloadCacheMethod

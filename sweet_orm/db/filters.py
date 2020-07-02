@@ -2,7 +2,7 @@
 from sweet_orm.utils import is_array, aqm
 
 
-class Filter(object):
+class Filter:
 
     def __init__(self, name, operator, value):
         self.name = name
