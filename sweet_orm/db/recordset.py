@@ -177,7 +177,7 @@ class Recordset:
     def _query_sql(self):
         params = []
         from_sql = self._from_sql(params)
-        select_sql, select_params = self.select_clause.compile()
+        select_sql, select_params = self.select_clause.compile(self.qutotation_marks, self.paramstyle_marks)
         sql = '{select_sql} {from_sql}{lock_sql}'.format(
             select_sql= select_sql,
             from_sql=from_sql,

@@ -255,19 +255,19 @@ class TestClauses(unittest.TestCase):
         self.assertEqual('LIMIT 15 OFFSET 15', sql)
 
     def test_select(self):
-        sql, params = self.select_clause.compile()
+        sql, params = self.select_clause.compile(self.qutotation_marks, self.paramstyle_marks)
         self.assertEqual('SELECT *', sql)
 
     def test_select_with_columns(self):
-        sql, params = self.select_clause.select('name').select('users.age').compile()
+        sql, params = self.select_clause.select('name').select('users.age').compile(self.qutotation_marks, self.paramstyle_marks)
         self.assertEqual('SELECT `name`, `users`.`age`', sql)
 
     def test_select_with_distinct(self):
-        sql, params = self.select_clause.distinct().compile()
+        sql, params = self.select_clause.distinct().compile(self.qutotation_marks, self.paramstyle_marks)
         self.assertEqual('SELECT DISTINCT *', sql)
 
     def test_select_with_distinct_and_columns(self):
-        sql, params = self.select_clause.select('name').select('users.age').distinct().compile()
+        sql, params = self.select_clause.select('name').select('users.age').distinct().compile(self.qutotation_marks, self.paramstyle_marks)
         self.assertEqual('SELECT DISTINCT `name`, `users`.`age`', sql)
 
     def test_join_and(self):

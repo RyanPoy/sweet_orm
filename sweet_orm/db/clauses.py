@@ -162,14 +162,13 @@ class GroupClause:
     def by(self, *columns):
         for c in columns:
             self._bys.append(c)
-            # self._bys.append(aqm(c, self.qutotation))
         return self
 
     def compile(self, qutotation, paramstyle):
         if not self._bys:
             return '', []
 
-        return 'GROUP BY %s' % ', '.join([ aqm(by, self.qutotation) for by in self._bys ]), []
+        return 'GROUP BY %s' % ', '.join([ aqm(by, qutotation) for by in self._bys ]), []
 
 
 class PageClause:
@@ -219,10 +218,10 @@ class SelectClause:
             self.columns.append(c)
         return self
 
-    def compile(self):
+    def compile(self, qutotation, paramstyle):
         sql = '*'
         if self.columns:
-            sql = ', '.join([ aqm(c, self.qutotation) for c in self.columns ])
+            sql = ', '.join([ aqm(c, qutotation) for c in self.columns ])
 
         if self._distinct:
             sql = 'SELECT DISTINCT %s' % sql
