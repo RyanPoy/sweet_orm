@@ -86,13 +86,20 @@ class JoinClause(WhereClause):
 
     def _on(self, and_or, *ons):
         for on in ons:
-            s = ' = '.join([ aqm(x.strip(), self.qutotation) for x in on.split('=', 1) ])
-            self._ons.append('%s %s' % (and_or, s))
+            self._ons.append((and_or, on))
         return self
 
     def compile(self):
         sql, params = self._compile()
-        on = self._ltrip_and_or(' '.join(self._ons).strip())
+
+        ons = []
+        for and_or, on in self._ons:
+            s = ' = '.join([ aqm(x.strip(), self.qutotation) for x in on.split('=', 1) ])
+            ons.append(and_or)
+            ons.append(' ')
+            ons.append(s)
+
+        on = self._ltrip_and_or(' '.join(ons).strip()).strip()
 
         if on and sql:
             sql = '%s JOIN %s ON %s %s' % (self.PREFIX, aqm(self.tbname, self.qutotation), on, sql)
@@ -121,41 +128,48 @@ class CrossJoinClause(JoinClause):
     PREFIX = 'CROSS'
 
 
-######################################
-###
-class ByClause:
+class OrderClause:
 
     def __init__(self, qutotation):
         self.qutotation = qutotation
         self._bys = []
 
-    def compile(self):
-        if not self._bys:
-            return '', []
-        return '%s %s' % (self.PREFIX, ', '.join(self._bys)), []
-
-
-class OrderClause(ByClause):
-
-    PREFIX = 'ORDER BY'
-
     def by(self, column, desc=False):
-        c = aqm(column, self.qutotation)
-        if desc:
-            self._bys.append('%s DESC' % c)
-        else:
-            self._bys.append(c)
+        # c = aqm(column, self.qutotation)
+        self._bys.append((column, desc))
         return self
 
+    def compile(self, qutotation, paramstyle):
+        if not self._bys:
+            return '', []
 
-class GroupClause(ByClause):
+        bys = []
+        for column, desc in self._bys:
+            c = aqm(column, qutotation)
+            if desc:
+                bys.append('%s DESC' % c)
+            else:
+                bys.append('%s' % c)
+        return 'ORDER BY %s' % ', '.join(bys), []
 
-    PREFIX = 'GROUP BY'
+
+class GroupClause:
+
+    def __init__(self, qutotation):
+        self.qutotation = qutotation
+        self._bys = []
 
     def by(self, *columns):
         for c in columns:
-            self._bys.append(aqm(c, self.qutotation))
+            self._bys.append(c)
+            # self._bys.append(aqm(c, self.qutotation))
         return self
+
+    def compile(self, qutotation, paramstyle):
+        if not self._bys:
+            return '', []
+
+        return 'GROUP BY %s' % ', '.join([ aqm(by, self.qutotation) for by in self._bys ]), []
 
 
 class PageClause:

@@ -223,7 +223,7 @@ class Recordset:
             params.extend(where_params)
 
         sql = self._push_exist_sql(where_sql, sql, params)
-        group_sql, group_params = self.group_clause.compile()
+        group_sql, group_params = self.group_clause.compile(self.qutotation_marks, self.paramstyle_marks)
         if group_sql:
             sql = '%s %s' % (sql, group_sql)
             params.extend(group_params)
@@ -237,7 +237,7 @@ class Recordset:
         if union_sql:
             sql = '%s %s' % (sql, union_sql)
 
-        order_sql, order_params = self.order_clause.compile()
+        order_sql, order_params = self.order_clause.compile(self.qutotation_marks, self.paramstyle_marks)
         if order_sql:
             sql = '%s %s' % (sql, order_sql)
             params.extend(order_params)

@@ -10,14 +10,16 @@ from sweet_orm.db.clauses import WhereClause, HavingClause, \
 class TestClauses(unittest.TestCase):
 
     def setUp(self):
-        self.where_clause = WhereClause('`', '%s')
-        self.having_clause = HavingClause('`', '%s')
-        self.inner_join_clause = JoinClause('`', '%s', 'mobiles')
-        self.left_join_clause = LeftJoinClause('`', '%s', 'mobiles')
-        self.right_join_clause = RightJoinClause('`', '%s', 'mobiles')
-        self.order_clause = OrderClause('`')
-        self.group_clause = GroupClause('`')
-        self.select_clause = SelectClause('`')
+        self.qutotation_marks = '`'
+        self.paramstyle_marks = '%s'
+        self.where_clause = WhereClause(self.qutotation_marks, self.paramstyle_marks)
+        self.having_clause = HavingClause(self.qutotation_marks, self.paramstyle_marks)
+        self.inner_join_clause = JoinClause(self.qutotation_marks, self.paramstyle_marks, 'mobiles')
+        self.left_join_clause = LeftJoinClause(self.qutotation_marks, self.paramstyle_marks, 'mobiles')
+        self.right_join_clause = RightJoinClause(self.qutotation_marks, self.paramstyle_marks, 'mobiles')
+        self.order_clause = OrderClause(self.qutotation_marks)
+        self.group_clause = GroupClause(self.qutotation_marks)
+        self.select_clause = SelectClause(self.qutotation_marks)
         self.page_clause = PageClause()
 
     def test_basic_where_clause(self):
@@ -134,11 +136,11 @@ class TestClauses(unittest.TestCase):
         self.assertEqual([1, 'Ryan'], params)
 
     def test_order_by(self):
-        sql, params = self.order_clause.by('email').by('age', desc=True).compile()
+        sql, params = self.order_clause.by('email').by('age', desc=True).compile(self.qutotation_marks, self.paramstyle_marks)
         self.assertEqual('ORDER BY `email`, `age` DESC', sql)
 
     def test_group_bys(self):
-        sql, params = self.group_clause.by('id', 'email').compile()
+        sql, params = self.group_clause.by('id', 'email').compile(self.qutotation_marks, self.paramstyle_marks)
         self.assertEqual('GROUP BY `id`, `email`', sql)
 
     def test_having(self):
