@@ -242,7 +242,7 @@ class Recordset:
             sql = '%s %s' % (sql, order_sql)
             params.extend(order_params)
 
-        limit_and_offset_sql, limit_and_offset_params = self.page_clause.compile()
+        limit_and_offset_sql, limit_and_offset_params = self.page_clause.compile(self.qutotation_marks, self.paramstyle_marks)
         if limit_and_offset_sql:
             sql = '%s %s' % (sql, limit_and_offset_sql)
             params.extend(limit_and_offset_params)
@@ -261,7 +261,7 @@ class Recordset:
     def _join_sql(self, params):
         sqls = []
         for j in self._joins_clauses:
-            tmp_sql, tmp_params = j.compile()
+            tmp_sql, tmp_params = j.compile(self.qutotation_marks, self.paramstyle_marks)
             if tmp_sql:
                 sqls.append(tmp_sql)
             params.extend(tmp_params)

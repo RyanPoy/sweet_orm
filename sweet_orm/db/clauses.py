@@ -89,12 +89,12 @@ class JoinClause(WhereClause):
             self._ons.append((and_or, on))
         return self
 
-    def compile(self):
+    def compile(self, qutotation, paramstyle):
         sql, params = self._compile()
 
         ons = []
         for and_or, on in self._ons:
-            s = ' = '.join([ aqm(x.strip(), self.qutotation) for x in on.split('=', 1) ])
+            s = ' = '.join([ aqm(x.strip(), qutotation) for x in on.split('=', 1) ])
             ons.append(and_or)
             ons.append(' ')
             ons.append(s)
@@ -189,7 +189,7 @@ class PageClause:
         page_num = 1 if page_num < 0 else page_num
         return self.limit((page_num-1) * page_size).offset(page_size)
 
-    def compile(self):
+    def compile(self, qutotation, paramstyle):
         sqls = []
         if self._limit:
             sqls.append('LIMIT %s' % self._limit)

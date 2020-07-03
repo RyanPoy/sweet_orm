@@ -247,11 +247,11 @@ class TestClauses(unittest.TestCase):
         self.assertEqual([1, 2, 3, 'Ryan'], params)
 
     def test_limits_and_offsets(self):
-        sql, params = self.page_clause.offset(5).limit(10).compile()
+        sql, params = self.page_clause.offset(5).limit(10).compile(self.qutotation_marks, self.paramstyle_marks)
         self.assertEqual('LIMIT 10 OFFSET 5', sql)
 
     def test_page(self):
-        sql, params = self.page_clause.page(2, 15).compile()
+        sql, params = self.page_clause.page(2, 15).compile(self.qutotation_marks, self.paramstyle_marks)
         self.assertEqual('LIMIT 15 OFFSET 15', sql)
 
     def test_select(self):
@@ -271,27 +271,27 @@ class TestClauses(unittest.TestCase):
         self.assertEqual('SELECT DISTINCT `name`, `users`.`age`', sql)
 
     def test_join_and(self):
-        sql, params = self.inner_join_clause.on('users.id=cars.user_id').and_(mobiles__name='iphone').and_(users__age=20).compile()
+        sql, params = self.inner_join_clause.on('users.id=cars.user_id').and_(mobiles__name='iphone').and_(users__age=20).compile(self.qutotation_marks, self.paramstyle_marks)
         self.assertEqual('INNER JOIN `mobiles` ON `users`.`id` = `cars`.`user_id` AND `mobiles`.`name` = %s AND `users`.`age` = %s', sql)
         self.assertEqual(['iphone', 20], params)
 
     def test_join_or(self):
-        sql, params = self.inner_join_clause.on('users.id=cars.user_id').or_(mobiles__name='iphone').or_(users__age=20).compile()
+        sql, params = self.inner_join_clause.on('users.id=cars.user_id').or_(mobiles__name='iphone').or_(users__age=20).compile(self.qutotation_marks, self.paramstyle_marks)
         self.assertEqual('INNER JOIN `mobiles` ON `users`.`id` = `cars`.`user_id` OR `mobiles`.`name` = %s OR `users`.`age` = %s', sql)
         self.assertEqual(['iphone', 20], params)
 
     def test_join_without_on(self):
-        sql, params = self.inner_join_clause.or_(mobiles__name='iphone').or_(users__age=20).compile()
+        sql, params = self.inner_join_clause.or_(mobiles__name='iphone').or_(users__age=20).compile(self.qutotation_marks, self.paramstyle_marks)
         self.assertEqual('INNER JOIN `mobiles` ON `mobiles`.`name` = %s OR `users`.`age` = %s', sql)
         self.assertEqual(['iphone', 20], params)
 
     def test_left_join(self):
-        sql, params = self.left_join_clause.on('users.id=cars.user_id').or_(mobiles__name='iphone').or_(users__age=20).compile()
+        sql, params = self.left_join_clause.on('users.id=cars.user_id').or_(mobiles__name='iphone').or_(users__age=20).compile(self.qutotation_marks, self.paramstyle_marks)
         self.assertEqual('LEFT JOIN `mobiles` ON `users`.`id` = `cars`.`user_id` OR `mobiles`.`name` = %s OR `users`.`age` = %s', sql)
         self.assertEqual(['iphone', 20], params)
 
     def test_right_join(self):
-        sql, params = self.right_join_clause.on('users.id=cars.user_id').or_(mobiles__name='iphone').or_(users__age=20).compile()
+        sql, params = self.right_join_clause.on('users.id=cars.user_id').or_(mobiles__name='iphone').or_(users__age=20).compile(self.qutotation_marks, self.paramstyle_marks)
         self.assertEqual('RIGHT JOIN `mobiles` ON `users`.`id` = `cars`.`user_id` OR `mobiles`.`name` = %s OR `users`.`age` = %s', sql)
         self.assertEqual(['iphone', 20], params)
 
