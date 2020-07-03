@@ -172,12 +172,12 @@ class Recordset:
         return self
 
     def _aqm(self, s):
-        return aqm(s, self.qutotation_marks)
+        return aqm(s, self.qutotation)
 
     def _query_sql(self):
         params = []
         from_sql = self._from_sql(params)
-        select_sql, select_params = self.select_clause.compile(self.qutotation_marks, self.paramstyle_marks)
+        select_sql, select_params = self.select_clause.compile(self.qutotation, self.paramstyle)
         sql = '{select_sql} {from_sql}{lock_sql}'.format(
             select_sql= select_sql,
             from_sql=from_sql,
@@ -217,18 +217,18 @@ class Recordset:
         return self._core_sql(sql, params)
 
     def _core_sql(self, sql, params):
-        where_sql, where_params = self.where_clause.compile(self.qutotation_marks, self.paramstyle_marks)
+        where_sql, where_params = self.where_clause.compile(self.qutotation, self.paramstyle)
         if where_sql:
             sql = '%s %s' % (sql, where_sql)
             params.extend(where_params)
 
         sql = self._push_exist_sql(where_sql, sql, params)
-        group_sql, group_params = self.group_clause.compile(self.qutotation_marks, self.paramstyle_marks)
+        group_sql, group_params = self.group_clause.compile(self.qutotation, self.paramstyle)
         if group_sql:
             sql = '%s %s' % (sql, group_sql)
             params.extend(group_params)
 
-        having_sql, having_params = self.having_clause.compile(self.qutotation_marks, self.paramstyle_marks)
+        having_sql, having_params = self.having_clause.compile(self.qutotation, self.paramstyle)
         if having_sql:
             sql = '%s %s' % (sql, having_sql)
             params.extend(having_params)
@@ -237,12 +237,12 @@ class Recordset:
         if union_sql:
             sql = '%s %s' % (sql, union_sql)
 
-        order_sql, order_params = self.order_clause.compile(self.qutotation_marks, self.paramstyle_marks)
+        order_sql, order_params = self.order_clause.compile(self.qutotation, self.paramstyle)
         if order_sql:
             sql = '%s %s' % (sql, order_sql)
             params.extend(order_params)
 
-        limit_and_offset_sql, limit_and_offset_params = self.page_clause.compile(self.qutotation_marks, self.paramstyle_marks)
+        limit_and_offset_sql, limit_and_offset_params = self.page_clause.compile(self.qutotation, self.paramstyle)
         if limit_and_offset_sql:
             sql = '%s %s' % (sql, limit_and_offset_sql)
             params.extend(limit_and_offset_params)
@@ -261,7 +261,7 @@ class Recordset:
     def _join_sql(self, params):
         sqls = []
         for j in self._joins_clauses:
-            tmp_sql, tmp_params = j.compile(self.qutotation_marks, self.paramstyle_marks)
+            tmp_sql, tmp_params = j.compile(self.qutotation, self.paramstyle)
             if tmp_sql:
                 sqls.append(tmp_sql)
             params.extend(tmp_params)
@@ -271,19 +271,19 @@ class Recordset:
         record = record or {}
         if kwargs: record.update(kwargs)
         insert_clause = InsertClause(self.tablename)
-        sql, params = insert_clause.insert(record).compile(self.qutotation_marks, self.paramstyle_marks)
+        sql, params = insert_clause.insert(record).compile(self.qutotation, self.paramstyle)
         return self.db.execute_lastrowid(sql, *params)
 
     def insert(self, records=None, **kwargs):
         insert_clause = InsertClause(self.tablename)
-        sql, params = insert_clause.insert(records, **kwargs).compile(self.qutotation_marks, self.paramstyle_marks)
+        sql, params = insert_clause.insert(records, **kwargs).compile(self.qutotation, self.paramstyle)
         return self.db.execute_rowcount(sql, *params)
 
     # @dcp
     def update(self, **kwargs):
         update_columns, update_params = [], []
         for k, v in kwargs.items():
-            update_columns.append('%s = %s' % (self._aqm(k), self.paramstyle_marks))
+            update_columns.append('%s = %s' % (self._aqm(k), self.paramstyle))
             update_params.append(v)
 
         sql = 'UPDATE %s' % self.tablename
@@ -310,10 +310,10 @@ class Recordset:
         update_columns, update_params = [], []
         for k, v in kwargs.items():
             update_columns.append(
-                '{name} = {name} {flag} {paramstyle_marks}'.format(
+                '{name} = {name} {flag} {paramstyle}'.format(
                     name=self._aqm(k), 
                     flag=flag,
-                    paramstyle_marks=self.paramstyle_marks
+                    paramstyle=self.paramstyle
                 )
             )
             update_params.append(v)
@@ -409,8 +409,8 @@ class Recordset:
 
 class MySQLRecordset(Recordset):
 
-    qutotation_marks = '`'
-    paramstyle_marks = '%s'
+    qutotation = '`'
+    paramstyle = '%s'
 
     @dcp
     def read_lock(self):
@@ -445,7 +445,7 @@ class MySQLRecordset(Recordset):
     def update(self, **kwargs):
         update_columns, update_params = [], []
         for k, v in kwargs.items():
-            update_columns.append('%s = %s' % (self._aqm(k), self.paramstyle_marks))
+            update_columns.append('%s = %s' % (self._aqm(k), self.paramstyle))
             update_params.append(v)
 
         sql = 'UPDATE %s' % self.tablename
@@ -471,8 +471,8 @@ class MySQLRecordset(Recordset):
 
 class SQLiteRecordset(Recordset):
 
-    qutotation_marks = '`'
-    paramstyle_marks = '?'        
+    qutotation = '`'
+    paramstyle = '?'        
 
     def truncate(self):
         r = self.db.execute_rowcount('DELETE FROM {}'.format(self.tablename))
@@ -505,7 +505,7 @@ class SQLiteRecordset(Recordset):
     def update(self, **kwargs):
         update_columns, params = [], []
         for k, v in kwargs.items():
-            update_columns.append('%s = %s' % (self._aqm(k), self.paramstyle_marks))
+            update_columns.append('%s = %s' % (self._aqm(k), self.paramstyle))
             params.append(v)
 
         sql = 'UPDATE %s SET %s' % (self.tablename, ', '.join(update_columns))

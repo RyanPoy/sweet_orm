@@ -7,8 +7,8 @@ import inspect
 
 def get_db():
     db = mock.MagicMock('db')
-    db.qutotation_marks = '`'
-    db.paramstyle_marks = '%s'
+    db.qutotation = '`'
+    db.paramstyle = '%s'
     db.get_columns = mock.MagicMock(return_value={})
     return db
 

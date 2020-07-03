@@ -182,8 +182,8 @@ class Driver:
 
 class MySQL(Driver):
     
-    qutotation_marks = '`'
-    paramstyle_marks = '%s'
+    qutotation = '`'
+    paramstyle = '%s'
 
     RECORDSET_CLASS = MySQLRecordset
     logger = logging.getLogger('MySQL')
@@ -288,8 +288,8 @@ def sqlite_row_factory(cursor, row):
 
 class SQLite(Driver):
 
-    qutotation_marks = '`'
-    paramstyle_marks = '?'
+    qutotation = '`'
+    paramstyle = '?'
 
     RECORDSET_CLASS = SQLiteRecordset
     logger = logging.getLogger('SQLite')
