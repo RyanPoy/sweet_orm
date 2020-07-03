@@ -217,7 +217,7 @@ class Recordset:
         return self._core_sql(sql, params)
 
     def _core_sql(self, sql, params):
-        where_sql, where_params = self.where_clause.compile()
+        where_sql, where_params = self.where_clause.compile(self.qutotation_marks, self.paramstyle_marks)
         if where_sql:
             sql = '%s %s' % (sql, where_sql)
             params.extend(where_params)
@@ -228,7 +228,7 @@ class Recordset:
             sql = '%s %s' % (sql, group_sql)
             params.extend(group_params)
 
-        having_sql, having_params = self.having_clause.compile()
+        having_sql, having_params = self.having_clause.compile(self.qutotation_marks, self.paramstyle_marks)
         if having_sql:
             sql = '%s %s' % (sql, having_sql)
             params.extend(having_params)

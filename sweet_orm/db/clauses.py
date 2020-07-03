@@ -30,13 +30,6 @@ class WhereClause:
             self.filters.append( (and_or, FilterBuilder.build(k, v)) )
         return self
 
-    def compile(self, with_prefix=True):
-        sql, params = self._compile()
-        sql = self._ltrip_and_or(sql)
-        if sql and with_prefix:
-            sql = '%s %s' % (self.PREFIX, sql)
-        return sql, params
-
     def _ltrip_and_or(self, s):
         if s.startswith(self.AND):
             s = s[4:]
@@ -44,21 +37,30 @@ class WhereClause:
             s = s[3:]
         return s
 
-    def _compile(self):
+    def compile(self, qutotation, paramstyle):
+        sql, params = self._compile(qutotation, paramstyle)
+        sql = self._ltrip_and_or(sql)
+        if sql:
+            sql = '%s %s' % (self.PREFIX, sql)
+        return sql, params
+
+    def _compile(self, qutotation, paramstyle):
         sqls, params = [], []
         for and_or, f in self.filters:
             if isinstance(f, WhereClause):
-                tmp_sql, tmp_params = f.compile(False)
+                tmp_sql, tmp_params = f._compile(qutotation, paramstyle)
+                tmp_sql = self._ltrip_and_or(tmp_sql)
                 sqls.append(and_or)
                 sqls.append("(")
                 sqls.append(tmp_sql)
                 sqls.append(")")
                 params.extend(tmp_params)
             else:
-                tmp_sql, tmp_params = f.compile(self.qutotation, self.paramstyle)
+                tmp_sql, tmp_params = f.compile(qutotation, paramstyle)
                 sqls.append(and_or)
                 sqls.append(tmp_sql)
                 params.extend(tmp_params)
+
         return ' '.join(sqls) if sqls else '', params
 
 
@@ -90,7 +92,7 @@ class JoinClause(WhereClause):
         return self
 
     def compile(self, qutotation, paramstyle):
-        sql, params = self._compile()
+        sql, params = self._compile(qutotation, paramstyle)
 
         ons = []
         for and_or, on in self._ons:
@@ -135,7 +137,6 @@ class OrderClause:
         self._bys = []
 
     def by(self, column, desc=False):
-        # c = aqm(column, self.qutotation)
         self._bys.append((column, desc))
         return self
 
