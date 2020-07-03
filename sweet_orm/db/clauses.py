@@ -230,9 +230,7 @@ class SelectClause:
 ###
 class InsertClause:
     
-    def __init__(self, qutotation, paramstyle, tbname):
-        self.qutotation = qutotation
-        self.paramstyle = paramstyle
+    def __init__(self, tbname):
         self.tbname = tbname
         self.list_records = []
 
@@ -248,7 +246,7 @@ class InsertClause:
 
         return self
 
-    def compile(self):
+    def compile(self, qutotation, paramstyle):
         if not self.list_records:
             return '', [] # nothing insert
 
@@ -260,12 +258,12 @@ class InsertClause:
 
         values_sql, params = [], []
         for r in self.list_records:
-            values_sql.append('(%s)' % ', '.join([self.paramstyle]*len(r)))
+            values_sql.append('(%s)' % ', '.join([paramstyle]*len(r)))
             params.extend(r.values())
         
         sql = 'INSERT INTO {tablename} ({columns}) VALUES {values_sql}'.format(
-            tablename=aqm(self.tbname, self.qutotation),
-            columns=', '.join([ aqm(c, self.qutotation) for c in self.list_records[0].keys() ]),
+            tablename=aqm(self.tbname, qutotation),
+            columns=', '.join([ aqm(c, qutotation) for c in self.list_records[0].keys() ]),
             values_sql=', '.join(values_sql)
         )
         return sql, params

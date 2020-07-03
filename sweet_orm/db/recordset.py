@@ -270,13 +270,13 @@ class Recordset:
     def insert_getid(self, record=None, **kwargs):
         record = record or {}
         if kwargs: record.update(kwargs)
-        insert_clause = InsertClause(self.qutotation_marks, self.paramstyle_marks, self.tablename)
-        sql, params = insert_clause.insert(record).compile()
+        insert_clause = InsertClause(self.tablename)
+        sql, params = insert_clause.insert(record).compile(self.qutotation_marks, self.paramstyle_marks)
         return self.db.execute_lastrowid(sql, *params)
 
     def insert(self, records=None, **kwargs):
-        insert_clause = InsertClause(self.qutotation_marks, self.paramstyle_marks, self.tablename)
-        sql, params = insert_clause.insert(records, **kwargs).compile()
+        insert_clause = InsertClause(self.tablename)
+        sql, params = insert_clause.insert(records, **kwargs).compile(self.qutotation_marks, self.paramstyle_marks)
         return self.db.execute_rowcount(sql, *params)
 
     # @dcp
