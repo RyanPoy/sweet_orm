@@ -12,7 +12,7 @@ import logging
 
 class Driver:
     
-    RECORDSET_CLASS = MySQLRecordset
+    RECORDSET_CLASS = None
 
     COLUMN_FIELD_MAPPING = {
         'integer': IntField, 
@@ -182,6 +182,9 @@ class Driver:
 
 class MySQL(Driver):
     
+    qutotation_marks = '`'
+    paramstyle_marks = '%s'
+
     RECORDSET_CLASS = MySQLRecordset
     logger = logging.getLogger('MySQL')
 
@@ -284,6 +287,9 @@ def sqlite_row_factory(cursor, row):
 
 
 class SQLite(Driver):
+
+    qutotation_marks = '`'
+    paramstyle_marks = '?'
 
     RECORDSET_CLASS = SQLiteRecordset
     logger = logging.getLogger('SQLite')
