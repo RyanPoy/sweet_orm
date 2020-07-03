@@ -35,8 +35,8 @@ class WhereClause:
             s = s[3:]
         return s
 
-    def compile(self, qutotation, paramstyle):
-        sql, params = self._compile(qutotation, paramstyle)
+    def compile(self, db):
+        sql, params = self._compile(db.qutotation, db.paramstyle)
         sql = self._ltrip_and_or(sql)
         if sql:
             sql = '%s %s' % (self.PREFIX, sql)

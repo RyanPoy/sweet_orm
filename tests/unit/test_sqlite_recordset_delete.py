@@ -7,7 +7,10 @@ from sweet_orm.db.recordset import SQLiteRecordset, SQLError
 class TestSQLiteRecordsetDelete(unittest.TestCase):
 
     def get_db(self):
-        return mock.MagicMock('db')
+        db = mock.MagicMock('db')
+        db.qutotation = '`'
+        db.paramstyle = '?'
+        return db
 
     def test_delete(self):
         db = self.get_db()

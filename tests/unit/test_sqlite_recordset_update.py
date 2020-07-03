@@ -7,7 +7,10 @@ from unittest import mock
 class TestSQLiteRecordsetUpdate(unittest.TestCase):
 
     def get_db(self):
-        return mock.MagicMock('db')
+        db = mock.MagicMock('db')
+        db.qutotation = '`'
+        db.paramstyle = '?'
+        return db
 
     def test_update(self):
         db = self.get_db()

@@ -7,7 +7,10 @@ from sweet_orm.db.recordset import MySQLRecordset
 class TestMySQLRecordsetDelete(unittest.TestCase):
 
     def get_db(self):
-        return mock.MagicMock('db')
+        db = mock.MagicMock('db')
+        db.qutotation = '`'
+        db.paramstyle = '%s'
+        return db
 
     def test_delete(self):
         db = self.get_db()
