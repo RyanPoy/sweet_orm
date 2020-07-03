@@ -17,9 +17,9 @@ class TestClauses(unittest.TestCase):
         self.inner_join_clause = JoinClause('mobiles')
         self.left_join_clause = LeftJoinClause('mobiles')
         self.right_join_clause = RightJoinClause('mobiles')
-        self.order_clause = OrderClause(self.qutotation_marks)
-        self.group_clause = GroupClause(self.qutotation_marks)
-        self.select_clause = SelectClause(self.qutotation_marks)
+        self.order_clause = OrderClause()
+        self.group_clause = GroupClause()
+        self.select_clause = SelectClause()
         self.page_clause = PageClause()
 
     def test_basic_where_clause(self):

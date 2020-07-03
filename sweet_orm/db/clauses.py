@@ -130,8 +130,7 @@ class CrossJoinClause(JoinClause):
 
 class OrderClause:
 
-    def __init__(self, qutotation):
-        self.qutotation = qutotation
+    def __init__(self):
         self._bys = []
 
     def by(self, column, desc=False):
@@ -154,8 +153,7 @@ class OrderClause:
 
 class GroupClause:
 
-    def __init__(self, qutotation):
-        self.qutotation = qutotation
+    def __init__(self):
         self._bys = []
 
     def by(self, *columns):
@@ -202,8 +200,7 @@ class PageClause:
 ###
 class SelectClause:
 
-    def __init__(self, qutotation):
-        self.qutotation = qutotation
+    def __init__(self):
         self.columns = []
         self._distinct = False
 

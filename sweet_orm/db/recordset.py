@@ -28,11 +28,11 @@ class Recordset:
         """
         self.db = db
         self.tablename = self._aqm(tablename)
-        self.select_clause = SelectClause(self.qutotation_marks)
+        self.select_clause = SelectClause()
         self.where_clause = WhereClause()
         self.having_clause = HavingClause()
-        self.group_clause = GroupClause(self.qutotation_marks)
-        self.order_clause = OrderClause(self.qutotation_marks)
+        self.group_clause = GroupClause()
+        self.order_clause = OrderClause()
         self._joins_clauses = []
         self.page_clause = PageClause()
         self._lock = self.LOCK.NILL
