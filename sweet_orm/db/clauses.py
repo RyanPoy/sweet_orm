@@ -89,8 +89,9 @@ class JoinClause(WhereClause):
             self._ons.append((and_or, on))
         return self
 
-    def compile(self, qutotation, paramstyle):
-        sql, params = self._compile(qutotation, paramstyle)
+    def compile(self, db):
+        qutotation, paramstyle = db.qutotation, db.paramstyle
+        sql, params = self._compile(db.qutotation, db.paramstyle)
 
         ons = []
         for and_or, on in self._ons:
@@ -101,15 +102,16 @@ class JoinClause(WhereClause):
 
         on = self._ltrip_and_or(' '.join(ons).strip()).strip()
 
+        tablname = aqm(self.tbname, qutotation)
         if on and sql:
-            sql = '%s JOIN %s ON %s %s' % (self.PREFIX, aqm(self.tbname, qutotation), on, sql)
+            sql = '%s JOIN %s ON %s %s' % (self.PREFIX, tablname, on, sql)
         elif on:
-            sql = '%s JOIN %s ON %s' % (self.PREFIX, aqm(self.tbname, qutotation), on)
+            sql = '%s JOIN %s ON %s' % (self.PREFIX, tablname, on)
         elif sql:
             sql = self._ltrip_and_or(sql)
-            sql = '%s JOIN %s ON %s' % (self.PREFIX, aqm(self.tbname, qutotation), sql)
+            sql = '%s JOIN %s ON %s' % (self.PREFIX, tablname, sql)
         else:
-            sql = '%s JOIN %s' % (self.PREFIX, aqm(self.tbname, qutotation))
+            sql = '%s JOIN %s' % (self.PREFIX, tablname)
         return sql, params
 
 
@@ -137,13 +139,13 @@ class OrderClause:
         self._bys.append((column, desc))
         return self
 
-    def compile(self, qutotation, paramstyle):
+    def compile(self, db):
         if not self._bys:
             return '', []
 
         bys = []
         for column, desc in self._bys:
-            c = aqm(column, qutotation)
+            c = aqm(column, db.qutotation)
             if desc:
                 bys.append('%s DESC' % c)
             else:
@@ -161,11 +163,11 @@ class GroupClause:
             self._bys.append(c)
         return self
 
-    def compile(self, qutotation, paramstyle):
+    def compile(self, db):
         if not self._bys:
             return '', []
 
-        return 'GROUP BY %s' % ', '.join([ aqm(by, qutotation) for by in self._bys ]), []
+        return 'GROUP BY %s' % ', '.join([ aqm(by, db.qutotation) for by in self._bys ]), []
 
 
 class PageClause:
@@ -186,7 +188,7 @@ class PageClause:
         page_num = 1 if page_num < 0 else page_num
         return self.limit((page_num-1) * page_size).offset(page_size)
 
-    def compile(self, qutotation, paramstyle):
+    def compile(self):
         sqls = []
         if self._limit:
             sqls.append('LIMIT %s' % self._limit)
@@ -214,10 +216,10 @@ class SelectClause:
             self.columns.append(c)
         return self
 
-    def compile(self, qutotation, paramstyle):
+    def compile(self, db):
         sql = '*'
         if self.columns:
-            sql = ', '.join([ aqm(c, qutotation) for c in self.columns ])
+            sql = ', '.join([ aqm(c, db.qutotation) for c in self.columns ])
 
         if self._distinct:
             sql = 'SELECT DISTINCT %s' % sql
@@ -246,7 +248,7 @@ class InsertClause:
 
         return self
 
-    def compile(self, qutotation, paramstyle):
+    def compile(self, db):
         if not self.list_records:
             return '', [] # nothing insert
 
@@ -258,12 +260,12 @@ class InsertClause:
 
         values_sql, params = [], []
         for r in self.list_records:
-            values_sql.append('(%s)' % ', '.join([paramstyle]*len(r)))
+            values_sql.append('(%s)' % ', '.join([db.paramstyle]*len(r)))
             params.extend(r.values())
         
         sql = 'INSERT INTO {tablename} ({columns}) VALUES {values_sql}'.format(
-            tablename=aqm(self.tbname, qutotation),
-            columns=', '.join([ aqm(c, qutotation) for c in self.list_records[0].keys() ]),
+            tablename=aqm(self.tbname, db.qutotation),
+            columns=', '.join([ aqm(c, db.qutotation) for c in self.list_records[0].keys() ]),
             values_sql=', '.join(values_sql)
         )
         return sql, params

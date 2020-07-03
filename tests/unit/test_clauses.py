@@ -143,11 +143,11 @@ class TestClauses(unittest.TestCase):
         self.assertEqual([1, 'Ryan'], params)
 
     def test_order_by(self):
-        sql, params = self.order_clause.by('email').by('age', desc=True).compile(self.qutotation, self.paramstyle)
+        sql, params = self.order_clause.by('email').by('age', desc=True).compile(self.get_db())
         self.assertEqual('ORDER BY `email`, `age` DESC', sql)
 
     def test_group_bys(self):
-        sql, params = self.group_clause.by('id', 'email').compile(self.qutotation, self.paramstyle)
+        sql, params = self.group_clause.by('id', 'email').compile(self.get_db())
         self.assertEqual('GROUP BY `id`, `email`', sql)
 
     def test_having(self):
@@ -254,51 +254,51 @@ class TestClauses(unittest.TestCase):
         self.assertEqual([1, 2, 3, 'Ryan'], params)
 
     def test_limits_and_offsets(self):
-        sql, params = self.page_clause.offset(5).limit(10).compile(self.qutotation, self.paramstyle)
+        sql, params = self.page_clause.offset(5).limit(10).compile()
         self.assertEqual('LIMIT 10 OFFSET 5', sql)
 
     def test_page(self):
-        sql, params = self.page_clause.page(2, 15).compile(self.qutotation, self.paramstyle)
+        sql, params = self.page_clause.page(2, 15).compile()
         self.assertEqual('LIMIT 15 OFFSET 15', sql)
 
     def test_select(self):
-        sql, params = self.select_clause.compile(self.qutotation, self.paramstyle)
+        sql, params = self.select_clause.compile(self.get_db())
         self.assertEqual('SELECT *', sql)
 
     def test_select_with_columns(self):
-        sql, params = self.select_clause.select('name').select('users.age').compile(self.qutotation, self.paramstyle)
+        sql, params = self.select_clause.select('name').select('users.age').compile(self.get_db())
         self.assertEqual('SELECT `name`, `users`.`age`', sql)
 
     def test_select_with_distinct(self):
-        sql, params = self.select_clause.distinct().compile(self.qutotation, self.paramstyle)
+        sql, params = self.select_clause.distinct().compile(self.get_db())
         self.assertEqual('SELECT DISTINCT *', sql)
 
     def test_select_with_distinct_and_columns(self):
-        sql, params = self.select_clause.select('name').select('users.age').distinct().compile(self.qutotation, self.paramstyle)
+        sql, params = self.select_clause.select('name').select('users.age').distinct().compile(self.get_db())
         self.assertEqual('SELECT DISTINCT `name`, `users`.`age`', sql)
 
     def test_join_and(self):
-        sql, params = self.inner_join_clause.on('users.id=cars.user_id').and_(mobiles__name='iphone').and_(users__age=20).compile(self.qutotation, self.paramstyle)
+        sql, params = self.inner_join_clause.on('users.id=cars.user_id').and_(mobiles__name='iphone').and_(users__age=20).compile(self.get_db())
         self.assertEqual('INNER JOIN `mobiles` ON `users`.`id` = `cars`.`user_id` AND `mobiles`.`name` = %s AND `users`.`age` = %s', sql)
         self.assertEqual(['iphone', 20], params)
 
     def test_join_or(self):
-        sql, params = self.inner_join_clause.on('users.id=cars.user_id').or_(mobiles__name='iphone').or_(users__age=20).compile(self.qutotation, self.paramstyle)
+        sql, params = self.inner_join_clause.on('users.id=cars.user_id').or_(mobiles__name='iphone').or_(users__age=20).compile(self.get_db())
         self.assertEqual('INNER JOIN `mobiles` ON `users`.`id` = `cars`.`user_id` OR `mobiles`.`name` = %s OR `users`.`age` = %s', sql)
         self.assertEqual(['iphone', 20], params)
 
     def test_join_without_on(self):
-        sql, params = self.inner_join_clause.or_(mobiles__name='iphone').or_(users__age=20).compile(self.qutotation, self.paramstyle)
+        sql, params = self.inner_join_clause.or_(mobiles__name='iphone').or_(users__age=20).compile(self.get_db())
         self.assertEqual('INNER JOIN `mobiles` ON `mobiles`.`name` = %s OR `users`.`age` = %s', sql)
         self.assertEqual(['iphone', 20], params)
 
     def test_left_join(self):
-        sql, params = self.left_join_clause.on('users.id=cars.user_id').or_(mobiles__name='iphone').or_(users__age=20).compile(self.qutotation, self.paramstyle)
+        sql, params = self.left_join_clause.on('users.id=cars.user_id').or_(mobiles__name='iphone').or_(users__age=20).compile(self.get_db())
         self.assertEqual('LEFT JOIN `mobiles` ON `users`.`id` = `cars`.`user_id` OR `mobiles`.`name` = %s OR `users`.`age` = %s', sql)
         self.assertEqual(['iphone', 20], params)
 
     def test_right_join(self):
-        sql, params = self.right_join_clause.on('users.id=cars.user_id').or_(mobiles__name='iphone').or_(users__age=20).compile(self.qutotation, self.paramstyle)
+        sql, params = self.right_join_clause.on('users.id=cars.user_id').or_(mobiles__name='iphone').or_(users__age=20).compile(self.get_db())
         self.assertEqual('RIGHT JOIN `mobiles` ON `users`.`id` = `cars`.`user_id` OR `mobiles`.`name` = %s OR `users`.`age` = %s', sql)
         self.assertEqual(['iphone', 20], params)
 

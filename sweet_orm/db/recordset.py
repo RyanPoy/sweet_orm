@@ -177,7 +177,7 @@ class Recordset:
     def _query_sql(self):
         params = []
         from_sql = self._from_sql(params)
-        select_sql, select_params = self.select_clause.compile(self.qutotation, self.paramstyle)
+        select_sql, select_params = self.select_clause.compile(self.db)
         sql = '{select_sql} {from_sql}{lock_sql}'.format(
             select_sql= select_sql,
             from_sql=from_sql,
@@ -223,7 +223,7 @@ class Recordset:
             params.extend(where_params)
 
         sql = self._push_exist_sql(where_sql, sql, params)
-        group_sql, group_params = self.group_clause.compile(self.qutotation, self.paramstyle)
+        group_sql, group_params = self.group_clause.compile(self.db)
         if group_sql:
             sql = '%s %s' % (sql, group_sql)
             params.extend(group_params)
@@ -237,12 +237,12 @@ class Recordset:
         if union_sql:
             sql = '%s %s' % (sql, union_sql)
 
-        order_sql, order_params = self.order_clause.compile(self.qutotation, self.paramstyle)
+        order_sql, order_params = self.order_clause.compile(self.db)
         if order_sql:
             sql = '%s %s' % (sql, order_sql)
             params.extend(order_params)
 
-        limit_and_offset_sql, limit_and_offset_params = self.page_clause.compile(self.qutotation, self.paramstyle)
+        limit_and_offset_sql, limit_and_offset_params = self.page_clause.compile()
         if limit_and_offset_sql:
             sql = '%s %s' % (sql, limit_and_offset_sql)
             params.extend(limit_and_offset_params)
@@ -261,7 +261,7 @@ class Recordset:
     def _join_sql(self, params):
         sqls = []
         for j in self._joins_clauses:
-            tmp_sql, tmp_params = j.compile(self.qutotation, self.paramstyle)
+            tmp_sql, tmp_params = j.compile(self.db)
             if tmp_sql:
                 sqls.append(tmp_sql)
             params.extend(tmp_params)
@@ -271,12 +271,12 @@ class Recordset:
         record = record or {}
         if kwargs: record.update(kwargs)
         insert_clause = InsertClause(self.tablename)
-        sql, params = insert_clause.insert(record).compile(self.qutotation, self.paramstyle)
+        sql, params = insert_clause.insert(record).compile(self.db)
         return self.db.execute_lastrowid(sql, *params)
 
     def insert(self, records=None, **kwargs):
         insert_clause = InsertClause(self.tablename)
-        sql, params = insert_clause.insert(records, **kwargs).compile(self.qutotation, self.paramstyle)
+        sql, params = insert_clause.insert(records, **kwargs).compile(self.db)
         return self.db.execute_rowcount(sql, *params)
 
     # @dcp
