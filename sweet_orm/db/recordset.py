@@ -136,7 +136,7 @@ class Recordset:
 
     @dcp
     def _join(self, join_clause_class, tbname, on, func=None):
-        jc = join_clause_class(self.qutotation_marks, self.paramstyle_marks, tbname)
+        jc = join_clause_class(tbname)
         if on:
             jc.on(on)
 

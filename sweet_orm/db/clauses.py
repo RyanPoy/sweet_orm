@@ -73,7 +73,7 @@ class JoinClause(WhereClause):
     
     PREFIX = 'INNER'
 
-    def __init__(self, qutotation, paramstyle, tbname):
+    def __init__(self, tbname):
         super().__init__()
         self.tbname = tbname
         self._ons = []

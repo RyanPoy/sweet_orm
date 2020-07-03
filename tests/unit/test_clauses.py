@@ -14,9 +14,9 @@ class TestClauses(unittest.TestCase):
         self.paramstyle_marks = '%s'
         self.where_clause = WhereClause()
         self.having_clause = HavingClause()
-        self.inner_join_clause = JoinClause(self.qutotation_marks, self.paramstyle_marks, 'mobiles')
-        self.left_join_clause = LeftJoinClause(self.qutotation_marks, self.paramstyle_marks, 'mobiles')
-        self.right_join_clause = RightJoinClause(self.qutotation_marks, self.paramstyle_marks, 'mobiles')
+        self.inner_join_clause = JoinClause('mobiles')
+        self.left_join_clause = LeftJoinClause('mobiles')
+        self.right_join_clause = RightJoinClause('mobiles')
         self.order_clause = OrderClause(self.qutotation_marks)
         self.group_clause = GroupClause(self.qutotation_marks)
         self.select_clause = SelectClause(self.qutotation_marks)
