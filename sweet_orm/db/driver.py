@@ -1,7 +1,7 @@
 #coding: utf8
 from sweet_orm.db.recordset import MySQLRecordset, SQLiteRecordset
 from contextlib import contextmanager
-from abc import abstractmethod
+from abc import abstractmethod, ABC
 from sweet_orm.orm.fields import *
 from sweet_orm.utils import *
 import MySQLdb
@@ -10,7 +10,7 @@ import time
 import logging
 
 
-class Driver:
+class Driver(ABC):
     
     RECORDSET_CLASS = None
 

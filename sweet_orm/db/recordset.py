@@ -2,7 +2,7 @@
 from collections import namedtuple
 from sweet_orm.db.clauses import *
 from sweet_orm.utils import *
-from abc import abstractmethod
+from abc import abstractmethod, ABC
 import functools
 import copy
 
@@ -17,7 +17,7 @@ def dcp(method):
     return _
 
 
-class Recordset:
+class Recordset(ABC):
 
     LOCK = namedtuple("Lock", ['NILL', 'READ', 'WRITE'])._make([0, 1, 2])
 
@@ -188,7 +188,7 @@ class Recordset:
 
     @abstractmethod
     def _lock_sql(self):
-        return ''
+        pass
 
     def _push_exist_sql(self, where_sql, sql, params):
         sqls = []
@@ -469,6 +469,7 @@ class MySQLRecordset(Recordset):
             lock = ' FOR UPDATE'
         return lock
 
+
 class SQLiteRecordset(Recordset):
 
     qutotation = '`'
@@ -522,3 +523,12 @@ class SQLiteRecordset(Recordset):
             sql = self._core_sql(sql, params)
 
         return self.db.execute_rowcount(sql, *params)
+
+    def _lock_sql(self):
+        return ''
+
+    def read_lock(self):
+        return self
+
+    def write_lock(self):
+        return self
