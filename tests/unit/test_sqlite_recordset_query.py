@@ -139,7 +139,7 @@ class TestSQLiteRecordsetQuery(unittest.TestCase):
 
     def test_where_group_parameters(self):
         sql, params = self.get_recordset().select('*').where(id__bt=[1, 2]).or_where(
-            WhereClause('`', '?').and_(name='jim').or_(name='lucy')
+            WhereClause().and_(name='jim').or_(name='lucy')
         ).where(id=10)._query_sql()
         self.assertEqual('SELECT * FROM `users` WHERE `id` BETWEEN ? AND ? OR ( `name` = ? OR `name` = ? ) AND `id` = ?', sql)
         self.assertEqual([1, 2, 'jim', 'lucy', 10], params)
@@ -196,7 +196,7 @@ class TestSQLiteRecordsetQuery(unittest.TestCase):
 
     def test_where_group_parameters(self):
         sql, params = self.get_recordset().select('*').having(id=1, name='Ryan').or_having(
-            WhereClause('`', '?').and_(name='jim').or_(name='lucy')
+            WhereClause().and_(name='jim').or_(name='lucy')
         )._query_sql()
         self.assertEqual('SELECT * FROM `users` HAVING `id` = ? AND `name` = ? OR ( `name` = ? OR `name` = ? )', sql)
         self.assertEqual([1, 'Ryan', 'jim', 'lucy'], params)

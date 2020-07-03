@@ -9,9 +9,7 @@ class WhereClause:
 
     PREFIX = 'WHERE'
 
-    def __init__(self, qutotation, paramstyle):
-        self.qutotation = qutotation
-        self.paramstyle = paramstyle
+    def __init__(self):
         self.filters = []
 
     def and_(self, *other_clauses, **kwargs):
@@ -76,7 +74,7 @@ class JoinClause(WhereClause):
     PREFIX = 'INNER'
 
     def __init__(self, qutotation, paramstyle, tbname):
-        super().__init__(qutotation, paramstyle)
+        super().__init__()
         self.tbname = tbname
         self._ons = []
 
@@ -104,14 +102,14 @@ class JoinClause(WhereClause):
         on = self._ltrip_and_or(' '.join(ons).strip()).strip()
 
         if on and sql:
-            sql = '%s JOIN %s ON %s %s' % (self.PREFIX, aqm(self.tbname, self.qutotation), on, sql)
+            sql = '%s JOIN %s ON %s %s' % (self.PREFIX, aqm(self.tbname, qutotation), on, sql)
         elif on:
-            sql = '%s JOIN %s ON %s' % (self.PREFIX, aqm(self.tbname, self.qutotation), on)
+            sql = '%s JOIN %s ON %s' % (self.PREFIX, aqm(self.tbname, qutotation), on)
         elif sql:
             sql = self._ltrip_and_or(sql)
-            sql = '%s JOIN %s ON %s' % (self.PREFIX, aqm(self.tbname, self.qutotation), sql)
+            sql = '%s JOIN %s ON %s' % (self.PREFIX, aqm(self.tbname, qutotation), sql)
         else:
-            sql = '%s JOIN %s' % (self.PREFIX, aqm(self.tbname, self.qutotation))
+            sql = '%s JOIN %s' % (self.PREFIX, aqm(self.tbname, qutotation))
         return sql, params
 
 

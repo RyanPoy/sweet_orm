@@ -29,8 +29,8 @@ class Recordset:
         self.db = db
         self.tablename = self._aqm(tablename)
         self.select_clause = SelectClause(self.qutotation_marks)
-        self.where_clause = WhereClause(self.qutotation_marks, self.paramstyle_marks)
-        self.having_clause = HavingClause(self.qutotation_marks, self.paramstyle_marks)
+        self.where_clause = WhereClause()
+        self.having_clause = HavingClause()
         self.group_clause = GroupClause(self.qutotation_marks)
         self.order_clause = OrderClause(self.qutotation_marks)
         self._joins_clauses = []

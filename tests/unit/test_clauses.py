@@ -12,8 +12,8 @@ class TestClauses(unittest.TestCase):
     def setUp(self):
         self.qutotation_marks = '`'
         self.paramstyle_marks = '%s'
-        self.where_clause = WhereClause(self.qutotation_marks, self.paramstyle_marks)
-        self.having_clause = HavingClause(self.qutotation_marks, self.paramstyle_marks)
+        self.where_clause = WhereClause()
+        self.having_clause = HavingClause()
         self.inner_join_clause = JoinClause(self.qutotation_marks, self.paramstyle_marks, 'mobiles')
         self.left_join_clause = LeftJoinClause(self.qutotation_marks, self.paramstyle_marks, 'mobiles')
         self.right_join_clause = RightJoinClause(self.qutotation_marks, self.paramstyle_marks, 'mobiles')
