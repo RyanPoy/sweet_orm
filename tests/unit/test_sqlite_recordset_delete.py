@@ -1,16 +1,18 @@
 #coding: utf8
 import unittest
 from unittest import mock
+from sweet_orm.db import SQLite
 from sweet_orm.db.recordset import SQLiteRecordset, SQLError
 
 
 class TestSQLiteRecordsetDelete(unittest.TestCase):
 
     def get_db(self):
-        db = mock.MagicMock('db')
-        db.qutotation = '`'
-        db.paramstyle = '?'
-        return db
+        class FakeDB(mock.MagicMock):
+            qutotation = '`'
+            paramstyle = '?'
+        FakeDB.aqm = SQLite.aqm
+        return FakeDB()
 
     def test_delete(self):
         db = self.get_db()

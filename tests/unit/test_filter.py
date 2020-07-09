@@ -1,16 +1,25 @@
 #coding: utf8
 import unittest
+from unittest import mock
+from sweet_orm.db import MySQL
 from sweet_orm.db.filters import FilterBuilder
 
 
 class TestFilter(unittest.TestCase):
-    
+
+    def get_db(self):
+        class FakeDB(mock.MagicMock):
+            qutotation = '`'
+            paramstyle = '%s'
+        FakeDB.aqm = MySQL.aqm
+        return FakeDB()
+
     def get_filter(self, name, value):
         return FilterBuilder.build(name, value)
 
     def test_filter(self):
         f = self.get_filter('name', 'Ryan')
-        sql, params = f.compile('`', '%s')
+        sql, params = f.compile(self.get_db())
         self.assertEqual('name', f.name)
         self.assertEqual('Ryan', f.value)
         self.assertEqual(['Ryan'], params)
@@ -19,7 +28,7 @@ class TestFilter(unittest.TestCase):
 
     def test_filter2(self):
         f = self.get_filter('user__name', 'Ryan')
-        sql, params = f.compile('`', '%s')
+        sql, params = f.compile(self.get_db())
         self.assertEqual('user.name', f.name)
         self.assertEqual('Ryan', f.value)
         self.assertEqual(['Ryan'], params)
@@ -28,7 +37,7 @@ class TestFilter(unittest.TestCase):
 
     def test_filter_not(self):
         f = self.get_filter('age__not', 10)
-        sql, params = f.compile('`', '%s')
+        sql, params = f.compile(self.get_db())
         self.assertEqual('age', f.name)
         self.assertEqual(10, f.value)
         self.assertEqual([10], params)
@@ -37,7 +46,7 @@ class TestFilter(unittest.TestCase):
 
     def test_filter_is_none(self):
         f = self.get_filter('name', None)
-        sql, params = f.compile('`', '%s')
+        sql, params = f.compile(self.get_db())
         self.assertEqual('name', f.name)
         self.assertEqual(None, f.value)
         self.assertEqual([], params)
@@ -46,7 +55,7 @@ class TestFilter(unittest.TestCase):
 
     def test_filter_is_not_none(self):
         f = self.get_filter('name__not', None)
-        sql, params = f.compile('`', '%s')
+        sql, params = f.compile(self.get_db())
         self.assertEqual('name', f.name)
         self.assertEqual(None, f.value)
         self.assertEqual([], params)
@@ -55,7 +64,7 @@ class TestFilter(unittest.TestCase):
 
     def test_filter_in(self):
         f = self.get_filter('name', ['ryan', 'poy', 'judy'])
-        sql, params = f.compile('`', '%s')
+        sql, params = f.compile(self.get_db())
         self.assertEqual('name', f.name)
         self.assertEqual(['ryan', 'poy', 'judy'], f.value)
         self.assertEqual(['ryan', 'poy', 'judy'], params)
@@ -64,7 +73,7 @@ class TestFilter(unittest.TestCase):
 
     def test_filter_not_in(self):
         f = self.get_filter('age__not', [10, 20, 30])
-        sql, params = f.compile('`', '%s')
+        sql, params = f.compile(self.get_db())
         self.assertEqual('age', f.name)
         self.assertEqual([10, 20, 30], f.value)
         self.assertEqual([10, 20, 30], params)
@@ -73,7 +82,7 @@ class TestFilter(unittest.TestCase):
 
     def test_filter_like(self):
         f = self.get_filter('name__like', '%ryan%')
-        sql, params = f.compile('`', '%s')
+        sql, params = f.compile(self.get_db())
         self.assertEqual('name', f.name)
         self.assertEqual('%ryan%', f.value)
         self.assertEqual(['%ryan%'], params)
@@ -82,7 +91,7 @@ class TestFilter(unittest.TestCase):
 
     def test_filter_not_like(self):
         f = self.get_filter('name__not_like', '%ryan%')
-        sql, params = f.compile('`', '%s')
+        sql, params = f.compile(self.get_db())
         self.assertEqual('name', f.name)
         self.assertEqual('%ryan%', f.value)
         self.assertEqual(['%ryan%'], params)
@@ -91,7 +100,7 @@ class TestFilter(unittest.TestCase):
 
     def test_filter_between(self):
         f = self.get_filter('age__bt', [10, 30])
-        sql, params = f.compile('`', '%s')
+        sql, params = f.compile(self.get_db())
         self.assertEqual('age', f.name)
         self.assertEqual([10, 30], f.value)
         self.assertEqual([10, 30], params)
@@ -100,7 +109,7 @@ class TestFilter(unittest.TestCase):
 
     def test_filter_not_between(self):
         f = self.get_filter('age__not_bt', [10, 30])
-        sql, params = f.compile('`', '%s')
+        sql, params = f.compile(self.get_db())
         self.assertEqual('age', f.name)
         self.assertEqual([10, 30], f.value)
         self.assertEqual([10, 30], params)
@@ -113,7 +122,7 @@ class TestFilter(unittest.TestCase):
 
     def test_filter_gt(self):
         f = self.get_filter('name__gt', 'Ryan')
-        sql, params = f.compile('`', '%s')
+        sql, params = f.compile(self.get_db())
         self.assertEqual('name', f.name)
         self.assertEqual('Ryan', f.value)
         self.assertEqual(['Ryan'], params)
@@ -122,7 +131,7 @@ class TestFilter(unittest.TestCase):
 
     def test_filter_gte(self):
         f = self.get_filter('name__gte', 'Ryan')
-        sql, params = f.compile('`', '%s')
+        sql, params = f.compile(self.get_db())
         self.assertEqual('name', f.name)
         self.assertEqual('Ryan', f.value)
         self.assertEqual(['Ryan'], params)
@@ -131,7 +140,7 @@ class TestFilter(unittest.TestCase):
 
     def test_filter_lt(self):
         f = self.get_filter('name__lt', 'Ryan')
-        sql, params = f.compile('`', '%s')
+        sql, params = f.compile(self.get_db())
         self.assertEqual('name', f.name)
         self.assertEqual('Ryan', f.value)
         self.assertEqual(['Ryan'], params)
@@ -140,7 +149,7 @@ class TestFilter(unittest.TestCase):
 
     def test_filter_lte(self):
         f = self.get_filter('name__lte', 'Ryan')
-        sql, params = f.compile('`', '%s')
+        sql, params = f.compile(self.get_db())
         self.assertEqual('name', f.name)
         self.assertEqual('Ryan', f.value)
         self.assertEqual(['Ryan'], params)
@@ -149,7 +158,7 @@ class TestFilter(unittest.TestCase):
 
     def test_filter_is_gt_null(self):
         f = self.get_filter('age__gt', None)
-        sql, params = f.compile('`', '%s')
+        sql, params = f.compile(self.get_db())
         self.assertEqual('age', f.name)
         self.assertEqual(None, f.value)
         self.assertEqual([None], params)

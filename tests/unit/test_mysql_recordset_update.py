@@ -1,5 +1,6 @@
 #coding: utf8
 import unittest
+from sweet_orm.db import MySQL
 from sweet_orm.db.recordset import MySQLRecordset
 from unittest import mock
 
@@ -7,10 +8,11 @@ from unittest import mock
 class TestMySQLRecordsetUpdate(unittest.TestCase):
 
     def get_db(self):
-        db = mock.MagicMock('db')
-        db.qutotation = '`'
-        db.paramstyle = '%s'
-        return db
+        class FakeDB(mock.MagicMock):
+            qutotation = '`'
+            paramstyle = '%s'
+        FakeDB.aqm = MySQL.aqm
+        return FakeDB()
 
     def test_update(self):
         db = self.get_db()

@@ -1,6 +1,7 @@
 #coding: utf8
 import unittest
 from unittest import mock
+from sweet_orm.db import MySQL
 from sweet_orm.db.clauses import WhereClause, HavingClause, \
                                     JoinClause, LeftJoinClause, \
                                     RightJoinClause, OrderClause, \
@@ -24,10 +25,11 @@ class TestClauses(unittest.TestCase):
         self.page_clause = PageClause()
 
     def get_db(self):
-        db = mock.MagicMock('db')
-        db.qutotation = '`'
-        db.paramstyle = '%s'
-        return db
+        class FakeDB(mock.MagicMock):
+            qutotation = '`'
+            paramstyle = '%s'
+        FakeDB.aqm = MySQL.aqm
+        return FakeDB()
 
     def test_basic_where_clause(self):
         sql, params = self.where_clause.compile(self.get_db())

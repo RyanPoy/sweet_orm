@@ -59,6 +59,12 @@ class Driver(ABC):
         self.prepare(**db_config)
         self._reconnect()
 
+    def aqm(self, s):
+        if not s or s == '*':
+            return s
+        q = self.qutotation
+        return '.'.join([ '%s%s%s' % (q, x.strip(q), q) for x in s.split('.') ])
+
     @abstractmethod
     def prepare(self, **db_config):
         pass

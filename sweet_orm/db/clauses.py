@@ -1,5 +1,5 @@
 #coding: utf8
-from sweet_orm.utils import is_array, is_str, is_hash, aqm
+from sweet_orm.utils import is_array, is_str, is_hash
 from sweet_orm.db.filters import FilterBuilder
 
 
@@ -36,17 +36,17 @@ class WhereClause:
         return s
 
     def compile(self, db):
-        sql, params = self._compile(db.qutotation, db.paramstyle)
+        sql, params = self._compile(db)
         sql = self._ltrip_and_or(sql)
         if sql:
             sql = '%s %s' % (self.PREFIX, sql)
         return sql, params
 
-    def _compile(self, qutotation, paramstyle):
+    def _compile(self, db):
         sqls, params = [], []
         for and_or, f in self.filters:
             if isinstance(f, WhereClause):
-                tmp_sql, tmp_params = f._compile(qutotation, paramstyle)
+                tmp_sql, tmp_params = f._compile(db)
                 tmp_sql = self._ltrip_and_or(tmp_sql)
                 sqls.append(and_or)
                 sqls.append("(")
@@ -54,7 +54,7 @@ class WhereClause:
                 sqls.append(")")
                 params.extend(tmp_params)
             else:
-                tmp_sql, tmp_params = f.compile(qutotation, paramstyle)
+                tmp_sql, tmp_params = f.compile(db)
                 sqls.append(and_or)
                 sqls.append(tmp_sql)
                 params.extend(tmp_params)
@@ -90,19 +90,18 @@ class JoinClause(WhereClause):
         return self
 
     def compile(self, db):
-        qutotation, paramstyle = db.qutotation, db.paramstyle
-        sql, params = self._compile(db.qutotation, db.paramstyle)
+        sql, params = self._compile(db)
 
         ons = []
         for and_or, on in self._ons:
-            s = ' = '.join([ aqm(x.strip(), qutotation) for x in on.split('=', 1) ])
+            s = ' = '.join([ db.aqm(x.strip()) for x in on.split('=', 1) ])
             ons.append(and_or)
             ons.append(' ')
             ons.append(s)
 
         on = self._ltrip_and_or(' '.join(ons).strip()).strip()
 
-        tablname = aqm(self.tbname, qutotation)
+        tablname = db.aqm(self.tbname)
         if on and sql:
             sql = '%s JOIN %s ON %s %s' % (self.PREFIX, tablname, on, sql)
         elif on:
@@ -145,7 +144,7 @@ class OrderClause:
 
         bys = []
         for column, desc in self._bys:
-            c = aqm(column, db.qutotation)
+            c = db.aqm(column)
             if desc:
                 bys.append('%s DESC' % c)
             else:
@@ -167,7 +166,7 @@ class GroupClause:
         if not self._bys:
             return '', []
 
-        return 'GROUP BY %s' % ', '.join([ aqm(by, db.qutotation) for by in self._bys ]), []
+        return 'GROUP BY %s' % ', '.join([ db.aqm(by) for by in self._bys ]), []
 
 
 class PageClause:
@@ -219,7 +218,7 @@ class SelectClause:
     def compile(self, db):
         sql = '*'
         if self.columns:
-            sql = ', '.join([ aqm(c, db.qutotation) for c in self.columns ])
+            sql = ', '.join([ db.aqm(c) for c in self.columns ])
 
         if self._distinct:
             sql = 'SELECT DISTINCT %s' % sql
@@ -264,8 +263,8 @@ class InsertClause:
             params.extend(r.values())
         
         sql = 'INSERT INTO {tablename} ({columns}) VALUES {values_sql}'.format(
-            tablename=aqm(self.tbname, db.qutotation),
-            columns=', '.join([ aqm(c, db.qutotation) for c in self.list_records[0].keys() ]),
+            tablename=db.aqm(self.tbname),
+            columns=', '.join([ db.aqm(c) for c in self.list_records[0].keys() ]),
             values_sql=', '.join(values_sql)
         )
         return sql, params

@@ -1,5 +1,7 @@
 #coding: utf8
 import unittest
+from unittest import mock
+from sweet_orm.db import SQLite
 from sweet_orm.db.recordset import SQLiteRecordset
 from sweet_orm.db.clauses import WhereClause, HavingClause
 from sweet_orm.utils import mydict
@@ -8,9 +10,10 @@ from sweet_orm.utils import mydict
 class TestSQLiteRecordsetQuery(unittest.TestCase):
 
     def get_recordset(self, name="users"):
-        class FakeDB:
+        class FakeDB(mock.MagicMock):
             qutotation = '`'
             paramstyle = '?'
+        FakeDB.aqm = SQLite.aqm
         return SQLiteRecordset(db=FakeDB(), tablename=name)
 
     def test_copy_deep(self):

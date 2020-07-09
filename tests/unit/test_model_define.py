@@ -9,6 +9,9 @@ def get_db():
     db.qutotation = '`'
     db.paramstyle = '%s'
     db.get_columns = mock.MagicMock(return_value={})
+    db.aqm = lambda self, s: \
+                    s if not s or s == '*' \
+                      else '.'.join([ '%s%s%s' % (self.qutotation, x.strip(self.qutotation), self.qutotation) for x in s.split('.') ])
     return db
 
 db = get_db()

@@ -1,6 +1,6 @@
 #coding: utf8
-from sweet_orm.utils import is_array, aqm
-
+from sweet_orm.utils import is_array
+from abc import abstractmethod
 
 class Filter:
 
@@ -13,43 +13,47 @@ class Filter:
     def valid(self):
         return True
 
+    @abstractmethod
+    def compile(self, db):
+        pass
+
 
 class JoinOnFilter(Filter):
 
-    def compile(self, qutotation, paramstyle):
+    def compile(self, db):
         pass
 
 
 class SimpleFilter(Filter):
     
-    def compile(self, qutotation, paramstyle):
+    def compile(self, db):
         params = []
-        sql = '%s %s %s' % (aqm(self.name, qutotation), self.operator, paramstyle)
+        sql = '%s %s %s' % (db.aqm(self.name), self.operator, db.paramstyle)
         params.append(self.value)
         return sql, params
 
 
 class InFilter(Filter):
 
-    def compile(self, qutotation, paramstyle):
+    def compile(self, db):
         params = []
-        ps = ', '.join([paramstyle]*len(self.value))
-        sql = '%s %s (%s)' % (aqm(self.name, qutotation), self.operator, ps)
+        ps = ', '.join([db.paramstyle]*len(self.value))
+        sql = '%s %s (%s)' % (db.aqm(self.name), self.operator, ps)
         params.extend(self.value)
         return sql, params
 
 
 class NullFilter(Filter):
 
-    def compile(self, qutotation, paramstyle):
-        return '%s %s NULL' % (aqm(self.name, qutotation), self.operator), []
+    def compile(self, db):
+        return '%s %s NULL' % (db.aqm(self.name), self.operator), []
 
 
 class BetweenFilter(Filter):
     
-    def compile(self, qutotation, paramstyle):
+    def compile(self, db):
         params = []
-        sql = '%s %s %s AND %s' % (aqm(self.name, qutotation), self.operator, paramstyle, paramstyle)
+        sql = '%s %s %s AND %s' % (db.aqm(self.name), self.operator, db.paramstyle, db.paramstyle)
         params.append(self.value[0])
         params.append(self.value[1])
         return sql, params

@@ -27,7 +27,8 @@ class Recordset(ABC):
         pk = model_class.__pk__ if model_class is not None
         """
         self.db = db
-        self.tablename = self._aqm(tablename)
+        self.tablename = tablename
+        self.aqm_tablename = self.db.aqm(tablename)
         self.select_clause = SelectClause()
         self.where_clause = WhereClause()
         self.having_clause = HavingClause()
@@ -45,7 +46,7 @@ class Recordset(ABC):
 
     def __deepcopy__(self, memo):
         """ Deep copy """
-        obj = self.__class__(self.db, self.tablename)
+        obj = self.__class__(self.db, self.aqm_tablename)
         for k, v in self.__dict__.items():
             if k == 'db' or k == 'tablename': # conn can not deep copy
                 obj.__dict__[k] = v
@@ -171,9 +172,6 @@ class Recordset(ABC):
             self._exists_tables.append( (WhereClause.OR, t) )
         return self
 
-    def _aqm(self, s):
-        return aqm(s, self.qutotation)
-
     def _query_sql(self):
         params = []
         from_sql = self._from_sql(params)
@@ -210,7 +208,7 @@ class Recordset(ABC):
         return sql
 
     def _from_sql(self, params):
-        sql = 'FROM {tablename}'.format(tablename=self.tablename)
+        sql = 'FROM {tablename}'.format(tablename=self.aqm_tablename)
         join_sql = self._join_sql(params)
         if join_sql:
             sql = '%s %s' % (sql, join_sql)
@@ -270,12 +268,12 @@ class Recordset(ABC):
     def insert_getid(self, record=None, **kwargs):
         record = record or {}
         if kwargs: record.update(kwargs)
-        insert_clause = InsertClause(self.tablename)
+        insert_clause = InsertClause(self.aqm_tablename)
         sql, params = insert_clause.insert(record).compile(self.db)
         return self.db.execute_lastrowid(sql, *params)
 
     def insert(self, records=None, **kwargs):
-        insert_clause = InsertClause(self.tablename)
+        insert_clause = InsertClause(self.aqm_tablename)
         sql, params = insert_clause.insert(records, **kwargs).compile(self.db)
         return self.db.execute_rowcount(sql, *params)
 
@@ -283,10 +281,10 @@ class Recordset(ABC):
     def update(self, **kwargs):
         update_columns, update_params = [], []
         for k, v in kwargs.items():
-            update_columns.append('%s = %s' % (self._aqm(k), self.paramstyle))
+            update_columns.append('%s = %s' % (self.db.aqm(k), self.paramstyle))
             update_params.append(v)
 
-        sql = 'UPDATE %s' % self.tablename
+        sql = 'UPDATE %s' % self.aqm_tablename
         params = [] 
         join_sql = self._join_sql(params)
         if join_sql:
@@ -311,7 +309,7 @@ class Recordset(ABC):
         for k, v in kwargs.items():
             update_columns.append(
                 '{name} = {name} {flag} {paramstyle}'.format(
-                    name=self._aqm(k), 
+                    name=self.db.aqm(k), 
                     flag=flag,
                     paramstyle=self.paramstyle
                 )
@@ -319,7 +317,7 @@ class Recordset(ABC):
             update_params.append(v)
 
         params = []
-        sql = 'UPDATE %s' % self.tablename 
+        sql = 'UPDATE %s' % self.aqm_tablename 
         join_sql = self._join_sql(params)
         if join_sql:
             sql = '%s %s' % (sql, join_sql)
@@ -393,7 +391,7 @@ class Recordset(ABC):
         if column == '*':
             distinct = False
 
-        column_name = self._aqm(column)
+        column_name = self.db.aqm(column)
 
         params = []
         from_sql = self._from_sql(params)
@@ -423,7 +421,7 @@ class MySQLRecordset(Recordset):
         return self
 
     def truncate(self):
-        return self.db.execute_rowcount('TRUNCATE {}'.format(self.tablename))
+        return self.db.execute_rowcount('TRUNCATE {}'.format(self.aqm_tablename))
 
     def delete(self):
         if self.model_class:
@@ -436,7 +434,7 @@ class MySQLRecordset(Recordset):
             sql = "DELETE {from_sql}".format(from_sql=from_sql)
         else:
             sql = "DELETE {tablename} {from_sql}".format(
-                tablename=self.tablename,
+                tablename=self.aqm_tablename,
                 from_sql=from_sql
             )
         return self.db.execute_rowcount(sql, *params)
@@ -445,10 +443,10 @@ class MySQLRecordset(Recordset):
     def update(self, **kwargs):
         update_columns, update_params = [], []
         for k, v in kwargs.items():
-            update_columns.append('%s = %s' % (self._aqm(k), self.paramstyle))
+            update_columns.append('%s = %s' % (self.db.aqm(k), self.paramstyle))
             update_params.append(v)
 
-        sql = 'UPDATE %s' % self.tablename
+        sql = 'UPDATE %s' % self.aqm_tablename
         params = [] 
         join_sql = self._join_sql(params)
         if join_sql:
@@ -476,10 +474,10 @@ class SQLiteRecordset(Recordset):
     paramstyle = '?'        
 
     def truncate(self):
-        r = self.db.execute_rowcount('DELETE FROM {}'.format(self.tablename))
+        r = self.db.execute_rowcount('DELETE FROM {}'.format(self.aqm_tablename))
         find_slite_master_sql = "SELECT `name` FROM `sqlite_master` WHERE `type` = 'table' and `name` = 'sqlite_sequence'"
         if self.db.execute_rowcount(find_slite_master_sql) != -1:
-            self.db.execute('UPDATE sqlite_sequence SET seq = 0 where name = {}'.format(self.tablename))
+            self.db.execute('UPDATE sqlite_sequence SET seq = 0 where name = {}'.format(self.aqm_tablename))
 
         return r
 
@@ -494,9 +492,9 @@ class SQLiteRecordset(Recordset):
             sql = "DELETE {from_sql}".format(from_sql=from_sql)
         elif self.table_pk:
             sql = "DELETE FROM {tablename} WHERE {tablename}.{pk} IN (SELECT {tablename}.{pk} {from_sql})".format(
-                tablename=self.tablename,
+                tablename=self.aqm_tablename,
                 from_sql=from_sql,
-                pk=self._aqm(self.table_pk)
+                pk=self.db.aqm(self.table_pk)
             )
         else:
             raise SQLError("SQLite can't support delete with join")
@@ -506,17 +504,17 @@ class SQLiteRecordset(Recordset):
     def update(self, **kwargs):
         update_columns, params = [], []
         for k, v in kwargs.items():
-            update_columns.append('%s = %s' % (self._aqm(k), self.paramstyle))
+            update_columns.append('%s = %s' % (self.db.aqm(k), self.paramstyle))
             params.append(v)
 
-        sql = 'UPDATE %s SET %s' % (self.tablename, ', '.join(update_columns))
+        sql = 'UPDATE %s SET %s' % (self.aqm_tablename, ', '.join(update_columns))
         join_sql = self._join_sql(params)
         if join_sql:
             join_sql = self._core_sql(join_sql, params)
             sub_select_sql = 'WHERE {tablename}.{pk} IN (SELECT {tablename}.{pk} FROM {tablename} {join_sql})'.format(
-                tablename=self.tablename,
+                tablename=self.aqm_tablename,
                 join_sql=join_sql,
-                pk=self._aqm(self.table_pk)
+                pk=self.db.aqm(self.table_pk)
             )
             sql = '%s %s' % (sql, sub_select_sql)
         else:
