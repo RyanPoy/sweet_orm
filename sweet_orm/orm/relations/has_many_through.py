@@ -1,6 +1,6 @@
 #coding: utf8
 from sweet_orm.orm.relations.relation import Relation, relation_q
-from sweet_orm.utils.collection import Collection
+from sweet_orm.orm.collection import Collection
 from sweet_orm.utils.inflection import *
 from sweet_orm.utils import *
 
@@ -131,7 +131,7 @@ class HasManyThrough(Relation):
         for o in owner_objs:
             through_fk_on_owner = o.get_pk()
             group = groups.get(through_fk_on_owner, [])
-            o._set_relation_cache(self.name, Collection(*group))
+            # o._set_relation_cache(self.name, Collection(*group))
 
         return self
 

@@ -27,7 +27,7 @@ class HasOne(HasMany):
 
             for o in owner_objs:
                 target = target_groups.get(o.get_pk(), None)
-                o._set_relation_cache(self.name, target)
+                # o._set_relation_cache(self.name, target)
         return self
 
 
@@ -75,7 +75,7 @@ class HasOneThrough(HasManyThrough):
         for o in owner_objs:
             through_fk_on_owner = o.get_pk()
             group = groups.get(through_fk_on_owner, [None])
-            o._set_relation_cache(self.name, group[0])
+            # o._set_relation_cache(self.name, group[0])
 
         return self
 

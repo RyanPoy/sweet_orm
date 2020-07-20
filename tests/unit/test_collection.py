@@ -1,6 +1,6 @@
 # coding: utf8
 import unittest
-from sweet_orm.utils.collection import *
+from sweet_orm.orm.collection import *
 
 class Foobar:
     pass

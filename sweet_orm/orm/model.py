@@ -59,12 +59,16 @@ class Model(metaclass=ModelMetaClass):
             return super().__getattribute__(name)
         except AttributeError as ex:
             if name in self.__relations__: # it does means a relation
-                cache_key = self._build_relation_cache_key(name) 
-                if not hasattr(self, cache_key): # can not get cache of relation
-                    r = self.__relations__[name]
-                    real_value = r.get_real_value(self)
-                    self._set_relation_cache(cache_key, real_value, False) # set cache
-                return getattr(self, cache_key)
+                return self.__relations__[name].get_real_value(self)
+
+                ###### from cache get value #####
+                #################################
+                # cache_key = self._build_relation_cache_key(name) 
+                # if not hasattr(self, cache_key): # can not get cache of relation
+                #     r = self.__relations__[name]
+                #     real_value = r.get_real_value(self)
+                #     self._set_relation_cache(cache_key, real_value, False) # set cache
+                # return getattr(self, cache_key)
             else:
                 method = MethodMissing.match(self, name)
                 if method:
@@ -76,22 +80,22 @@ class Model(metaclass=ModelMetaClass):
         if name in cls.__relations__:
             relation = cls.__relations__[name]
             relation.inject(self, value)
-            self._set_relation_cache(self, name, value)
+            # self._set_relation_cache(self, name, value)
         super().__setattr__(name, value)
 
-    def _set_relation_cache(self, name, value, should_build_key=True):
-        cache_key = self._build_relation_cache_key(name) if should_build_key else name
-        setattr(self, cache_key, value)
-        return self
+    # def _set_relation_cache(self, name, value, should_build_key=True):
+    #     cache_key = self._build_relation_cache_key(name) if should_build_key else name
+    #     setattr(self, cache_key, value)
+    #     return self
 
-    def _delete_relation_cache(self, name):
-        key = self._build_relation_cache_key(name)
-        if hasattr(self, key):
-            delattr(self, key)
-        return self
+    # def _delete_relation_cache(self, name):
+    #     key = self._build_relation_cache_key(name)
+    #     if hasattr(self, key):
+    #         delattr(self, key)
+    #     return self
 
-    def _build_relation_cache_key(self, name):
-        return '_cached_relation_which_named_%s' % name
+    # def _build_relation_cache_key(self, name):
+    #     return '_cached_relation_which_named_%s' % name
 
     def _init_field_default_value(self):
         """ set default value of field which does not init 

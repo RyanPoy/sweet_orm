@@ -2,7 +2,7 @@
 from sweet_orm.orm.relations.relation import Relation, relation_q
 from sweet_orm.orm.relations.has_many_through import HasManyThrough
 from sweet_orm.utils.inflection import *
-from sweet_orm.utils.collection import *
+from sweet_orm.orm.collection import *
 from sweet_orm.utils import *
 
 
@@ -72,7 +72,7 @@ class HasMany(Relation):
 
             for o in owner_objs:
                 group = target_groups.get(o.get_pk(), [])
-                o._set_relation_cache(self.name, Collection(*group))
+                # o._set_relation_cache(self.name, Collection(*group))
         return self
 
     def inject(self, owner_model, target_model):
