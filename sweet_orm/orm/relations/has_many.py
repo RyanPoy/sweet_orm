@@ -47,7 +47,8 @@ class HasMany(Relation):
         """ eg. user has many mobiles
             Mobile.where(user_id=user.id).all()
         """
-        return self.target.where(**{self.target_fk: owner_obj.get_pk()})
+        rs = self.target.where(**{self.target_fk: owner_obj.get_pk()})
+        return Collection(rs)
 
     def delete_all_real_value(self, owner_objs):
         """ eg. user has many mobiles

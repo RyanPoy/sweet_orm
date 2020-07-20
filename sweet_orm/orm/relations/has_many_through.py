@@ -81,10 +81,11 @@ class HasManyThrough(Relation):
             through_fk_on_owner=self.through_fk_on_owner
         )
 
-        return self.target.objects \
+        rs = self.target.objects \
                           .join(self.through_table, on=target_and_through_table_join_on) \
                           .join(self.owner.__tablename__, on=owner_and_through_table_join_on) \
                           .where(**{self.through_table+'__'+self.through_fk_on_owner: owner_obj.get_pk()})
+        return Collection(rs)
 
     def delete_all_real_value(self, owner_objs):
         """ eg. article has and belongs many tags
