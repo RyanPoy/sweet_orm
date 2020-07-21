@@ -9,7 +9,7 @@ from tests.integration.for_mysql.helper import StudentForHasOneThrough as Studen
 from sweet_orm.orm import Model
 from sweet_orm.db import MySQL
 from sweet_orm.db.recordset import MySQLRecordset
-from sweet_orm.utils.collection import Collection
+from sweet_orm.orm.collection import Collection, MemCollection
 from contextlib import contextmanager
 
 
@@ -103,7 +103,7 @@ class TestRelationIncludeMysql(unittest.TestCase):
             us = User.all()
             for u in us:
                 ms = u.mobiles
-                self.assertEqual(MySQLRecordset, type(ms))
+                self.assertEqual(Collection, type(ms))
                 for m in ms.all():
                     m.name
             self.assertEqual(3, len(FakeDB.SQLS))
@@ -116,7 +116,7 @@ class TestRelationIncludeMysql(unittest.TestCase):
             us = User.include("mobiles").all()
             for u in us:
                 ms = u.mobiles
-                self.assertEqual(Collection, type(ms))
+                self.assertEqual(MemCollection, type(ms))
                 for m in ms.all():
                     m.name
             self.assertEqual(2, len(FakeDB.SQLS))
@@ -174,7 +174,7 @@ class TestRelationIncludeMysql(unittest.TestCase):
             # not use include
             for s in Student.all():
                 cs = s.courses
-                self.assertEqual(type(cs), MySQLRecordset)
+                self.assertEqual(type(cs), Collection)
                 for c in cs.all():
                     c.name
             self.assertEqual(4, len(FakeDB.SQLS))
@@ -196,7 +196,7 @@ class TestRelationIncludeMysql(unittest.TestCase):
             # not use include
             for s in Student.include("courses").all():
                 cs = s.courses
-                self.assertEqual(type(cs), Collection)
+                self.assertEqual(type(cs), MemCollection)
                 for c in cs.all():
                     c.name
             self.assertEqual(3, len(FakeDB.SQLS))
@@ -280,7 +280,7 @@ class TestRelationIncludeMysql(unittest.TestCase):
             # not use include
             for t in Tag.all():
                 articles = t.articles
-                self.assertEqual(type(articles), MySQLRecordset)
+                self.assertEqual(type(articles), Collection)
                 for a in articles.all():
                     a.title
             self.assertEqual(4, len(FakeDB.SQLS))
@@ -303,7 +303,7 @@ class TestRelationIncludeMysql(unittest.TestCase):
             # not use include
             for t in Tag.include("articles").all():
                 articles = t.articles
-                self.assertEqual(type(articles), Collection)
+                self.assertEqual(type(articles), MemCollection)
                 for a in articles.all():
                     a.title
             self.assertEqual(3, len(FakeDB.SQLS))

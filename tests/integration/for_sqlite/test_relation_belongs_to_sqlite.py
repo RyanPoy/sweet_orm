@@ -19,18 +19,18 @@ class TestRelationBelongsToSQLite(unittest.TestCase):
         Mobile.delete_all()
         User.delete_all()
 
-    def test_reload(self):
-        user_id = User.create(name="Jon", age=31).id
-        m = Mobile.create(name="Nokia", user_id=user_id)
+    # def test_reload(self):
+    #     user_id = User.create(name="Jon", age=31).id
+    #     m = Mobile.create(name="Nokia", user_id=user_id)
 
-        key = m._build_relation_cache_key('user')
-        self.assertEqual(False, hasattr(m, key))
+    #     key = m._build_relation_cache_key('user')
+    #     self.assertEqual(False, hasattr(m, key))
 
-        m.user
-        self.assertEqual(True, hasattr(m, key))
+    #     m.user
+    #     self.assertEqual(True, hasattr(m, key))
 
-        m.reload_user()
-        self.assertEqual(False, hasattr(m, key))
+    #     m.reload_user()
+    #     self.assertEqual(False, hasattr(m, key))
 
     def test_query(self):
         user_id = User.create(name="Jon", age=31).id

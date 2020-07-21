@@ -2,6 +2,7 @@
 from sweet_orm.orm.relations.relation import relation_q
 from sweet_orm.orm.relations.has_many import HasMany
 from sweet_orm.orm.relations.has_many_through import HasManyThrough
+from sweet_orm.orm.collection import Collection, MemCollection
 from sweet_orm.utils.inflection import *
 
 
@@ -27,8 +28,14 @@ class HasOne(HasMany):
 
             for o in owner_objs:
                 target = target_groups.get(o.get_pk(), None)
+
+                setattr(o, self.name, target)
                 # o._set_relation_cache(self.name, target)
         return self
+
+    def inject(self, owner_model, target_model):
+        attr_name = self.target_fk
+        setattr(owner_model, attr_name, target_model.get_pk())
 
 
 class HasOneThrough(HasManyThrough):
@@ -75,9 +82,12 @@ class HasOneThrough(HasManyThrough):
         for o in owner_objs:
             through_fk_on_owner = o.get_pk()
             group = groups.get(through_fk_on_owner, [None])
+
+            setattr(o, self.name, group[0])
             # o._set_relation_cache(self.name, group[0])
 
         return self
+
 
 def has_one(class_, name=None, fk=None, cascade=False,
                     through=None, through_fk_on_owner=None, through_fk_on_target=None):

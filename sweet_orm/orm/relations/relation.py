@@ -33,3 +33,6 @@ class Relation:
             else:
                 self._target_name = self._target_cls_or_target_name.__name__
         return self._target_name
+
+    def inject(self, owner_model, target_model):
+        pass
