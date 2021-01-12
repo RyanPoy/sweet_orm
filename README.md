@@ -6,7 +6,7 @@
 [recordset](./docs/recordset.rst)
 
 # orm basic
-[orm basic](./docs/orm_basic.rst)
+[orm basic](./docs/orm.rst)
 
 # orm relations
-[orm relations](./docs/orm_relations.rst)
+[orm relations](./docs/associations.rst)
