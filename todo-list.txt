@@ -1,0 +1,69 @@
+belongs_to：mobile belongs_to user
+
+    association
+    association=(associate)
+    build_association(attributes = {})
+    create_association(attributes = {})
+    create_association!(attributes = {})
+    reload_association
+
+has_one：user has_one mobile
+  
+    association
+    association=(associate)
+    build_association(attributes = {})
+    create_association(attributes = {})
+    create_association!(attributes = {})
+    reload_association
+
+  - user.create_mobile
+  - user.build_mobile
+
+
+has_many：user has_many mobiles
+
+    collection
+    collection<<(object, ...)
+    collection.delete(object, ...)
+    collection.destroy(object, ...)
+    collection=(objects)
+    collection_singular_ids
+    collection_singular_ids=(ids)
+    collection.clear
+    collection.empty?
+    collection.size
+    collection.find(...)
+    collection.where(...)
+    collection.exists?(...)
+    collection.build(attributes = {}, ...)
+    collection.create(attributes = {})
+    collection.create!(attributes = {})
+    collection.reload
+
+has_and_belongs_to_many
+
+    collection
+    collection<<(object, ...)
+    collection.delete(object, ...)
+    collection.destroy(object, ...)
+    collection=(objects)
+    collection_singular_ids
+    collection_singular_ids=(ids)
+    collection.clear
+    collection.empty?
+    collection.size
+    collection.find(...)
+    collection.where(...)
+    collection.exists?(...)
+    collection.build(attributes = {})
+    collection.create(attributes = {})
+    collection.create!(attributes = {})
+    collection.reload
+
+
+  - user.mobiles   =>   Collection （拥有recordset完全一样的功能）
+  - user.mobiles.push(*mobiles)  # 添加mobiles
+  - user.mobiles.pop(*mobiles) # 删除mobiles
+  - user.mobiles = mobiles # 设置user的mobiles内容，和数据库里面的进行比对，并且该删删，该加加，该改改
+
+

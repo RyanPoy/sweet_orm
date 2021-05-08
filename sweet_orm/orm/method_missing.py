@@ -65,13 +65,35 @@ class ReloadCacheMethod:
 
     def __call__(self):
         name = self.__class__.pattern.match(self.method_name).groups()[0]
-        return self.model._delete_relation_cache(name)
+        # return self.model._delete_relation_cache(name)
+        return self
+
+
+class BuildAssociationMethod:
+    """ for Model
+    """
+
+    pattern = re.compile(r'^build_([_a-zA-Z]\w*)$')
+
+    def __init__(self, model, method_name):
+        self.method_name = method_name
+        self.model = model
+
+    @classmethod
+    def match(cls, model, name):
+        return True if cls.pattern.match(name) else False
+
+    def __call__(self):
+        name = self.__class__.pattern.match(self.method_name).groups()[0]
+        print ('*'*10, name)
+        # return self.model._delete_relation_cache(name)
+        return self
 
 
 class MethodMissing:
 
     methods = [
-        AssociateMethod, ReloadCacheMethod
+        AssociateMethod, ReloadCacheMethod, BuildAssociationMethod
     ]
 
     @classmethod

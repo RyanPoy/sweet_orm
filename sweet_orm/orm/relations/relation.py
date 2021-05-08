@@ -2,6 +2,7 @@
 from collections import OrderedDict as oDict
 from sweet_orm.utils.inflection import *
 from sweet_orm.utils import import_object, Q
+import copy
 
 
 relation_q = Q()
@@ -36,3 +37,6 @@ class Relation:
 
     def inject(self, owner_model, target_model):
         pass
+
+    def cp(self):
+        return copy.copy(self)

@@ -2,7 +2,7 @@
 from sweet_orm.utils import *
 from sweet_orm.utils.inflection import *
 from sweet_orm.orm.relations import *
-from sweet_orm.orm.method_missing import *
+from sweet_orm.orm.method_missing import MethodMissing
 
 
 class ModelMetaClass(type):
@@ -53,6 +53,9 @@ class Model(metaclass=ModelMetaClass):
         for k, v in attrs.items():
             setattr(self, k, v)
         self._init_field_default_value() # !Very Important
+        
+        for name, r in self.__class__.__relations__.items():
+            self.__relations__[name] = r.cp()
 
     def __getattribute__(self, name):
         try:
@@ -76,9 +79,8 @@ class Model(metaclass=ModelMetaClass):
             raise ex
 
     def __setattr__(self, name, value):
-        cls = self.__class__
-        if name in cls.__relations__:
-            relation = cls.__relations__[name]
+        if name in self.__relations__:
+            relation = self.__relations__[name]
             relation.inject(self, value)
             # self._set_relation_cache(self, name, value)
         super().__setattr__(name, value)
@@ -180,7 +182,6 @@ class Model(metaclass=ModelMetaClass):
             objs = cls.objects.where(**attrs)
         else:
             objs = cls.objects
-        
         objs.delete()
         return cls
 

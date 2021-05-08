@@ -202,7 +202,7 @@ class classproperty:
 
 def cacheproperty(func):
 
-    @functools.wrapper(func)
+    @functools.wraps(func)
     def wrapper(self, *args, **kwargs):
         attr_name = '_%s' % func.__name__
         if not hasattr(self, attr_name):

@@ -8,6 +8,8 @@ from tests.integration.for_mysql.helper import User, Mobile
 
 
 class TestRelationBelongsToMysql(unittest.TestCase):
+    """ mobile belongs_to user
+    """
     
     def setUp(self):
         self.remove_record()
@@ -16,7 +18,7 @@ class TestRelationBelongsToMysql(unittest.TestCase):
         self.remove_record()
 
     def remove_record(self):
-        Mobile.delete_all()
+        # Mobile.delete_all()
         User.delete_all()
 
     # def test_reload(self):
@@ -46,61 +48,83 @@ class TestRelationBelongsToMysql(unittest.TestCase):
         m = Mobile.where(name='IPhone', user_id=user_id).first()
         self.assertEqual(u.id, m.user.id)
 
-    def test_query_with_include(self):
-        user = User.create(name="Jon", age=31)
-        Mobile.create(name="Nokia", user=user)
-        Mobile.create(name="IPhone", user=user)
+    # def test_query_with_include(self):
+    #     user = User.create(name="Jon", age=31)
+    #     Mobile.create(name="Nokia", user=user)
+    #     Mobile.create(name="IPhone", user=user)
 
-        m = Mobile.include('user').where(name='Nokia').first()
-        u = m.user
-        self.assertEqual(User, type(u))
-        self.assertEqual('Jon', u.name)
-        self.assertEqual(31, u.age)
+    #     m = Mobile.include('user').where(name='Nokia').first()
+    #     u = m.user
+    #     self.assertEqual(User, type(u))
+    #     self.assertEqual('Jon', u.name)
+    #     self.assertEqual(31, u.age)
 
-        m = Mobile.include('user').where(name='IPhone', user_id=user.id).first()
-        self.assertEqual(u.id, m.user.id)
+    #     m = Mobile.include('user').where(name='IPhone', user_id=user.id).first()
+    #     self.assertEqual(u.id, m.user.id)
 
-    def test_create(self):
-        u = User.create(name="Jon", age=31)
-        mobile_id = Mobile.create(name="Nokia", user=u).id
-        m = Mobile.find(mobile_id)
+    # def test_create(self):
+    #     u = User.create(name="Jon", age=31)
+    #     mobile_id = Mobile.create(name="Nokia", user=u).id
+    #     m = Mobile.find(mobile_id)
+    #     self.assertEqual(u.id, m.user_id)
+
+    #     u = m.user
+    #     self.assertEqual("Jon", u.name)
+    #     self.assertEqual(31, u.age)
+
+    # def test_save(self):
+    #     u = User.create(name="Jon", age=31)
+    #     mobile_id = Mobile(name="Nokia", user=u).save().id
+
+    #     m = Mobile.find(mobile_id)
+    #     self.assertEqual(u.id, m.user_id)
+
+    #     u = m.user
+    #     self.assertEqual("Jon", u.name)
+    #     self.assertEqual(31, u.age)
+
+    # def test_update(self):
+    #     u1 = User.create(name="Jon", age=31)
+    #     u2 = User.create(name="Lily", age=21)
+    #     u3 = User.create(name="Lucy", age=11)
+
+    #     m = Mobile(name="Nokia", user=u1).save()
+    #     self.assertEqual(u1.id, m.user_id)
+
+    #     m.update(user=u2)
+    #     self.assertEqual(u2.id, m.user_id)
+
+    #     m = Mobile.where(name='Nokia').first()
+    #     self.assertEqual(u2.id, m.user_id)
+
+    #     m.user = u3
+    #     m.save()
+    #     self.assertEqual(u3.id, m.user_id)
+
+    #     m = Mobile.where(name='Nokia').first()
+    #     self.assertEqual(u3.id, m.user_id)
+
+    def test_dynamic_method_set_association(self):
+        """ mobile belongs_to user
+        """
+        u = User.create(name="Jon", age=32)
+        m = Mobile(name='Nokia')
+        m.user = u
+        self.assertTrue(m.user_id is not None)
         self.assertEqual(u.id, m.user_id)
-
-        u = m.user
-        self.assertEqual("Jon", u.name)
-        self.assertEqual(31, u.age)
-
-    def test_save(self):
-        u = User.create(name="Jon", age=31)
-        mobile_id = Mobile(name="Nokia", user=u).save().id
-
-        m = Mobile.find(mobile_id)
-        self.assertEqual(u.id, m.user_id)
-
-        u = m.user
-        self.assertEqual("Jon", u.name)
-        self.assertEqual(31, u.age)
-
-    def test_update(self):
-        u1 = User.create(name="Jon", age=31)
-        u2 = User.create(name="Lily", age=21)
-        u3 = User.create(name="Lucy", age=11)
-
-        m = Mobile(name="Nokia", user=u1).save()
-        self.assertEqual(u1.id, m.user_id)
-
-        m.update(user=u2)
-        self.assertEqual(u2.id, m.user_id)
-        
-        m = Mobile.where(name='Nokia').first()
-        self.assertEqual(u2.id, m.user_id)
-
-        m.user = u3
         m.save()
-        self.assertEqual(u3.id, m.user_id)
+        print('0'*20)
+        u = User(name="Lily", age=20)
+        m.user = u
+        self.assertTrue(m.user_id is None)
+        self.assertEqual(u.id, m.user_id)
 
-        m = Mobile.where(name='Nokia').first()
-        self.assertEqual(u3.id, m.user_id)
+    # def test_dynamic_method_build_association(self):
+    #     m = Mobile(name="Nokia")
+    #     u = m.build_user(name="Jon", age=32)
+    #     self.assertEqual(User, type(u))
+    #     self.assertTrue(m.user_id is None)
+    #     self.assertEqual(u.id, m.user_id)
 
 
 if __name__ == '__main__':

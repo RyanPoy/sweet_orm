@@ -1,6 +1,7 @@
 #coding: utf8
 from sweet_orm.orm.relations.relation import Relation, relation_q
 from sweet_orm.utils.inflection import *
+from sweet_orm.utils import cacheproperty
 
 
 class BelongsTo(Relation):
@@ -43,7 +44,9 @@ class BelongsTo(Relation):
         """ eg. if mobile belongs to user.
             User.find(mobile.user_id)
         """
-        return self.target.find(getattr(owner_obj, self.owner_fk))
+        if not hasattr(self, '_get_real_value'):
+            self._get_real_value = self.target.find(getattr(owner_obj, self.owner_fk))
+        return self._get_real_value
 
     def preload(self, owner_objs):
         target_pks = list(set([ getattr(o, self.owner_fk) for o in owner_objs ]))
@@ -52,12 +55,12 @@ class BelongsTo(Relation):
             for o in owner_objs:
                 fk = getattr(o, self.owner_fk)
                 setattr(o, self.name, target_objs.get(fk, None))
-
         return self
 
     def inject(self, owner_model, target_model):
         attr_name = self.owner_fk
         setattr(owner_model, attr_name, target_model.get_pk())
+        setattr(self, '_get_real_value', target_model)
 
 
 def belongs_to(class_, name=None, fk=None):
